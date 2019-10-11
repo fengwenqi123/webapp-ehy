@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import jinhua from './modules/jinhua'
 import gyt from './modules/gyt'
 import sewageDisposal from './modules/sewageDisposal'
-import boatInfo from './modules/boatInfo'
+import ehy from './modules/ehy'
 
 Vue.use(Router)
 
@@ -17,7 +17,7 @@ export default new Router({
     ...jinhua,
     ...gyt,
     ...sewageDisposal,
-    ...boatInfo,
+    ...ehy,
     {
       path: '/exp',
       name: 'exp',
