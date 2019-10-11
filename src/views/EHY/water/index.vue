@@ -1,45 +1,34 @@
 <template>
   <div class="container">
-    水位
+    <div class="list">
+      <p>{{address}}</p>
+      <ul>
+        <li></li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable object-curly-spacing,prefer-const,no-undef */
-import Vue from 'vue'
-
+import { waterList } from '@/api/ehy.js'
 export default {
   data() {
     return {
-      already: require('@/assets/img/already.png'),
-      wait: require('@/assets/img/wait.png'),
-      list: [],
-      page: {
-        pageSize: 5,
-        pageNum: 1,
-        total: 0
-      },
-      consignee: null,
-      token: null
+      address: '湖州市'
     }
   },
   created() {
+    this.getList()
   },
   methods: {
-    watchs(id) {
-      Vue.prototype.expActive = id
-      this.$router.push(
-        {
-          path: '/expList'
-        }
-      )
-    },
-    qrcode() {
-      this.$router.push(
-        {
-          path: '/expQrcode'
-        }
-      )
+    getList() {
+      waterList().then(response => {
+
+      })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }
