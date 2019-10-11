@@ -12,5 +12,10 @@ const ehy = [{
   name: 'boatInfo',
   component: () => import('@/views/EHY/boatInfo'),
   meta: { title: '船舶详情' }
+}, {
+  path: '/register',
+  name: 'register',
+  component: () => import('@/views/EHY/register'),
+  meta: { title: '注册' }
 }]
 export default ehy
