@@ -1,45 +1,94 @@
 <template>
   <div class="container">
-    水位
+    <div class="list">
+      <van-pull-refresh
+        v-model="refreshing"
+        @refresh="onRefresh"
+        class="list-refresh"
+      >
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+        >
+          <p>{{address}}</p>
+          <ul>
+            <li
+              v-for="(item,index) in items"
+              :key="index"
+            >
+              <div>
+                <span>{{item.name}}</span>
+                <span>{{item.modifyTimeString}}</span>
+              </div>
+              <div>
+                <i>当前水位</i>
+                <i>警戒水位</i>
+                <i>保障水位</i>
+              </div>
+              <div>
+                <label>{{item.depth || '--'}}</label>
+                <label>{{item.depthMin || '--'}}</label>
+                <label>{{item.depthMax || '--'}}</label>
+              </div>
+            </li>
+          </ul>
+        </van-list>
+      </van-pull-refresh>
+    </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable object-curly-spacing,prefer-const,no-undef */
-import Vue from 'vue'
-
+import { waterList } from '@/api/ehy.js'
 export default {
   data() {
     return {
-      already: require('@/assets/img/already.png'),
-      wait: require('@/assets/img/wait.png'),
-      list: [],
+      address: '湖州市',
+      loading: false,
+      finished: false,
+      refreshing: false,
+      items: [],
       page: {
-        pageSize: 5,
-        pageNum: 1,
+        pageSize: 10,
+        pageNum: 0,
         total: 0
-      },
-      consignee: null,
-      token: null
+      }
     }
   },
   created() {
+    this.getList()
   },
   methods: {
-    watchs(id) {
-      Vue.prototype.expActive = id
-      this.$router.push(
-        {
-          path: '/expList'
+    getList() {
+      waterList().then(response => {
+        this.items = this.items.concat(response.data.dataList)
+        this.page = response.data.page
+        this.refreshing = false
+        // 加载状态结束
+        this.loading = false
+        // 数据全部加载完成
+        if (this.page.pageNum * this.page.pageSize >= this.page.total) {
+          this.finished = true
         }
-      )
+      })
+        .catch(error => {
+          console.log(error)
+          this.loading = false
+          this.finished = true
+        })
     },
-    qrcode() {
-      this.$router.push(
-        {
-          path: '/expQrcode'
-        }
-      )
+    onLoad() {
+      this.page.pageNum += 1
+      this.getList()
+    },
+    onRefresh() {
+      this.page.pageNum = 0
+      this.list = []
+      this.finished = false
+      window.scrollTo(0, 10)
     }
   }
 }
@@ -49,7 +98,55 @@ export default {
 .container {
   width: 100%;
   margin: 0 auto;
-  padding: 20px 40px;
   box-sizing: border-box;
+  p {
+    height: 96px;
+    line-height: 96px;
+    color: #858585;
+    padding-left: 32px;
+    font-size: 30px;
+  }
+  .list {
+    ul {
+      background: #fff;
+      padding: 0 32px;
+      li {
+        height: 163px;
+        border-bottom: 1px solid #d8d8d8;
+        div:first-child {
+          height: 68px;
+          line-height: 68px;
+          span:first-child {
+            float: left;
+            color: #333333;
+            font-size: 30px;
+          }
+          span {
+            float: right;
+            font-size: 26px;
+            color: #666666;
+          }
+        }
+        div:nth-child(2),
+        div:nth-child(3) {
+          i,
+          label {
+            height: 25px;
+            line-height: 25px;
+            width: 33.33333%;
+            float: left;
+            color: #555555;
+            font-size: 26px;
+          }
+          label {
+            height: 57px;
+            line-height: 57px;
+            color: #108ee9;
+            font-size: 30px;
+          }
+        }
+      }
+    }
+  }
 }
 </style>

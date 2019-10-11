@@ -59,8 +59,6 @@ export default {
     return {
       loading: false,
       finished: false,
-      already: require('@/assets/img/already.png'),
-      wait: require('@/assets/img/wait.png'),
       list: [],
       page: {
         pageSize: 10,
