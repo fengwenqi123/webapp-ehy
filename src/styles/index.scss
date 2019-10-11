@@ -1,0 +1,73 @@
+@import "./reset.scss";
+@import "./base.scss";
+
+* {
+  font-size: 30px;
+}
+
+.container {
+  header {
+    width: 100%;
+    height: 100px;
+    line-height: 100px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #fff;
+    box-shadow: 0 3px 5px #efefef;
+    z-index: 9;
+
+    div:first-child {
+      position: absolute;
+      left: 24px;
+      top: 0;
+      font-size: 36px;
+      z-index: 999;
+
+      .van-icon {
+        top: 0.08rem;
+      }
+    }
+
+    p {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      margin: auto;
+      text-align: center;
+      height: 100px;
+      line-height: 100px;
+      font-size: 40px;
+      font-weight: bold;
+      z-index: 99;
+    }
+  }
+}
+
+// 我的排闸图
+@keyframes heart {
+  0% {
+    // opacity: 0.5;
+    background: rgba(0, 255, 255, 0.2);
+  }
+
+  50% {
+    // opacity: 1;
+    background: rgba(255, 255, 255, 1);
+  }
+
+  100% {
+    // opacity: 0.5;
+    background: rgba(0, 255, 255, 0.2);
+  }
+}
+
+.submit {
+  margin: 20px auto;
+  width: 90%;
+  .van-button__text {
+    font-size: 36px;
+    font-weight: 400;
+  }
+}
