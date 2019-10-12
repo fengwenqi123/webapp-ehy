@@ -28,7 +28,7 @@ export default {
     feeling,
     breakRules
   },
-  created() {
+  mounted() {
     setTitle(this.$route.meta.title)
   },
   data() {

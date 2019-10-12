@@ -11,7 +11,7 @@
                 <p>{{item.shipName}}</p>
                 <p>船舶识别号：{{item.cbsbh}}</p>
                 <p>添加时间：{{item.addTimeString}}</p>
-              </div>     
+              </div>
               <span :class="{one:item.auditStatus===1,two:item.auditStatus===2,three:item.auditStatus===3}">{{item.auditStatus===1?'待审核':item.auditStatus===2?'通过':item.auditStatus===3?'未通过':'--'}}</span>
             </li>
           </ul>
@@ -29,7 +29,7 @@ export default {
       shipList: []
     }
   },
-  created() {
+  mounted() {
     this.list()
     setTitle(this.$route.meta.title)
   },
