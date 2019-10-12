@@ -1,29 +1,38 @@
 <template>
   <div class="card">
     <van-row>
-      <van-col v-for="item in itemList" :key="item.id" :span="24">
-        <p>{{item.card}}</p>
-        <p>证书有效期：{{item.date}}</p>
+      <van-col
+        v-for="item in items"
+        :key="item.id"
+        :span="24"
+      >
+        <p>{{item.zsmc}}</p>
+        <p>证书有效期：{{item.yxrq}}</p>
       </van-col>
     </van-row>
   </div>
 </template>
 
 <script>
+import { certificate } from '@/api/ehy.js'
 export default {
   data() {
     return {
       infoObj: {},
-      itemList: [
-        { id: '1', card: '船舶营业运输证', date: '2020-04-30' },
-        { id: '2', card: '船舶营业运输证', date: '2020-04-30' },
-        { id: '3', card: '船舶营业运输证', date: '2020-04-30' }
-      ]
+      items: []
     }
   },
   created() {
     this.infoObj = this.$route.query.info
-    console.log(this.infoObj)
+    this.getCbsbh(this.infoObj.cbdjh)
+  },
+  methods: {
+    getCbsbh(cbdjh) {
+      certificate(cbdjh).then(response => {
+        console.log(response)
+        this.items = response.data
+      })
+    }
   }
 }
 </script>
