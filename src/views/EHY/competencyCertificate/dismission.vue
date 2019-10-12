@@ -3,15 +3,15 @@
   <div class="title">
     当前任职情况
   </div>
-  <div class="content">
-    <ul>
+  <div class="content" v-if="rzList.length>0">
+    <ul v-for="(item,index) in rzList" :key="index">
       <li>
         <div class="item">
           <div class="label">
             任职船名
           </div>
           <div class="value">
-            asdasadasdasd
+            {{item.cbmc}}
           </div>
         </div>
       </li>
@@ -21,7 +21,7 @@
             上船任职时间
           </div>
           <div class="value">
-            asdasadasdasd
+            {{item.createdate}}
           </div>
         </div>
       </li>
@@ -31,7 +31,7 @@
             职务
           </div>
           <div class="value">
-            asdasadasdasd
+            {{item.zw}}
           </div>
         </div>
       </li>
@@ -40,15 +40,15 @@
   <div class="title">
     历史任职情况
   </div>
-  <div class="content">
-    <ul>
+  <div class="content" v-if="jzList.length>0">
+    <ul v-for="(item,index) in jzList" :key="index">
       <li>
         <div class="item">
           <div class="label">
             任职船名
           </div>
           <div class="value">
-            asdasadasdasd
+            {{item.cbmc}}
           </div>
         </div>
       </li>
@@ -58,7 +58,7 @@
             上船任职时间
           </div>
           <div class="value">
-            asdasadasdasd
+            {{item.createdate}}
           </div>
         </div>
       </li>
@@ -68,7 +68,7 @@
             职务
           </div>
           <div class="value">
-            asdasadasdasd
+            {{item.zw}}
           </div>
         </div>
       </li>
@@ -78,8 +78,41 @@
 </template>
 
 <script>
+  import { jrzList } from '@/api/competencyCertificate'
   export default {
-    name: 'dismission'
+    name: 'dismission',
+    props: ['name'],
+    data() {
+      return {
+        page: 1,
+        row: 99,
+        dataList: null,
+        rzList: [],
+        jzList: []
+      }
+    },
+    mounted() {
+      this.init()
+    },
+    methods: {
+      init() {
+        jrzList(this.page, this.row, this.name).then(response => {
+          this.dataList = JSON.parse(response.data).records.data
+          this.getList()
+        })
+      },
+      getList() {
+        this.rzList = []
+        this.jzList = []
+        this.dataList.forEach((item, index) => {
+          if (item.sfsc === 0) {
+            this.jzList.push(item)
+          } else {
+            this.rzList.push(item)
+          }
+        })
+      }
+    }
   }
 </script>
 
@@ -99,12 +132,11 @@
     ul{
       display: flex;
       flex-wrap: wrap;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #ccc;
       li{
         width: 50%;
         margin-top: 20px;
-        .item{
-
-        }
       }
     }
   }

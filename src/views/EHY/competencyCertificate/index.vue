@@ -41,8 +41,15 @@
     methods: {
       submit() {
         search(this.form.name, this.form.idCard).then(response => {
+          let data = null
+          if (response.data.dataList) {
+            data = response.data.dataList
+          }
           this.$router.push({
-            path: '/cerDetails'
+            path: '/cerDetails',
+            query: {
+              data
+            }
           })
         })
       }

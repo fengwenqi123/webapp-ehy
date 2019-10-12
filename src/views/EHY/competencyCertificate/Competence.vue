@@ -9,10 +9,10 @@
     <div class="id-info">
       <div class="line1">
         <div class="name">
-          刘旭
+          {{this.name}}
         </div>
         <div class="sex">
-          男
+          {{this.xb===1?'男':'女'}}
         </div>
       </div>
       <div class="line2">
@@ -20,40 +20,40 @@
           身份证号
         </div>
         <div class="sex">
-          223294234234234234243
+          {{this.idCard}}
         </div>
       </div>
     </div>
     <div class="certificate">
-      <ul v-for="item in 5" :key="item">
+      <ul v-for="(item,index) in dataList" :key="index">
         <li>
           <div class="item">
             <div class="label">证书编号</div>
-            <div class="value">33333333333333333333333333</div>
+            <div class="value">{{item.zshm}}</div>
           </div>
         </li>
         <li>
           <div class="item">
             <div class="label">适任等级/职务</div>
-            <div class="value">1231231</div>
+            <div class="value">{{item.srzwmc}}</div>
           </div>
         </li>
         <li>
           <div class="item">
             <div class="label">签发机构</div>
-            <div class="value">asdadas</div>
+            <div class="value">{{item.qfjg}}</div>
           </div>
         </li>
         <li>
           <div class="item">
             <div class="label">签发日期</div>
-            <div class="value">啊大大实打实大</div>
+            <div class="value">{{item.qfrq}}</div>
           </div>
         </li>
         <li>
           <div class="item">
             <div class="label">有效期止</div>
-            <div class="value">啊实打实大大声道</div>
+            <div class="value">{{item.jzrq}}</div>
           </div>
         </li>
       </ul>
@@ -63,7 +63,8 @@
 
 <script>
   export default {
-    name: 'Competence'
+    name: 'Competence',
+    props: ['name', 'idCard', 'xb', 'dataList']
   }
 </script>
 
@@ -134,10 +135,11 @@
     .certificate {
       background: #fff;
       margin-top: 30px;
+
       ul {
         display: flex;
         flex-wrap: wrap;
-        padding:30px;
+        padding: 30px;
         border-bottom: 1px solid #ccc;
 
         li {
