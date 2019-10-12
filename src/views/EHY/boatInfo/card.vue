@@ -13,14 +13,18 @@
 export default {
   data() {
     return {
+      infoObj: {},
       itemList: [
         { id: '1', card: '船舶营业运输证', date: '2020-04-30' },
         { id: '2', card: '船舶营业运输证', date: '2020-04-30' },
         { id: '3', card: '船舶营业运输证', date: '2020-04-30' }
       ]
     }
+  },
+  created() {
+    this.infoObj = this.$route.query.info
+    console.log(this.infoObj)
   }
-
 }
 </script>
 

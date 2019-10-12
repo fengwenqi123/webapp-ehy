@@ -8,3 +8,14 @@ export function waterList() {
     method: 'GET'
   })
 }
+
+// 船舶列表
+export function boatList(tags) {
+  return request({
+    url: 'member/memShip/selectByToken',
+    method: 'GET',
+    params: {
+      tags
+    }
+  })
+}

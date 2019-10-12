@@ -79,7 +79,15 @@
 
 <script>
 export default {
-
+  data() {
+    return {
+      infoObj: {}
+    }
+  },
+  created() {
+    this.infoObj = this.$route.query.info
+    console.log(this.infoObj)
+  }
 }
 </script>
 
