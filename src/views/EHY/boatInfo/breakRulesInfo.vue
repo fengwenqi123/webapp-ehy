@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { setTitle } from '@/utils/cache.js'
 export default {
   data() {
     return {
@@ -50,6 +51,7 @@ export default {
   },
   created() {
     this.infoObj = this.$route.query.info
+    setTitle(this.$route.meta.title)
     console.log(this.infoObj)
   }
 }
