@@ -46,3 +46,15 @@ export function certificate(cbdjh) {
     method: 'GET'
   })
 }
+
+// 感知
+export function feeling(dataType, shipName) {
+  return request({
+    url: 'gps/position/latestPosByShipName',
+    method: 'GET',
+    params: {
+      dataType, shipName
+    }
+  })
+}
+

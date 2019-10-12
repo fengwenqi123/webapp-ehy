@@ -2,44 +2,40 @@
   <div class="boatInfo">
     <van-row>
       <van-col :span="12">
-        <p>船名号</p>
-        <p>123</p>
+        <p>中文船名</p>
+        <p>{{infoObj.shipName}}</p>
       </van-col>
       <van-col :span="12">
-        <p>船长</p>
-        <p>123</p>
+        <p>违章录入单位</p>
+        <p>{{infoObj.dockName||'--'}}</p>
       </van-col>
       <van-col :span="12">
-        <p>船检登记号</p>
-        <p>123</p>
+        <p>违章处理状态</p>
+        <p>{{infoObj.status||'--'}}</p>
       </van-col>
       <van-col :span="12">
-        <p>案件类别</p>
-        <p>123</p>
+        <p>违章时间</p>
+        <p>{{infoObj.violationDate.substring(0,10)}}</p>
       </van-col>
       <van-col :span="12">
-        <p>案件来源</p>
-        <p>123</p>
+        <p>违章标记</p>
+        <p>{{infoObj.flag||'--'}}</p>
       </van-col>
-      <van-col :span="12">
-        <p>发案时间</p>
-        <p>123</p>
+       <van-col :span="24">
+        <p>违章录入时间</p>
+        <p>{{infoObj.addDate||'--'}}</p>
       </van-col>
       <van-col :span="24">
-        <p>是否结案</p>
-        <p>123</p>
-      </van-col>
-      <van-col :span="24">
-        <p>案由</p>
-        <p>123</p>
+        <p>违章类型</p>
+        <p>{{infoObj.gcvTypeName||'--'}}</p>
       </van-col>
       <van-col :span="24">
         <p>违法内容</p>
-        <p>123</p>
+        <p>{{infoObj.content||'--'}}</p>
       </van-col>
       <van-col :span="24">
-        <p>违法条例</p>
-        <p>123</p>
+        <p>违章处理结果</p>
+        <p>{{infoObj.whyRemove||'--'}}</p>
       </van-col>
     </van-row>
   </div>
@@ -47,7 +43,15 @@
 
 <script>
 export default {
-
+  data() {
+    return {
+      infoObj: {}
+    }
+  },
+  created() {
+    this.infoObj = this.$route.query.info
+    console.log(this.infoObj)
+  }
 }
 </script>
 

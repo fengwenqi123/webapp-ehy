@@ -16,6 +16,7 @@
                   <van-icon name="arrow" />
                 </p>
             </li>
+            <li v-if="noDeel.length===0">暂无记录</li>
           </ul>
       </van-col>
       <van-col :span="24" >
@@ -33,6 +34,7 @@
                   <van-icon name="arrow" />
                 </p>
             </li>
+             <li v-if="doDeel.length===0">暂无记录</li>
           </ul>
       </van-col>
     </van-row>
@@ -62,12 +64,12 @@ export default {
   },
   methods: {
     breakRule() {
-      breakRules(this.page.pageNum, this.page.pageSize, '杭州测试01').then(response => {
+      breakRules(this.page.pageNum, this.page.pageSize, this.infoObj.shipName).then(response => {
         // console.log(response)
         this.page.total = response.data.page.total
         if (this.page.total > this.page.pageSize) {
           this.page.pageSize = this.page.total
-          breakRules(this.page.pageNum, this.page.pageSize, '杭州测试01').then(response => {
+          breakRules(this.page.pageNum, this.page.pageSize, this.infoObj.shipName).then(response => {
             this.allBreakRules = response.data.dataList
           })
         } else {
@@ -80,6 +82,7 @@ export default {
       })
     },
     goBreakRuleInfo(item) {
+      this.$router.push({ path: '/breakRulesInfo', query: { info: item }})
     }
 
   }

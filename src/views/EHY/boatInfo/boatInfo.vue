@@ -65,7 +65,7 @@
         <p>船舶所有人</p>
         <p>{{items.syr || '--'}}</p>
       </van-col>
-      <van-col :span="12">
+      <van-col :span="24">
         <p>船舶经营人</p>
         <p>{{items.jyr || '--'}}</p>
       </van-col>
