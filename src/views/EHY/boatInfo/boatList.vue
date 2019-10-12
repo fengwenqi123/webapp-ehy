@@ -5,12 +5,14 @@
           <ul>
             <li v-for="item in shipList" :key="item.id" @click="goInfo(item)">
               <div>
-                <img src="../../../assets/img/1.png">
+                <img src="../../../assets/img/ehyShip.png">
+              </div>
+              <div>
                 <p>{{item.shipName}}</p>
-              </div>       
-                <p>
-                  <van-icon name="arrow" />
-                </p>
+                <p>船舶识别号：{{item.cbsbh}}</p>
+                <p>添加时间：{{item.addTimeString}}</p>
+              </div>     
+              <span :class="{one:item.auditStatus===1,two:item.auditStatus===2,three:item.auditStatus===3}">{{item.auditStatus===1?'待审核':item.auditStatus===2?'通过':item.auditStatus===3?'未通过':'--'}}</span>
             </li>
           </ul>
       </van-col>
@@ -19,6 +21,7 @@
 </template>
 
 <script>
+import { setTitle } from '@/utils/cache.js'
 import { boatList } from '@/api/ehy'
 export default {
   data() {
@@ -28,6 +31,7 @@ export default {
   },
   created() {
     this.list()
+    setTitle(this.$route.meta.title)
   },
   methods: {
     list() {
@@ -46,52 +50,59 @@ export default {
 <style scoped lang="scss">
 .boatList {
   .van-row {
-    padding: 20px 0;
     .van-col {
-      > p {
-        padding: 20px;
-        color: #888;
-        line-height: 60px;
-      }
       ul {
-        background-color: #fff;
-        width: 100%;
+        padding: 20px;
         li {
-          border-top: 1px solid #eee;
-          height: 120px;
-          padding: 20px;
-          > p {
+          padding: 10px;
+          margin-bottom: 20px;
+          background-color: #fff;
+          height: 224px;
+          border-radius: 10px;
+          span {
+            font-size: 30px;
+            margin-right: 10px;
             display: inline-block;
+            line-height: 90px;
             float: right;
-            line-height: 120px;
-            color: #888;
+          }
+          .one {
+            color: #ffbe00;
+          }
+          .two {
+            color: #09bb07;
+          }
+          .three {
+            color: #f76260;
           }
           div {
-            height: 120px;
+            height: 180px;
             display: inline-block;
-            width: 80%;
             img {
-              height: 100%;
+              height: 50%;
               float: left;
             }
             p {
               margin-left: 20px;
-              display: inline-block;
-              line-height: 120px;
+            }
+            p:nth-of-type(1) {
+              color: #333;
               font-size: 34px;
+              line-height: 60px;
+            }
+            p:nth-of-type(2) {
+              color: #333;
+              font-size: 28px;
+              line-height: 60px;
+            }
+            p:nth-of-type(3) {
+              color: #888;
+              font-size: 28px;
+              line-height: 60px;
             }
           }
         }
       }
-    }
-  }
-  .bottom {
-    width: 96%;
-    padding: 0 2%;
-    .van-button {
-      width: 96%;
-      position: fixed;
-      bottom: 20px;
     }
   }
 }
