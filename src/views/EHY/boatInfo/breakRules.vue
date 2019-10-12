@@ -4,10 +4,13 @@
       <van-col :span="24">
         <p>未处理违章</p>
           <ul>
-            <li>
+            <li v-for="item in noDeel" :key="item.id" @click="goBreakRuleInfo(item)">
               <div>
-                <p>未能按照交通法规行驶未能按照交通法规行驶未能按照交通法规行驶</p>
-                <p>海事</p>
+                <p>{{item.content}}</p>
+                <p>
+                  <span>{{item.dockName}}</span>
+                  <span>{{item.violationDate.substring(0,10)}}</span>
+                </p>
               </div>       
                 <p>
                   <van-icon name="arrow" />
@@ -17,23 +20,68 @@
       </van-col>
       <van-col :span="24" >
         <p>历史行政处罚信息</p>
-        <van-col :span="20"></van-col>
-        <van-col :span="4"></van-col>
+        <ul>
+            <li v-for="item in doDeel" :key="item.id">
+              <div>
+                <p>{{item.content}}</p>
+                <p>
+                  <span>{{item.dockName}}</span>
+                  <span>{{item.violationDate.substring(0,10)}}</span>
+                </p>
+              </div>       
+                <p>
+                  <van-icon name="arrow" />
+                </p>
+            </li>
+          </ul>
       </van-col>
     </van-row>
   </div>
 </template>
 
 <script>
+import { breakRules } from '@/api/ehy'
 export default {
   data() {
     return {
-      infoObj: {}
+      page: {
+        pageNum: 1,
+        pageSize: 200,
+        total: 0
+      },
+      infoObj: {},
+      allBreakRules: [],
+      noDeel: [],
+      doDeel: []
     }
   },
   created() {
     this.infoObj = this.$route.query.info
+    this.breakRule()
     console.log(this.infoObj)
+  },
+  methods: {
+    breakRule() {
+      breakRules(this.page.pageNum, this.page.pageSize, '杭州测试01').then(response => {
+        // console.log(response)
+        this.page.total = response.data.page.total
+        if (this.page.total > this.page.pageSize) {
+          this.page.pageSize = this.page.total
+          breakRules(this.page.pageNum, this.page.pageSize, '杭州测试01').then(response => {
+            this.allBreakRules = response.data.dataList
+          })
+        } else {
+          this.allBreakRules = response.data.dataList
+        }
+        this.noDeel = this.allBreakRules.filter(item => item.status === '未处理')
+        this.doDeel = this.allBreakRules.filter(item => item.status === '已处理')
+        console.log('未处理', this.noDeel)
+        console.log('已处理', this.doDeel)
+      })
+    },
+    goBreakRuleInfo(item) {
+    }
+
   }
 }
 </script>
@@ -52,6 +100,7 @@ export default {
         width: 100%;
         li {
           height: 100px;
+          border-top: 1px solid #eee;
           padding: 20px;
           > p {
             display: inline-block;
@@ -65,6 +114,9 @@ export default {
               width: 80%;
               p {
                 line-height: 50px;
+                span:nth-child(2) {
+                  float: right;
+                }
                 &:nth-child(1) {
                   overflow: hidden;
                   white-space: nowrap;

@@ -15,9 +15,6 @@
           </ul>
       </van-col>
     </van-row>
-    <div class="bottom">
-      <van-button type="default" color="#0064e0" @click.native="addShip">新增船舶</van-button>
-    </div>
   </div>
 </template>
 
@@ -41,9 +38,6 @@ export default {
     },
     goInfo(item) {
       this.$router.push({ path: '/boatInfo', query: { info: item }})
-    },
-    addShip() {
-      this.$router.push({ name: 'addShip' })
     }
   }
 }

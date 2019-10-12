@@ -14,12 +14,6 @@ const ehy = [{
   meta: { title: '船舶列表' }
 },
 {
-  path: '/addShip',
-  name: 'addShip',
-  component: () => import('@/views/EHY/boatInfo/addShip'),
-  meta: { title: '新增船舶' }
-},
-{
   path: '/boatInfo',
   name: 'boatInfo',
   component: () => import('@/views/EHY/boatInfo'),

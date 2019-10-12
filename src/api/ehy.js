@@ -19,3 +19,15 @@ export function boatList(tags) {
     }
   })
 }
+
+// 违章
+export function breakRules(pageNum, pageSize, shipName) {
+  return request({
+    url: 'collaboration/violation ',
+    method: 'GET',
+    params: {
+      pageNum, pageSize, shipName
+    }
+  })
+}
+
