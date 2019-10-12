@@ -17,20 +17,23 @@
             <li
               v-for="(item,index) in items"
               :key="index"
+              :class="{danger:item.status !== 1}"
             >
-              <div>
-                <span>{{item.name}}</span>
-                <span>{{item.modifyTimeString}}</span>
-              </div>
-              <div>
-                <i>当前水位</i>
-                <i>警戒水位</i>
-                <i>保障水位</i>
-              </div>
-              <div>
-                <label>{{item.depth || '--'}}</label>
-                <label>{{item.depthMin || '--'}}</label>
-                <label>{{item.depthMax || '--'}}</label>
+              <div class="box">
+                <div>
+                  <span>{{item.name}}</span>
+                  <span>{{item.modifyTimeString}}</span>
+                </div>
+                <div>
+                  <i>当前水位</i>
+                  <i>警戒水位</i>
+                  <i>保障水位</i>
+                </div>
+                <div>
+                  <label :class="{red:item.status !== 1}">{{item.depth || '--'}}</label>
+                  <label>{{item.depthMin || '--'}}</label>
+                  <label>{{item.depthMax || '--'}}</label>
+                </div>
               </div>
             </li>
           </ul>
@@ -109,41 +112,58 @@ export default {
   .list {
     ul {
       background: #fff;
-      padding: 0 32px;
       li {
         height: 163px;
-        border-bottom: 1px solid #d8d8d8;
-        div:first-child {
-          height: 68px;
-          line-height: 68px;
-          span:first-child {
-            float: left;
-            color: #333333;
-            font-size: 30px;
+        padding-left: 32px;
+
+        .box {
+          height: 100%;
+          width: 100%;
+          border-bottom: 1px solid #d8d8d8;
+          div {
+            padding-right: 32px;
           }
-          span {
-            float: right;
-            font-size: 26px;
-            color: #666666;
+          div:first-child {
+            height: 68px;
+            line-height: 68px;
+            span:first-child {
+              float: left;
+              color: #333333;
+              font-size: 30px;
+            }
+            span {
+              float: right;
+              font-size: 26px;
+              color: #666666;
+            }
+          }
+          div:nth-child(2),
+          div:nth-child(3) {
+            float: left;
+            width: 100%;
+            i,
+            label {
+              height: 25px;
+              line-height: 25px;
+              width: 33.33333%;
+              float: left;
+              color: #555555;
+              font-size: 26px;
+            }
+            label {
+              height: 57px;
+              line-height: 57px;
+              color: #108ee9;
+              font-size: 30px;
+            }
           }
         }
-        div:nth-child(2),
-        div:nth-child(3) {
-          i,
-          label {
-            height: 25px;
-            line-height: 25px;
-            width: 33.33333%;
-            float: left;
-            color: #555555;
-            font-size: 26px;
-          }
-          label {
-            height: 57px;
-            line-height: 57px;
-            color: #108ee9;
-            font-size: 30px;
-          }
+      }
+      .danger {
+        background: #fff0f0;
+        .red {
+          color: red !important;
+          font-weight: bold;
         }
       }
     }
