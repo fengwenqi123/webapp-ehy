@@ -86,6 +86,7 @@ service.interceptors.response.use(
   },
   // 错误反馈
   error => {
+    Toast.clear()
     Dialog.alert({
       title: '提示',
       message: '请求超时'

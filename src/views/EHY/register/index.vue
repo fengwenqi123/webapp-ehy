@@ -1,282 +1,162 @@
 <template>
   <div class="container">
-    <!--    <div class="header">-->
-    <!--      <pageHeader/>-->
-    <!--    </div>-->
     <div class="content">
       <van-cell-group>
         <van-field
-          v-model="shipName"
-          label="船名"
+          v-model="form.name"
+          label="姓名"
+          required
+          placeholder="请输入姓名"
           clickable
-          disabled
           input-align="right"
         />
         <van-field
-          v-model="active1.name"
-          label="装/卸货"
-          is-link
-          disabled
-          input-align="right"
-          arrow-direction="down"
-          placeholder="请选择"
-          @click="show=true"
-        />
-        <van-field
-          v-model="active2.name"
-          label="起运港"
-          is-link
-          disabled
-          input-align="right"
-          arrow-direction="down"
-          placeholder="请选择起运港"
-          @click="qyList"
-        />
-        <van-field
-          v-model="active3.name"
-          label="目的港"
-          is-link
-          disabled
-          input-align="right"
-          arrow-direction="down"
-          placeholder="请选择目的港"
-          @click="mdList"
-        />
-        <van-field
-          v-model="active4.name"
-          label="作业码头"
-          is-link
-          disabled
-          input-align="right"
-          arrow-direction="down"
-          placeholder="请选择作业码头"
-          @click="pierList"
-        />
-        <van-field
-          v-model="active5.name"
-          label="货种"
-          is-link
-          disabled
-          input-align="right"
-          arrow-direction="down"
-          placeholder="请选择货种"
-          @click="goodsList"
-        />
-        <van-field
-          v-model="Tonnage"
-          label="载重吨（t）"
+          v-model="form.idCard"
+          label="身份证"
+          required
+          placeholder="请输入身份证"
           clickable
-          disabled
           input-align="right"
-          placeholder="请选择载重吨（t）"
+        />
+        <van-field
+          v-model="form.mobile"
+          label="手机号"
+          type="tel"
+          required
+          placeholder="请输入手机号"
+          clickable
+          input-align="right"
+        />
+        <van-field
+          v-model="form.code"
+          type="number"
+          center
+          required
+          clearable
+          label="验证码"
+          placeholder="请输入短信验证码"
+        >
+          <van-button @click="_getSms" :disabled="disabled" slot="button" size="small" type="info">{{smsText}}</van-button>
+        </van-field>
+        <van-field
+          v-model="form.password"
+          label="密码"
+          required
+          type="password"
+          placeholder="请输入密码"
+          clickable
+          input-align="right"
+        />
+        <van-field
+          v-model="form.channel"
+          label="推广单位"
+          is-link
+          disabled
+          required
+          input-align="right"
+          placeholder="请选择推广单位"
+          @click="unitList"
         />
       </van-cell-group>
-      <div class="tip">
-        当前吨位为默认吨位无法修改，如果修改吨位请到站点进行报修
-      </div>
       <div class="submit" @click="submit">
-        <van-button type="info" size="large">报 港</van-button>
+        <van-button type="info" size="large">注 册</van-button>
       </div>
     </div>
-    <van-action-sheet
-      v-model="show"
-      :actions="actions"
-      round
-      close-on-click-action
-      @select="onSelect"
-      cancel-text="取消"
-    />
+    <van-popup v-model="showPicker" position="bottom">
+      <van-picker
+        show-toolbar
+        title="站点"
+        :columns="columns"
+        @cancel="showPicker = false"
+        @confirm="onConfirm"
+      />
+    </van-popup>
   </div>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import { getSms, getRegister } from '@/api/register.js'
   import { Toast } from 'vant'
-  import pageHeader from '@/components/navBar'
-  import { detailByShipName, report } from '@/api/gyt'
-  import { setTitle } from '@/utils/cache.js'
-
+  var smsText = 60
   export default {
     name: 'index',
-    components: {
-      pageHeader
-    },
-    computed: {
-      ...mapGetters([
-        'selected_qyg',
-        'selected_mdg',
-        'selected_pier',
-        'selected_zxh',
-        'selected_goods',
-        'selected_zzd',
-        'shipName'
-      ])
-    },
     data() {
       return {
-        show: false,
-        actions: [
-          {
-            name: '装货',
-            value: 1
-          },
-          {
-            name: '卸货',
-            value: 2
-          }
-        ],
-        active1: null,
-        active2: null,
-        active3: null,
-        active4: null,
-        active5: null,
-        Tonnage: null
+        smsText: '发送验证码',
+        disabled: false,
+        form: {
+          name: null,
+          idCard: null,
+          mobile: null,
+          channel: null,
+          code: null,
+          password: null,
+          loginName: null
+        },
+        showPicker: false,
+        columns: ['吴山渡站', '太湖站', '南浔港航管理检查站', '乾元站', '新市站', '环城站', '洪桥站', '双林站', '武康站', '马家渡站', '雉城站', '吕山站', '菱湖站', '小浦站', '和平站']
       }
     },
-    created() {
-      this.init()
-      this.getTonnage()
-      setTitle(this.$route.meta.title)
-    },
     methods: {
-      init() {
-        const obj = {
-          name: null
-        }
-        this.active1 = this.selected_zxh ? this.selected_zxh : obj
-        this.active2 = this.selected_qyg ? this.selected_qyg : obj
-        this.active3 = this.selected_mdg ? this.selected_mdg : obj
-        this.active4 = this.selected_pier ? this.selected_pier : obj
-        this.active5 = this.selected_goods ? this.selected_goods : obj
-      },
-      onSelect(item) {
-        this.$store.commit('set_zxh', item)
-        this.active1 = item
-      },
-      qyList() {
-        if (!this.active1.name) {
-          Toast('请先选择装/卸货')
+      // 获取验证码
+      _getSms() {
+        if (!this.form.mobile) {
+          Toast('请填写手机号')
           return
         }
-        this.$router.push(
-          {
-            path: '/qyList'
+        const type = 1
+        getSms(type, this.form.mobile).then(response => {
+          this.CountDown()
+        })
+      },
+      CountDown() {
+        setTimeout(() => {
+          if (smsText > 0) {
+            this.disabled = true
+            smsText--
+            this.smsText = smsText + ' s'
+            this.CountDown()
+          } else {
+            smsText = 60
+            this.smsText = '发送验证码'
+            this.disabled = false
           }
-        )
+        }, 1000)
       },
-      mdList() {
-        if (!this.active1.name) {
-          Toast('请先选择装/卸货')
-          return
-        }
-        if (!this.active2.name) {
-          Toast('请先选择起运港')
-          return
-        }
-        this.$router.push(
-          {
-            path: '/mdList'
-          }
-        )
-      },
-      pierList() {
-        if (!this.active1.name) {
-          Toast('请先选择装/卸货')
-          return
-        }
-        if (!this.active2.name) {
-          Toast('请先选择起运港')
-          return
-        }
-        if (!this.active3.name) {
-          Toast('请先选择目的港')
-          return
-        }
-        this.$router.push(
-          {
-            path: '/pierList',
-            query: {
-              name: this.active2.name ? `${this.active2.name}航管理处` : null
-            }
-          }
-        )
-      },
-      goodsList() {
-        if (!this.active1.name) {
-          Toast('请先选择装/卸货')
-          return
-        }
-        if (!this.active2.name) {
-          Toast('请先选择起运港')
-          return
-        }
-        if (!this.active3.name) {
-          Toast('请先选择目的港')
-          return
-        }
-        if (!this.active4.name) {
-          Toast('请先选择作业码头')
-          return
-        }
-        this.$router.push(
-          {
-            path: '/goodsList',
-            query: {
-              id: this.active4.id ? this.active4.id : null
-            }
-          }
-        )
-      },
-      getTonnage() {
-        if (this.selected_zzd) {
-          this.Tonnage = this.selected_zzd
-        } else {
-          detailByShipName(this.shipName).then(response => {
-            this.Tonnage = response.data.ckzzd
-            this.$store.commit('set_zzd', this.Tonnage)
-          })
-        }
+      unitList() {
+        this.showPicker = true
       },
       submit() {
-        if (!this.active1.name) {
-          Toast('请先选择装/卸货')
+        if (!this.form.name) {
+          Toast('请输入姓名')
+          return
+        } if (!this.form.name) {
+          Toast('请输入姓名')
+          return
+        } if (!this.form.idCard) {
+          Toast('请输入身份证')
+          return
+        } if (!this.form.mobile) {
+          Toast('请输入手机号')
+          return
+        } if (!this.form.code) {
+          Toast('请输入短信验证码')
+          return
+        } if (!this.form.password) {
+          Toast('请输入密码')
+          return
+        } if (!this.form.channel) {
+          Toast('请选择推广单位')
           return
         }
-        if (!this.active2.name) {
-          Toast('请先选择起运港')
-          return
-        }
-        if (!this.active3.name) {
-          Toast('请先选择目的港')
-          return
-        }
-        if (!this.active4.name) {
-          Toast('请先选择作业码头')
-          return
-        }
-        if (!this.active5.name) {
-          Toast('请先选择货种')
-          return
-        }
-        report({
-          shipName: this.shipName,
-          operationType: this.active1.value,
-          startPortId: this.active2.cityID,
-          targetPortId: this.active3.id,
-          pierId: this.active4.id,
-          goodsId: this.active5.id,
-          weight: this.Tonnage
-        }).then(response => {
-          Toast.success({
-            message: response.msg,
-            duration: 1000
-          })
-          setTimeout(() => {
-            this.$router.push({
-              path: '/bgHistory'
-            })
-          }, 1000)
+        this.form.loginName = this.form.mobile
+        getRegister(this.form).then(response => {
+
         })
+      },
+      onConfirm(value) {
+        this.form.channel = value
+        this.showPicker = false
       }
     }
   }
@@ -288,48 +168,5 @@
     position: absolute;
     width: 100%;
     background: #fff;
-
-    /*.header {*/
-    /*  position: fixed;*/
-    /*  width: 100%;*/
-    /*  z-index: 9;*/
-    /*}*/
-
-    .content {
-      /*padding-top: 100px;*/
-
-      ul {
-        li {
-          .item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40px;
-            height: 100px;
-            border-bottom: 1px solid #ccc;
-
-            .label {
-              font-size: 30px;
-            }
-
-            .value {
-              font-size: 30px;
-            }
-          }
-        }
-      }
-
-      .tip {
-        padding: 40px 40px;
-        font-size: 30px;
-        line-height: 40px;
-        color: rgba(43, 43, 43, 0.6)
-      }
-
-      .submit {
-        padding: 0 40px;
-      }
-
-    }
   }
 </style>
