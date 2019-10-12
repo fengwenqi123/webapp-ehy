@@ -31,3 +31,18 @@ export function breakRules(pageNum, pageSize, shipName) {
   })
 }
 
+// 船舶基本信息
+export function shipInfo(cbsbh) {
+  return request({
+    url: '/collaboration/shipExtend/findByCbsbh?cbsbh=' + cbsbh,
+    method: 'GET'
+  })
+}
+
+// 证书
+export function certificate(cbdjh) {
+  return request({
+    url: '/collaboration/certificateAllExtend/list?cbdjh=' + cbdjh,
+    method: 'GET'
+  })
+}
