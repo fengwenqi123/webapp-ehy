@@ -43,6 +43,7 @@
 
 <script>
 import { breakRules } from '@/api/ehy'
+import { getShipName } from '@/utils/cache.js'
 export default {
   data() {
     return {
@@ -58,13 +59,17 @@ export default {
     }
   },
   created() {
-    this.infoObj = this.$route.query.info
-    this.breakRule()
+    if (this.$route.query.info) {
+      this.infoObj = this.$route.query.info
+      this.breakRule(this.infoObj.shipName)
+    } else {
+      this.breakRule(getShipName())
+    }
     console.log(this.infoObj)
   },
   methods: {
-    breakRule() {
-      breakRules(this.page.pageNum, this.page.pageSize, this.infoObj.shipName).then(response => {
+    breakRule(shipName) {
+      breakRules(this.page.pageNum, this.page.pageSize, shipName).then(response => {
         // console.log(response)
         this.page.total = response.data.page.total
         if (this.page.total > this.page.pageSize) {

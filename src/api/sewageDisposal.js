@@ -2,12 +2,12 @@ import request from '@/utils/request'
 
 import qs from 'qs'
 // 收集点列表
-export function recoveryInfo(code) {
+export function recoveryInfo(shipName, code) {
   return request({
     url: '/sewage/sewageOutlet/findByCode',
     method: 'GET',
     params: {
-      code
+      shipName, code
     }
   })
 }
@@ -63,6 +63,14 @@ export function sewageReport(pageNum, pageSize, time, type) {
     params: {
       pageNum, pageSize, time, type
     }
+  })
+}
+
+//
+export function points() {
+  return request({
+    url: '/poi/sewage/selectSum',
+    method: 'GET'
   })
 }
 

@@ -35,7 +35,7 @@ const ehy = [
     path: '/competencyCertificate',
     name: 'competencyCertificate',
     component: () => import('@/views/EHY/competencyCertificate'),
-    meta: { title: '船员查询' }
+    meta: { title: '船员适任证' }
   },
   {
     path: '/cerDetails',

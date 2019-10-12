@@ -29,18 +29,18 @@
               <img src="../../../assets/img/sewage/integral.png" alt="" />
               <div class="content">
                 <div class="val1">
-                  吕山服务区
+                 {{item.name}}
                 </div>
                 <div class="val2">
-                  生活污水回收
+                  {{item.type===1?'生活污水':item.type===2?'油污':item.type===3?'生活垃圾':"--"}}
                 </div>
                 <div class="val3">
-                  09-12 22:00
+                 {{item.addTimeString}}
                 </div>
               </div>
             </div>
             <div class="right">
-              <p>+1</p>
+              <p><span v-if="item.totalPoint>0">+</span>{{item.totalPoint}}</p>
             </div>
           </div>
         </li> 
@@ -58,7 +58,8 @@
 import DatetimePicker from './DatetimePicker'
 import { parseTime } from '@/utils/index'
 import { setTitle } from '@/utils/cache.js'
-import { sewageReport } from '@/api/sewageDisposal'
+import { pwList } from '@/api/sewageDisposal1'
+import { points } from '@/api/sewageDisposal'
 export default {
   components: {
     DatetimePicker
@@ -70,6 +71,7 @@ export default {
     return {
       selectDate: parseTime(new Date(), '{y}-{m}'),
       show: false,
+      type: '1',
       page: {
         pageSize: 5,
         pageNum: 1,
@@ -80,6 +82,10 @@ export default {
       finished: false,
       loading: false
     }
+  },
+  created() {
+    this.lists()
+    this.point()
   },
   methods: {
     selectDateFn() {
@@ -92,6 +98,7 @@ export default {
     cancel() {
       this.show = false
     },
+
     onRefresh() {
       setTimeout(() => {
         this.$toast('刷新成功')
@@ -107,8 +114,13 @@ export default {
       this.page.pageNum++
       this.lists()
     },
+    point() {
+      points().then(reponse => {
+        console.log(reponse)
+      })
+    },
     lists() {
-      sewageReport(this.page.pageNum, this.page.pageSize, this.time, this.type).then(response => {
+      pwList(this.page.pageNum, this.page.pageSize, this.selectDate, this.type).then(response => {
         this.page.total = response.data.page.total
         this.itemList = this.itemList.concat(response.data.dataList)
         // 加载状态结束

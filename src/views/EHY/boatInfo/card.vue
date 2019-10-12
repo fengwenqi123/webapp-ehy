@@ -15,6 +15,7 @@
 
 <script>
 import { certificate } from '@/api/ehy.js'
+import { getCbdjh } from '@/utils/cache.js'
 export default {
   data() {
     return {
@@ -23,8 +24,12 @@ export default {
     }
   },
   created() {
-    this.infoObj = this.$route.query.info
-    this.getCbsbh(this.infoObj.cbdjh)
+    if (this.$route.query.info) {
+      this.infoObj = this.$route.query.info
+      this.getCbsbh(this.infoObj.cbdjh)
+    } else {
+      this.getCbsbh(getCbdjh())
+    }
   },
   methods: {
     getCbsbh(cbdjh) {

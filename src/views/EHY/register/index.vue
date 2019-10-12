@@ -75,98 +75,103 @@
 </template>
 
 <script>
-  import { getSms, getRegister } from '@/api/register.js'
-  import { Toast } from 'vant'
-  var smsText = 60
-  export default {
-    name: 'index',
-    data() {
-      return {
-        smsText: '发送验证码',
-        disabled: false,
-        form: {
-          name: null,
-          idCard: null,
-          mobile: null,
-          channel: null,
-          code: null,
-          password: null,
-          loginName: null
-        },
-        showPicker: false,
-        columns: ['吴山渡站', '太湖站', '南浔港航管理检查站', '乾元站', '新市站', '环城站', '洪桥站', '双林站', '武康站', '马家渡站', '雉城站', '吕山站', '菱湖站', '小浦站', '和平站']
+import { getSms, getRegister } from '@/api/register.js'
+import { getFinishWeb } from '@/utils/cache.js'
+import { Toast } from 'vant'
+import { setTitle } from '@/utils/cache.js'
+var smsText = 60
+export default {
+  name: 'index',
+  data() {
+    return {
+      smsText: '发送验证码',
+      disabled: false,
+      form: {
+        name: null,
+        idCard: null,
+        mobile: null,
+        channel: null,
+        code: null,
+        password: null,
+        loginName: null
+      },
+      showPicker: false,
+      columns: ['吴山渡站', '太湖站', '南浔港航管理检查站', '乾元站', '新市站', '环城站', '洪桥站', '双林站', '武康站', '马家渡站', '雉城站', '吕山站', '菱湖站', '小浦站', '和平站']
+    }
+  },
+  created() {
+    setTitle(this.$route.meta.title)
+  },
+  methods: {
+    // 获取验证码
+    _getSms() {
+      if (!this.form.mobile) {
+        Toast('请填写手机号')
+        return
       }
+      const type = 1
+      getSms(type, this.form.mobile).then(response => {
+        this.CountDown()
+      })
     },
-    methods: {
-      // 获取验证码
-      _getSms() {
-        if (!this.form.mobile) {
-          Toast('请填写手机号')
-          return
-        }
-        const type = 1
-        getSms(type, this.form.mobile).then(response => {
+    CountDown() {
+      setTimeout(() => {
+        if (smsText > 0) {
+          this.disabled = true
+          smsText--
+          this.smsText = smsText + ' s'
           this.CountDown()
-        })
-      },
-      CountDown() {
-        setTimeout(() => {
-          if (smsText > 0) {
-            this.disabled = true
-            smsText--
-            this.smsText = smsText + ' s'
-            this.CountDown()
-          } else {
-            smsText = 60
-            this.smsText = '发送验证码'
-            this.disabled = false
-          }
-        }, 1000)
-      },
-      unitList() {
-        this.showPicker = true
-      },
-      submit() {
-        if (!this.form.name) {
-          Toast('请输入姓名')
-          return
-        } if (!this.form.name) {
-          Toast('请输入姓名')
-          return
-        } if (!this.form.idCard) {
-          Toast('请输入身份证')
-          return
-        } if (!this.form.mobile) {
-          Toast('请输入手机号')
-          return
-        } if (!this.form.code) {
-          Toast('请输入短信验证码')
-          return
-        } if (!this.form.password) {
-          Toast('请输入密码')
-          return
-        } if (!this.form.channel) {
-          Toast('请选择推广单位')
-          return
+        } else {
+          smsText = 60
+          this.smsText = '发送验证码'
+          this.disabled = false
         }
-        this.form.loginName = this.form.mobile
-        getRegister(this.form).then(response => {
-
-        })
-      },
-      onConfirm(value) {
-        this.form.channel = value
-        this.showPicker = false
+      }, 1000)
+    },
+    unitList() {
+      this.showPicker = true
+    },
+    submit() {
+      if (!this.form.name) {
+        Toast('请输入姓名')
+        return
+      } if (!this.form.name) {
+        Toast('请输入姓名')
+        return
+      } if (!this.form.idCard) {
+        Toast('请输入身份证')
+        return
+      } if (!this.form.mobile) {
+        Toast('请输入手机号')
+        return
+      } if (!this.form.code) {
+        Toast('请输入短信验证码')
+        return
+      } if (!this.form.password) {
+        Toast('请输入密码')
+        return
+      } if (!this.form.channel) {
+        Toast('请选择推广单位')
+        return
       }
+      this.form.loginName = this.form.mobile
+      getRegister(this.form).then(response => {
+        getFinishWeb()
+      })
+    },
+    onConfirm(value) {
+      this.form.channel = value
+      this.showPicker = false
     }
   }
+}
 </script>
 
 <style scoped lang="scss">
-  .container {
-    height: 100%;
-    position: absolute;
-    width: 100%;
-    background: #fff;
-  }
+.container {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  background: #fff;
+}
 </style>
