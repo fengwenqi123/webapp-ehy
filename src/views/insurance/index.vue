@@ -122,83 +122,81 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main{
-  padding:0 24px;
-  margin-bottom:100px;
-    .card{
-      background-color:#fff;
-      margin:20px 0;
-      .card-header{
-        height:68px;
-        border-bottom:1px solid #EEEEEE;
-        .van-col{
-          line-height:68px;
-          img{
-            vertical-align: middle;
-          }
-          span{
-            font-size:26px;
-          }
-          &:nth-child(2){
-            span{
-              color:#999999;
-            }
-          }
-          &:nth-child(3){
-            span{
-              color:#108EE9;
-            }
+.main {
+  padding: 0 24px;
+  margin-bottom: 100px;
+  .card {
+    background-color: #fff;
+    margin: 20px 0;
+    .card-header {
+      height: 68px;
+      border-bottom: 1px solid #eeeeee;
+      .van-col {
+        line-height: 68px;
+        img {
+          vertical-align: middle;
+        }
+        span {
+          font-size: 26px;
+        }
+        &:nth-child(2) {
+          span {
+            color: #999999;
           }
         }
-      }
-      .card-content{
-        padding:30px;
-        p{
-          color:#666666;
-          font-size:24px;
-          line-height:50px;
-          &:nth-child(1){
-            font-size:40px;
-            line-height:70px;
-            color:#333333;
-          }
-          span:nth-child(1){
-            display:inline-block;
-            width:30%;
-          }
-          .van-button{
-            margin-top:20px;
-            float:right;
-            height:40px;
-            line-height:40px;
-            font-size:18px;
-            color:#108EE9;
-            span{
-              display:inline;
-            }
-          }
-          .van-button--primary{
-              border:2px solid #108EE9;
+        &:nth-child(3) {
+          span {
+            color: #108ee9;
           }
         }
-
       }
     }
-}
-.bottom{
-  position:fixed;
-  bottom:20px;
-  width:100%;
-  text-align:center;
- .bottom-button{
-  width:80%;
-  margin:0;
-  font-size:38px;
-  background-color:#108EE9;
+    .card-content {
+      padding: 30px;
+      p {
+        color: #666666;
+        font-size: 24px;
+        line-height: 50px;
+        &:nth-child(1) {
+          font-size: 40px;
+          line-height: 70px;
+          color: #333333;
+        }
+        span:nth-child(1) {
+          display: inline-block;
+          width: 30%;
+        }
+        .van-button {
+          margin-top: 20px;
+          float: right;
+          height: 40px;
+          line-height: 40px;
+          font-size: 18px;
+          color: #108ee9;
+          span {
+            display: inline;
+          }
+        }
+        .van-button--primary {
+          border: 2px solid #108ee9;
+        }
+      }
+    }
   }
-  .van-button--primary{
-  border:2px solid #108EE9;
+}
+.bottom {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  .bottom-button {
+    width: 80%;
+    margin: 0;
+    font-size: 38px;
+    background-color: #108ee9;
+  }
+  .van-button--primary {
+    border: 2px solid #108ee9;
   }
 }
-
 </style>
