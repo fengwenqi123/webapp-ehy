@@ -11,7 +11,7 @@
                   <span>{{item.dockName}}</span>
                   <span>{{item.violationDate.substring(0,10)}}</span>
                 </p>
-              </div>       
+              </div>
                 <p>
                   <van-icon name="arrow" />
                 </p>
@@ -29,7 +29,7 @@
                   <span>{{item.dockName}}</span>
                   <span>{{item.violationDate.substring(0,10)}}</span>
                 </p>
-              </div>       
+              </div>
                 <p>
                   <van-icon name="arrow" />
                 </p>
@@ -64,6 +64,7 @@ export default {
       this.breakRule(this.infoObj.shipName)
     } else {
       this.breakRule(getShipName())
+      this.$store.commit('seteshipName', getShipName())
     }
     console.log(this.infoObj)
   },
