@@ -3,6 +3,7 @@ import request from '@/utils/request'
 import qs from 'qs'
 // 收集点列表
 export function recoveryInfo(shipName, code) {
+  alert(shipName)
   return request({
     url: '/sewage/sewageOutlet/findByCode',
     method: 'GET',

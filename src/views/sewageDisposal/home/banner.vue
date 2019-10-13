@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <p @click="pathTo">
-      排污积分：<span>{{ 998 }} ></span>
+      排污积分：<span>{{ 100 }} ></span>
     </p>
     <div class="sys">
       <img

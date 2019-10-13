@@ -6,8 +6,8 @@
         <img src="../../../assets/img/sewage/down.png" alt="" />
       </div>
       <div class="right">
-        <p>累积加分{{ 16 }}</p>
-        <p>累积扣分{{ 16 }}</p>
+        <p>累积加分{{ 0 }}</p>
+        <p>累积扣分{{ 0 }}</p>
       </div>
     </div>
     <div class="list">
@@ -40,7 +40,7 @@
               </div>
             </div>
             <div class="right">
-              <p><span v-if="item.totalPoint>0">+</span>{{item.totalPoint}}</p>
+              <p><span v-if="item.totalPoint>0"> + </span>{{item.totalPoint}}</p>
             </div>
           </div>
         </li> 
@@ -86,6 +86,14 @@ export default {
   created() {
     this.lists()
     this.point()
+  },
+  watch: {
+    selectDate(n) {
+      this.page.pageNum = 1
+      this.itemList = []
+      console.log(n)
+      this.lists()
+    }
   },
   methods: {
     selectDateFn() {

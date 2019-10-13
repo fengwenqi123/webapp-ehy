@@ -41,7 +41,7 @@ export default {
       list: [
         {
           label: '违章积分',
-          value: 100
+          value: 0
         },
         {
           label: '排污积分',
@@ -50,7 +50,7 @@ export default {
         },
         {
           label: '运营积分',
-          value: 100
+          value: 0
         }
       ]
     }
