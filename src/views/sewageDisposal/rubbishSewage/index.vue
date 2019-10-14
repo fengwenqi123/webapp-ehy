@@ -105,7 +105,8 @@ export default {
         type: 3,
         shipName: this.recoveryInfo.shipName,
         code: this.recoveryCode,
-        refuseType: parseFloat(this.recoveryInfo.type) - 2
+        refuseType: parseFloat(this.recoveryInfo.type) - 2,
+        orderWay: 1
       }
       discharge(obj).then(response => {
         Toast.success({
@@ -129,7 +130,8 @@ export default {
         shipName: this.recoveryInfo.shipName,
         code: this.recoveryCode,
         refuseType: parseFloat(this.recoveryInfo.type) - 2,
-        amount: this.amount
+        amount: this.amount,
+        orderWay: 1
       }
       discharge(obj).then(response => {
         Toast.success({
