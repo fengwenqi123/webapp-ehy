@@ -3,7 +3,7 @@ import request from '@/utils/request'
 import qs from 'qs'
 // 收集点列表
 export function recoveryInfo(shipName, code) {
-  alert(shipName)
+  // alert(shipName)
   return request({
     url: '/sewage/sewageOutlet/findByCode',
     method: 'GET',
@@ -67,10 +67,21 @@ export function sewageReport(pageNum, pageSize, time, type) {
   })
 }
 
-//
-export function points() {
+// 累计积分
+export function points(time) {
   return request({
     url: '/poi/sewage/selectSum',
+    method: 'GET',
+    params: {
+      time
+    }
+  })
+}
+
+// 总积分
+export function allPoints() {
+  return request({
+    url: '/poi/shipPoint/sumByToken',
     method: 'GET'
   })
 }

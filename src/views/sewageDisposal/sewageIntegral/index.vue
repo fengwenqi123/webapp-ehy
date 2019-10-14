@@ -6,8 +6,8 @@
         <img src="../../../assets/img/sewage/down.png" alt="" />
       </div>
       <div class="right">
-        <p>累积加分{{ 0 }}</p>
-        <p>累积扣分{{ 0 }}</p>
+        <p>累积加分{{ jf }}</p>
+        <p>累积扣分{{ kf }}</p>
       </div>
     </div>
     <div class="list">
@@ -80,7 +80,9 @@ export default {
       itemList: [],
       isLoading: false,
       finished: false,
-      loading: false
+      loading: false,
+      jf: 0,
+      kf: 0
     }
   },
   created() {
@@ -93,6 +95,7 @@ export default {
       this.itemList = []
       console.log(n)
       this.lists()
+      this.point()
     }
   },
   methods: {
@@ -123,8 +126,10 @@ export default {
       this.lists()
     },
     point() {
-      points().then(reponse => {
-        console.log(reponse)
+      points(this.selectDate).then(response => {
+        console.log(response)
+        this.jf = response.data.sumOne
+        this.kf = response.data.sumOne
       })
     },
     lists() {

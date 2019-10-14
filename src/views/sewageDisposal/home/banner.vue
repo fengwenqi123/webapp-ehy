@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <p @click="pathTo">
-      排污积分：<span>{{ 100 }} ></span>
+      排污积分：<span>{{point}}</span><span>></span>
     </p>
     <div class="sys">
       <img
@@ -14,17 +14,22 @@
 </template>
 
 <script>
-import { recoveryInfo } from '@/api/sewageDisposal'
+import { recoveryInfo, allPoints } from '@/api/sewageDisposal'
 import { getGoQr, getShipName } from '@/utils/cache.js'
 
 export default {
   data() {
     return {
+      point: 0,
       code: null,
       shipName: getShipName()
     }
   },
+  created() {
+
+  },
   mounted() {
+    this.getAllPoint()
     window.callBackCode = this.callBackCode
   },
   methods: {
@@ -35,6 +40,11 @@ export default {
     },
     getCode() {
       getGoQr()
+    },
+    getAllPoint() {
+      allPoints().then(response => {
+        this.point = response.data
+      })
     },
     callBackCode(code) {
       this.code = code

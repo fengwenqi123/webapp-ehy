@@ -3,14 +3,31 @@
       <div class="main">
         <div class="value">
           <p>船舶综合积分</p>
-          <span>100</span>
+          <span>{{point}}</span>
         </div>
       </div>
     </div>
 </template>
 
 <script>
-export default {}
+import { allPoints } from '@/api/sewageDisposal'
+export default {
+  data() {
+    return {
+      point: 0
+    }
+  },
+  created() {
+    this.getAllPoint()
+  },
+  methods: {
+    getAllPoint() {
+      allPoints().then(response => {
+        this.point = response.data
+      })
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">
