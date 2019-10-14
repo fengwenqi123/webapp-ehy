@@ -45,41 +45,29 @@ export default {
       this.$store.commit('setrecoveryCode', this.code)
       this.getRecoveryInfo()
     },
-    methods: {
-      pathTo() {
-        this.$router.push({
-          path: '/shipIntegral'
-        })
-      },
-      getCode() {
-        getGoQr()
-      },
-      callBackCode(code) {
-        this.code = code
-        this.$store.commit('setrecoveryCode', this.code)
-        this.getRecoveryInfo()
-      },
-      getRecoveryInfo() {
-        recoveryInfo(this.eshipName, this.code).then(response => {
-          this.$store.commit('setRecoveryInfo', response.data)
-          switch (response.data.type) {
-            case 1:
-              this.$router.push({
-                path: '/lifeSewage'
-              })
-              break
-            case 2:
-              this.$router.push({
-                path: '/oilSewage'
-              })
-              break
-            default:
-              this.$router.push({
-                path: '/rubbishSewage'
-              })
-          }
-        })
-      }
+    getCode() {
+      getGoQr()
+    },
+    getRecoveryInfo() {
+      recoveryInfo(this.eshipName, this.code).then(response => {
+        this.$store.commit('setRecoveryInfo', response.data)
+        switch (response.data.type) {
+          case 1:
+            this.$router.push({
+              path: '/lifeSewage'
+            })
+            break
+          case 2:
+            this.$router.push({
+              path: '/oilSewage'
+            })
+            break
+          default:
+            this.$router.push({
+              path: '/rubbishSewage'
+            })
+        }
+      })
     }
   }
 }
