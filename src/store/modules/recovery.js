@@ -3,7 +3,8 @@
 const recovery = {
   state: {
     recoveryInfo: null,
-    recoveryCode: null
+    recoveryCode: null,
+    eshipName: null
   },
   mutations: {
     setRecoveryInfo: (state, obj) => {
@@ -11,6 +12,9 @@ const recovery = {
     },
     setrecoveryCode: (state, obj) => {
       state.recoveryCode = obj
+    },
+    seteshipName: (state, shipName) => {
+      state.eshipName = shipName
     }
   }
 }

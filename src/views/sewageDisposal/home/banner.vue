@@ -15,18 +15,15 @@
 
 <script>
 import { recoveryInfo, allPoints } from '@/api/sewageDisposal'
-import { getGoQr, getShipName } from '@/utils/cache.js'
+import { getGoQr } from '@/utils/cache.js'
 
 export default {
   data() {
     return {
       point: 0,
-      code: null,
-      shipName: getShipName()
+      code: null
+      // shipName: getShipName()
     }
-  },
-  created() {
-
   },
   mounted() {
     this.getAllPoint()
@@ -38,9 +35,6 @@ export default {
         path: '/shipIntegral'
       })
     },
-    getCode() {
-      getGoQr()
-    },
     getAllPoint() {
       allPoints().then(response => {
         this.point = response.data
@@ -51,26 +45,41 @@ export default {
       this.$store.commit('setrecoveryCode', this.code)
       this.getRecoveryInfo()
     },
-    getRecoveryInfo() {
-      recoveryInfo(this.shipName, this.code).then(response => {
-        this.$store.commit('setRecoveryInfo', response.data)
-        switch (response.data.type) {
-          case 1:
-            this.$router.push({
-              path: '/lifeSewage'
-            })
-            break
-          case 2:
-            this.$router.push({
-              path: '/oilSewage'
-            })
-            break
-          default:
-            this.$router.push({
-              path: '/rubbishSewage'
-            })
-        }
-      })
+    methods: {
+      pathTo() {
+        this.$router.push({
+          path: '/shipIntegral'
+        })
+      },
+      getCode() {
+        getGoQr()
+      },
+      callBackCode(code) {
+        this.code = code
+        this.$store.commit('setrecoveryCode', this.code)
+        this.getRecoveryInfo()
+      },
+      getRecoveryInfo() {
+        recoveryInfo(this.eshipName, this.code).then(response => {
+          this.$store.commit('setRecoveryInfo', response.data)
+          switch (response.data.type) {
+            case 1:
+              this.$router.push({
+                path: '/lifeSewage'
+              })
+              break
+            case 2:
+              this.$router.push({
+                path: '/oilSewage'
+              })
+              break
+            default:
+              this.$router.push({
+                path: '/rubbishSewage'
+              })
+          }
+        })
+      }
     }
   }
 }

@@ -35,6 +35,7 @@ export default {
       this.feel(this.infoObj.shipName)
     } else {
       this.feel(getShipName())
+      this.$store.commit('seteshipName', getShipName())
     }
 
     console.log(this.infoObj)

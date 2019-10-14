@@ -14,6 +14,7 @@ const getters = {
   boxInfos: state => state.gyt.boxInfos,
   userInfos: state => state.gyt.userInfos,
   recoveryInfo: state => state.recovery.recoveryInfo,
-  recoveryCode: state => state.recovery.recoveryCode
+  recoveryCode: state => state.recovery.recoveryCode,
+  eshipName: state => state.recovery.eshipName
 }
 export default getters
