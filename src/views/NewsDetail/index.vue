@@ -2,6 +2,10 @@
   <div class="container">
     <div class="news">
       <h1>{{obj.title}}</h1>
+      <div class="title-type">
+        <span>{{obj.categoryName}}</span>
+        <span>{{obj.addTimeString.slice(0,10)}}</span>
+      </div>
       <p v-html="obj.content"></p>
     </div>
     <!-- 遮罩 -->
@@ -11,7 +15,7 @@
   </div>
 </template>
 <script>
-// import { getNewsById } from '@/api/NewDetail.js'
+// import { selectByUserId } from '@/api/NewDetail.js'
 import { getId } from '@/utils/cache'
 import cjbLoading from '@/components/cjbLoading'
 
@@ -40,6 +44,7 @@ export default {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             this.obj = JSON.parse(xhr.responseText).data
+            console.log(this.obj)
             this.loadingSpinner = false
             // alert(JSON.stringify(xhr.responseText))
           } else {
@@ -47,9 +52,9 @@ export default {
           }
         }
       }
-      // this.id = Android.getId()
-      // getNewsById(Android.getId()).then(response => {
-      //   this.obj = response.data
+
+      // selectByUserId().then(response => {
+      //   console.log(response)
       // })
     }
   }
@@ -65,6 +70,17 @@ export default {
     height: 1rem;
     line-height: 1rem;
     font-size: 0.5rem;
+  }
+  .title-type {
+    padding: 0.4rem 0 0.2rem 0;
+    span {
+      color: #fd6161;
+      font-size: 0.4rem;
+    }
+    span:last-child {
+      color: #888;
+      padding-left: 1rem;
+    }
   }
   p {
     font-size: 0.4rem;

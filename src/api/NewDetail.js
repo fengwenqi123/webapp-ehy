@@ -2,9 +2,10 @@ import request from '@/utils/request'
 
 // import qs from 'qs'
 
-export function getNewsById(id) {
+// 新闻列表
+export function selectByUserId() {
   return request({
-    url: '/news/news/' + id,
+    url: '/news/news',
     method: 'GET'
   })
 }
