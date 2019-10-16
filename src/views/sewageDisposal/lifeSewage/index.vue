@@ -103,7 +103,8 @@ export default {
       const obj = {
         type: 1,
         shipName: this.recoveryInfo.shipName,
-        code: this.recoveryCode
+        code: this.recoveryCode,
+        orderWay: 1
       }
       discharge(obj).then(response => {
         Toast.success({
@@ -126,7 +127,8 @@ export default {
         type: 1,
         shipName: this.recoveryInfo.shipName,
         code: this.recoveryCode,
-        amount: this.amount
+        amount: this.amount,
+        orderWay: 1
       }
       discharge(obj).then(response => {
         Toast.success({
