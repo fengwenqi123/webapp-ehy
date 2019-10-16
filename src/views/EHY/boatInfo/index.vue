@@ -20,7 +20,7 @@ import boatInfo from './boatInfo.vue'
 import card from './card.vue'
 import feeling from './feeling.vue'
 import breakRules from './breakRules.vue'
-import { setTitle } from '@/utils/cache.js'
+import { setTitle, isWz } from '@/utils/cache.js'
 export default {
   components: {
     boatInfo,
@@ -28,12 +28,19 @@ export default {
     feeling,
     breakRules
   },
+  created() {
+    if (isWz() === '1') {
+      this.activeName = '3'
+    } else {
+      this.activeName = '1'
+    }
+  },
   mounted() {
     setTitle(this.$route.meta.title)
   },
   data() {
     return {
-      activeName: '1'
+      activeName: '3'
     }
   }
 }

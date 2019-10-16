@@ -73,6 +73,10 @@ export function getCbdjh() {
 export function getCbsbh() {
   // return Android.getCbsbh()
 }
+// 是否从违章进去
+export function isWz() {
+  return Android.isWz()
+}
 
 export function setToken(token) {
   return storage.set(Token, token)
