@@ -62,7 +62,7 @@ export default {
     }
   },
   created() {
-    this.getList()
+    // this.getList()
   },
   methods: {
     getList() {
@@ -84,12 +84,12 @@ export default {
         })
     },
     onLoad() {
-      this.page.pageNum += 1
+      this.page.pageNum++
       this.getList()
     },
     onRefresh() {
       this.page.pageNum = 0
-      this.list = []
+      this.items = []
       this.finished = false
       window.scrollTo(0, 10)
     }

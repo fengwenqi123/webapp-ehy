@@ -21,7 +21,7 @@
         <p>违章标记</p>
         <p>{{infoObj.flag||'--'}}</p>
       </van-col>
-       <van-col :span="24">
+      <van-col :span="24">
         <p>违章录入时间</p>
         <p>{{infoObj.addDate||'--'}}</p>
       </van-col>

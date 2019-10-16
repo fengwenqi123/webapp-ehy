@@ -23,10 +23,12 @@ export function boatList(tags) {
 // 违章
 export function breakRules(pageNum, pageSize, shipName) {
   return request({
-    url: 'collaboration/violation ',
+    url: 'collaboration/violation',
     method: 'GET',
     params: {
-      pageNum, pageSize, shipName
+      pageNum,
+      pageSize,
+      shipName
     }
   })
 }
@@ -53,8 +55,8 @@ export function feeling(dataType, shipName) {
     url: 'gps/position/latestPosByShipName',
     method: 'GET',
     params: {
-      dataType, shipName
+      dataType,
+      shipName
     }
   })
 }
-

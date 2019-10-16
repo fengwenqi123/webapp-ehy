@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="news">
-      <!-- <h1>{{obj.title}}</h1> -->
+      <h1>{{obj.title}}</h1>
       <p v-html="obj.content"></p>
     </div>
     <!-- 遮罩 -->
