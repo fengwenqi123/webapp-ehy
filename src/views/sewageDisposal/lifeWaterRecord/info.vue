@@ -132,15 +132,16 @@ export default {
       span {
         display: inline-block;
         line-height: 76px;
-        width: 46%;
         font-size: 28px;
         &:nth-child(1) {
           color: #888888;
           text-align: left;
+          width: 40%;
         }
         &:nth-child(2) {
           color: #333333;
           text-align: right;
+          width: 52%;
         }
       }
     }
