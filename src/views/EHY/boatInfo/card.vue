@@ -5,6 +5,7 @@
         v-for="item in items"
         :key="item.id"
         :span="24"
+        v-if="item.zsmc==='船舶营业运输证'||item.zsmc==='船舶国籍证书'"
       >
         <p>{{item.zsmc}}</p>
         <p>证书有效期：{{item.yxrq}}</p>

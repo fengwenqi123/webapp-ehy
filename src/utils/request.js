@@ -45,8 +45,8 @@ service.interceptors.response.use(
       case 502:
         Dialog.alert({
           title: '提示',
-          // message: '程序异常'
-          message: res.msg
+          message: '程序异常'
+          // message: res.msg
         }).then(() => {
           Dialog.close()
         })
@@ -54,8 +54,8 @@ service.interceptors.response.use(
       case 503:
         Dialog.alert({
           title: '提示',
-          // message: '未登录，请重新登录!'
-          message: res.msg
+          message: '未登录，请重新登录!'
+          // message: res.msg
         }).then(() => {
           Dialog.close()
         })
@@ -63,8 +63,8 @@ service.interceptors.response.use(
       case 401:
         Dialog.alert({
           title: '提示',
-          // message: '未授权'
-          message: res.msg
+          message: '未授权'
+          // message: res.msg
         }).then(() => {
           Dialog.close()
         })
@@ -72,8 +72,8 @@ service.interceptors.response.use(
       case 403:
         Dialog.alert({
           title: '提示',
-          // message: '非法请求'
-          message: res.msg
+          message: '非法请求'
+          // message: res.msg
         }).then(() => {
           Dialog.close()
         })
@@ -81,8 +81,8 @@ service.interceptors.response.use(
       default:
         Dialog.alert({
           title: '提示',
-          // message: '未知错误'
-          message: res.msg
+          message: '未知错误'
+          // message: res.msg
         }).then(() => {
           Dialog.close()
         })
@@ -94,8 +94,8 @@ service.interceptors.response.use(
     Toast.clear()
     Dialog.alert({
       title: '提示',
-      // message: '请求超时'
-      message: error
+      message: '请求超时'
+      // message: error
     }).then(() => {
       Dialog.close()
     })
