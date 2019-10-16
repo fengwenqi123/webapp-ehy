@@ -63,7 +63,7 @@ export default {
     }
   },
   created() {
-    this.getList()
+    // this.getList()
     setTitle(this.$route.meta.title)
   },
   methods: {
@@ -91,7 +91,7 @@ export default {
     },
     onRefresh() {
       this.page.pageNum = 0
-      this.list = []
+      this.items = []
       this.finished = false
       window.scrollTo(0, 10)
     }
