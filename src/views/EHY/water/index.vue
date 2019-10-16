@@ -12,7 +12,14 @@
           finished-text="没有更多了"
           @load="onLoad"
         >
-          <p>{{address}}</p>
+          <van-dropdown-menu>
+            <van-dropdown-item
+              v-model="value"
+              :options="option"
+              @change="cityChange"
+            />
+          </van-dropdown-menu>
+          <!-- <p>{{address}}</p> -->
           <ul>
             <li
               v-for="(item,index) in items"
@@ -45,30 +52,48 @@
 
 <script>
 /* eslint-disable object-curly-spacing,prefer-const,no-undef */
-import { setTitle } from '@/utils/cache.js'
+import { setTitle, getCity } from '@/utils/cache.js'
 import { waterList } from '@/api/ehy.js'
 export default {
   data() {
     return {
-      address: '湖州市',
+      province: '浙江省',
+      city: getCity() || '杭州市',
+      value: '杭州市',
+      option: [
+        { text: '杭州市', value: '杭州市' },
+        { text: '宁波市', value: '宁波市' },
+        { text: '温州市', value: '温州市' },
+        { text: '绍兴市', value: '绍兴市' },
+        { text: '湖州市', value: '湖州市' },
+        { text: '嘉兴市', value: '嘉兴市' },
+        { text: '金华市', value: '金华市' },
+        { text: '衢州市', value: '衢州市' },
+        { text: '台州市', value: '台州市' },
+        { text: '丽水市', value: '丽水市' },
+        { text: '舟山市', value: '舟山市' }
+      ],
       loading: false,
       finished: false,
       refreshing: false,
       items: [],
       page: {
-        pageSize: 10,
+        pageSize: 20,
         pageNum: 0,
         total: 0
       }
     }
   },
   created() {
-    // this.getList()
     setTitle(this.$route.meta.title)
   },
   methods: {
+    cityChange(city) {
+      this.city = city
+      this.onRefresh()
+    },
     getList() {
-      waterList().then(response => {
+      waterList(this.page.pageNum, this.page.pageSize, this.province, this.city).then(response => {
         this.items = this.items.concat(response.data.dataList)
         this.page = response.data.page
         this.refreshing = false
