@@ -11,11 +11,6 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
-    Toast.loading({
-      mask: true,
-      message: '加载中...',
-      duration: 0
-    })
     if (getToken()) {
       config.headers['accessToken'] = getToken() // 让每个请求携带自定义token
     }
@@ -46,7 +41,6 @@ service.interceptors.response.use(
         Dialog.alert({
           title: '提示',
           message: '程序异常'
-          // message: res.msg
         }).then(() => {
           Dialog.close()
         })
@@ -55,7 +49,6 @@ service.interceptors.response.use(
         Dialog.alert({
           title: '提示',
           message: '未登录，请重新登录!'
-          // message: res.msg
         }).then(() => {
           Dialog.close()
         })
@@ -64,7 +57,6 @@ service.interceptors.response.use(
         Dialog.alert({
           title: '提示',
           message: '未授权'
-          // message: res.msg
         }).then(() => {
           Dialog.close()
         })
@@ -73,7 +65,6 @@ service.interceptors.response.use(
         Dialog.alert({
           title: '提示',
           message: '非法请求'
-          // message: res.msg
         }).then(() => {
           Dialog.close()
         })
@@ -82,7 +73,6 @@ service.interceptors.response.use(
         Dialog.alert({
           title: '提示',
           message: '未知错误'
-          // message: res.msg
         }).then(() => {
           Dialog.close()
         })
@@ -91,11 +81,9 @@ service.interceptors.response.use(
   },
   // 错误反馈
   error => {
-    Toast.clear()
     Dialog.alert({
       title: '提示',
       message: '请求超时'
-      // message: error
     }).then(() => {
       Dialog.close()
     })

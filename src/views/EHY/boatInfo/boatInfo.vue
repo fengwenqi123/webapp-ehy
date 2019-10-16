@@ -79,6 +79,7 @@
 
 <script>
 import { shipInfo } from '@/api/ehy.js'
+import { getCbsbh } from '@/utils/cache.js'
 
 export default {
   data() {
@@ -88,13 +89,18 @@ export default {
     }
   },
   created() {
-    this.infoObj = this.$route.query.info
-    this.getCbsbh(this.infoObj.cbsbh)
+    console.log(this.$route.query.info)
+    if (this.$route.query.info) {
+      this.infoObj = this.$route.query.info
+      this.getCbsbh(this.infoObj.cbsbh)
+    } else {
+      this.getCbsbh(getCbsbh())
+    }
   },
   methods: {
     getCbsbh(cbsbh) {
       shipInfo(cbsbh).then(response => {
-        console.log(response)
+        // console.log(response)
         this.items = response.data
       })
     }

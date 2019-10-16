@@ -20,12 +20,16 @@ import boatInfo from './boatInfo.vue'
 import card from './card.vue'
 import feeling from './feeling.vue'
 import breakRules from './breakRules.vue'
+import { setTitle } from '@/utils/cache.js'
 export default {
   components: {
     boatInfo,
     card,
     feeling,
     breakRules
+  },
+  mounted() {
+    setTitle(this.$route.meta.title)
   },
   data() {
     return {

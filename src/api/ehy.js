@@ -1,6 +1,5 @@
 import request from '@/utils/request'
-
-// import qs from 'qs'
+import qs from 'qs'
 // 水位
 export function waterList() {
   return request({
@@ -58,5 +57,17 @@ export function feeling(dataType, shipName) {
       dataType,
       shipName
     }
+  })
+}
+
+// 解绑船舶
+export function removeShip(id) {
+  const data = qs.stringify({
+    id
+  })
+  return request({
+    url: '/member/memShip/remove',
+    method: 'PUT',
+    data
   })
 }

@@ -1,17 +1,6 @@
 <template>
   <div class="container">
     <div class="content">
-      <div class="title">
-        <div class="nav-bar">
-          <van-nav-bar
-            :title="title"
-            left-text="返回"
-            left-arrow
-            @click-left="onClickLeft"
-          >
-          </van-nav-bar>
-        </div>
-      </div>
       <p v-html="content"></p>
     </div>
   </div>
@@ -57,6 +46,8 @@ export default {
 
   p {
     margin: 10px 40px;
+    line-height: 50px;
+    text-indent: 60px;
   }
 }
 </style>

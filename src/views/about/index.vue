@@ -39,8 +39,8 @@ export default {
   methods: {
     getList() {
       list({
-        articleClassId: 'platform',
-        articleClassCode: 'platform',
+        articleClassId: '',
+        articleClassCode: 'ehy_about',
         status: 1
       }).then(response => {
         if (response.data.length === 1) {

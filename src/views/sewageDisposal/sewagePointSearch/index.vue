@@ -92,7 +92,7 @@ export default {
         { text: '活动商品', value: 2 }
       ],
       columns: [
-        '排污类型',
+        '全部类型',
         '生活垃圾',
         '生活污水',
         '油污'
@@ -210,7 +210,7 @@ export default {
       showArea: false,
       showType: false,
       areaBtn: '选择地区',
-      typeBtn: '选择类型',
+      typeBtn: '排污类型',
       itemList: [],
       forms1: false,
       forms2: false,
@@ -267,7 +267,7 @@ export default {
     },
     onConfirm(value) {
       console.log(value)
-      if (value !== '排污类型') {
+      if (value !== '全部类型') {
         this.page.pageNum = 1
         this.typeBtn = value
         this.showType = false

@@ -6,34 +6,47 @@
         <img src="../../../assets/img/sewage/down.png" alt="" />
       </div>
       <div class="right">
-        <p>累积加分{{ 16 }}</p>
-        <p>累积扣分{{ 16 }}</p>
+        <p>累积加分{{ jf }}</p>
+        <p>累积扣分{{ kf }}</p>
       </div>
     </div>
     <div class="list">
+    <van-pull-refresh
+      v-model="isLoading"
+      @refresh="onRefresh"
+     >
+      <van-list
+        class="main"
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+      >
       <ul>
         <li>
-          <div class="item" v-for="item in 5" :key="item">
+          <div class="item" v-for="item in itemList" :key="item.id">
             <div class="left">
               <img src="../../../assets/img/sewage/integral.png" alt="" />
               <div class="content">
                 <div class="val1">
-                  吕山服务区
+                 {{item.name}}
                 </div>
                 <div class="val2">
-                  生活污水回收
+                  {{item.type===1?'生活污水':item.type===2?'油污':item.type===3?'生活垃圾':"--"}}
                 </div>
                 <div class="val3">
-                  09-12 22:00
+                 {{item.addTimeString}}
                 </div>
               </div>
             </div>
             <div class="right">
-              <p>+1</p>
+              <p><span v-if="item.totalPoint>0"> + </span>{{item.totalPoint}}</p>
             </div>
           </div>
-        </li>
-      </ul>
+        </li> 
+      </ul> 
+    </van-list>
+    </van-pull-refresh>
     </div>
     <van-popup v-model="show" round position="bottom">
       <DatetimePicker @sendDate="sendDate" @cancel="cancel" />
@@ -45,6 +58,8 @@
 import DatetimePicker from './DatetimePicker'
 import { parseTime } from '@/utils/index'
 import { setTitle } from '@/utils/cache.js'
+import { pwList } from '@/api/sewageDisposal1'
+import { points } from '@/api/sewageDisposal'
 export default {
   components: {
     DatetimePicker
@@ -55,7 +70,32 @@ export default {
   data() {
     return {
       selectDate: parseTime(new Date(), '{y}-{m}'),
-      show: false
+      show: false,
+      type: '1',
+      page: {
+        pageSize: 5,
+        pageNum: 1,
+        total: 0
+      },
+      itemList: [],
+      isLoading: false,
+      finished: false,
+      loading: false,
+      jf: 0,
+      kf: 0
+    }
+  },
+  created() {
+    this.lists()
+    this.point()
+  },
+  watch: {
+    selectDate(n) {
+      this.page.pageNum = 1
+      this.itemList = []
+      console.log(n)
+      this.lists()
+      this.point()
     }
   },
   methods: {
@@ -68,6 +108,41 @@ export default {
     },
     cancel() {
       this.show = false
+    },
+
+    onRefresh() {
+      setTimeout(() => {
+        this.$toast('刷新成功')
+        this.page.pageNum = 1
+        this.itemList = []
+        this.lists()
+        this.isLoading = false
+        this.finished = false
+      }, 500)
+    },
+    onLoad() {
+      // 异步更新数据
+      this.page.pageNum++
+      this.lists()
+    },
+    point() {
+      points(this.selectDate).then(response => {
+        console.log(response)
+        this.jf = response.data.sumOne
+        this.kf = response.data.sumOne
+      })
+    },
+    lists() {
+      pwList(this.page.pageNum, this.page.pageSize, this.selectDate, this.type).then(response => {
+        this.page.total = response.data.page.total
+        this.itemList = this.itemList.concat(response.data.dataList)
+        // 加载状态结束
+        this.loading = false
+        // 数据全部加载完成
+        if (this.page.pageNum * this.page.pageSize >= this.page.total) {
+          this.finished = true
+        }
+      })
     }
   }
 }
@@ -109,9 +184,9 @@ export default {
     }
   }
   .list {
-    background: #fff;
     ul {
       padding: 0 32px;
+      background: #fff;
       li {
         .item {
           padding: 34px 0;

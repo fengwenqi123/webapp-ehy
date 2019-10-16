@@ -5,6 +5,7 @@
         v-for="item in items"
         :key="item.id"
         :span="24"
+        v-if="item.zsmc==='船舶营业运输证'||item.zsmc==='船舶国籍证书'"
       >
         <p>{{item.zsmc}}</p>
         <p>证书有效期：{{item.yxrq}}</p>
@@ -15,6 +16,7 @@
 
 <script>
 import { certificate } from '@/api/ehy.js'
+import { getCbdjh } from '@/utils/cache.js'
 export default {
   data() {
     return {
@@ -23,8 +25,12 @@ export default {
     }
   },
   created() {
-    this.infoObj = this.$route.query.info
-    this.getCbsbh(this.infoObj.cbdjh)
+    if (this.$route.query.info) {
+      this.infoObj = this.$route.query.info
+      this.getCbsbh(this.infoObj.cbdjh)
+    } else {
+      this.getCbsbh(getCbdjh())
+    }
   },
   methods: {
     getCbsbh(cbdjh) {

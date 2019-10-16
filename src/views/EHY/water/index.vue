@@ -45,6 +45,7 @@
 
 <script>
 /* eslint-disable object-curly-spacing,prefer-const,no-undef */
+import { setTitle } from '@/utils/cache.js'
 import { waterList } from '@/api/ehy.js'
 export default {
   data() {
@@ -63,6 +64,7 @@ export default {
   },
   created() {
     // this.getList()
+    setTitle(this.$route.meta.title)
   },
   methods: {
     getList() {

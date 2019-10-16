@@ -98,9 +98,10 @@ export default {
   methods: {
     submit() {
       const obj = {
-        type: 3,
+        type: 2,
         shipName: this.recoveryInfo.shipName,
-        code: this.recoveryCode
+        code: this.recoveryCode,
+        orderWay: 1
       }
       discharge(obj).then(response => {
         Toast.success({
@@ -120,10 +121,11 @@ export default {
         return
       }
       const obj = {
-        type: 3,
+        type: 2,
         shipName: this.recoveryInfo.shipName,
         code: this.recoveryCode,
-        amount: this.amount
+        amount: this.amount,
+        orderWay: 1
       }
       discharge(obj).then(response => {
         Toast.success({

@@ -5,7 +5,7 @@ const userInfo = 'userInfo'
 
 // 页面退出
 export function getFinishWeb() {
-  Android.finishWeb()
+  return Android.finishWeb()
 }
 
 // 获取新闻详情id
@@ -15,12 +15,12 @@ export function getId() {
 
 // 调用支付
 export function getAliPay(id) {
-  Android.aliPay(id)
+  return Android.aliPay(id)
 }
 
 // 调用扫码
 export function getGoQr() {
-  Android.goQr()
+  return Android.goQr()
 }
 
 // 扫码返回id
@@ -53,7 +53,20 @@ export function getOrderId() {
 // 获取token
 export function getToken() {
   return Android.getAccount()
-  // return 'QMKBqWSMG8cvGVof3cLFyM'
+  // return 'BtCqjqFFD6JmNk2M5nKeNd'
+}
+
+// 获取船名
+export function getShipName() {
+  return Android.getName()
+}
+// 获取船舶登记号
+export function getCbdjh() {
+  return Android.getCbdjh()
+}
+// 获取船舶识别号
+export function getCbsbh() {
+  return Android.getCbsbh()
 }
 
 export function setToken(token) {

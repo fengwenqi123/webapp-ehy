@@ -29,9 +29,13 @@
 <script>
 import tip from './tip'
 import { setTitle } from '@/utils/cache.js'
+import { allPoints } from '@/api/sewageDisposal'
 export default {
   components: {
     tip
+  },
+  created() {
+    this.getAllPoint()
   },
   mounted() {
     setTitle(this.$route.meta.title)
@@ -41,16 +45,16 @@ export default {
       list: [
         {
           label: '违章积分',
-          value: 100
+          value: 0
         },
         {
           label: '排污积分',
-          value: 100,
+          value: 0,
           path: '/sewageIntegral'
         },
         {
           label: '运营积分',
-          value: 100
+          value: 0
         }
       ]
     }
@@ -59,6 +63,11 @@ export default {
     pathTo(path) {
       this.$router.push({
         path
+      })
+    },
+    getAllPoint() {
+      allPoints().then(response => {
+        this.list[1].value = response.data
       })
     }
   }

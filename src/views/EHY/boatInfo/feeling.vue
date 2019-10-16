@@ -20,22 +20,29 @@
 
 <script>
 import { feeling } from '@/api/ehy'
+import { getShipName } from '@/utils/cache.js'
 export default {
   data() {
     return {
       infoObj: {},
       feelObj: {},
-      isAis: '是'
+      isAis: ''
     }
   },
   created() {
-    this.infoObj = this.$route.query.info
-    this.feel()
+    if (this.$route.query.info) {
+      this.infoObj = this.$route.query.info
+      this.feel(this.infoObj.shipName)
+    } else {
+      this.feel(getShipName())
+      this.$store.commit('seteshipName', getShipName())
+    }
+
     console.log(this.infoObj)
   },
   methods: {
-    feel() {
-      feeling(2, this.infoObj.shipName).then(response => {
+    feel(shipName) {
+      feeling(2, shipName).then(response => {
         console.log(response)
         if (response.data) {
           this.feelObj = response.data
