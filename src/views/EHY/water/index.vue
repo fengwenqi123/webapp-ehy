@@ -14,7 +14,7 @@
         >
           <van-dropdown-menu>
             <van-dropdown-item
-              v-model="value"
+              v-model="city"
               :options="option"
               @change="cityChange"
             />
@@ -59,7 +59,6 @@ export default {
     return {
       province: '浙江省',
       city: getCity() || '杭州市',
-      value: '杭州市',
       option: [
         { text: '杭州市', value: '杭州市' },
         { text: '宁波市', value: '宁波市' },
