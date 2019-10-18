@@ -43,13 +43,13 @@ service.interceptors.response.use(
         })
         return Promise.reject('error')
       case 502:
-        Dialog.alert({
-          title: '提示',
-          message: '程序异常'
-          // message: res.msg
-        }).then(() => {
-          Dialog.close()
-        })
+        // Dialog.alert({
+        //   title: '提示',
+        //   message: '程序异常'
+        //   // message: res.msg
+        // }).then(() => {
+        //   Dialog.close()
+        // })
         return Promise.reject('error')
       case 503:
         Dialog.alert({
