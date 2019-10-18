@@ -4,7 +4,7 @@
       <h1>{{obj.title}}</h1>
       <div class="title-type">
         <span>{{obj.categoryName}}</span>
-        <span>{{obj.addTimeString.slice(0,10)}}</span>
+        <span>{{obj.addTimeString}}</span>
       </div>
       <p v-html="obj.content"></p>
     </div>
@@ -67,7 +67,7 @@ export default {
   h1 {
     text-align: center;
     width: 100%;
-    height: 1rem;
+    min-height: 1rem;
     line-height: 1rem;
     font-size: 0.5rem;
   }
