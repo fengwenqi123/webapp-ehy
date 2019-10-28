@@ -128,7 +128,8 @@ export default {
         shipName: this.recoveryInfo.shipName,
         code: this.recoveryCode,
         amount: this.amount,
-        orderWay: 1
+        orderWay: 1,
+        status: 3
       }
       discharge(obj).then(response => {
         Toast.success({
