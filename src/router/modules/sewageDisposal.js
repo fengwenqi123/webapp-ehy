@@ -54,6 +54,12 @@ const sewageDisposal = [
     meta: { title: '回收成功' }
   },
   {
+    path: '/successAuto',
+    name: 'successAuto',
+    component: () => import('@/views/sewageDisposal/lifeSewage/successAuto'),
+    meta: { title: '回收成功' }
+  },
+  {
     path: '/rubbishSewage',
     name: 'rubbishSewage',
     component: () => import('@/views/sewageDisposal/rubbishSewage'),
@@ -76,6 +82,12 @@ const sewageDisposal = [
     name: 'unrecognized',
     component: () => import('@/views/sewageDisposal/result/unrecognized'),
     meta: { title: '无法识别' }
+  },
+  {
+    path: '/landRecord',
+    name: 'landRecord',
+    component: () => import('@/views/sewageDisposal/landRecord'),
+    meta: { title: '上岸记录' }
   }
 ]
 export default sewageDisposal

@@ -1,32 +1,49 @@
 <template>
- <div>
-  <div class="shipList">
-    <img src="../../../assets/img/ehyShip.png">
-    <span>{{shipName}}</span>
-    <van-icon name="exchange" @click="selectShipName" />
-  </div>
-  <van-popup
-  v-model="showShipName"
-  round
-  position="bottom"
-  :style="{ height: '30%' }"
->
-<van-picker :columns="shipColumn" show-toolbar @cancel="onCancel"
-  @confirm="onConfirm"/>
-</van-popup>
-  <div class="container">
-    <p @click="pathTo">
-      排污积分：<span>{{point}}</span><span>></span>
-    </p>
-    <div class="sys">
-      <img
-        @click="getCode"
-        src="../../../assets/img/sewage/sys.png"
-        alt="扫一扫"
-      />
+  <div class="main">
+    <div class="shipList">
+      <img src="../../../assets/img/ehyShip.png">
+      <span>{{shipName}}</span>
+      <p @click="selectShipName">
+        <span>切换</span>
+        <img src="../../../assets/img/qh.png" />
+      </p>
+      <div style="clear:both"></div>
+    </div>
+    <van-popup v-model="showShipName"
+               round
+               position="bottom"
+               :style="{ height: '30%' }">
+      <van-picker :columns="shipColumn"
+                  show-toolbar
+                  @cancel="onCancel"
+                  @confirm="onConfirm" />
+    </van-popup>
+    <!-- <div class="container">
+      <p @click="pathTo">
+        排污积分：<span>{{point}}</span><span>></span>
+      </p>
+      <div class="sys">
+        <img @click="getCode"
+             src="../../../assets/img/sewage/sys.png"
+             alt="扫一扫" />
+      </div>
+    </div> -->
+    <div class="container">
+      <div @click="getCode">
+        <img src="../../../assets/img/sm.png" />
+        <div>
+          <p>扫码排放</p>
+        </div>
+      </div>
+      <div>
+        <img src="../../../assets/img/ls.png" />
+        <div>
+          <p>可用绿水分</p>
+          <p>831</p>
+        </div>
+      </div>
     </div>
   </div>
- </div> 
 </template>
 
 <script>
@@ -116,58 +133,98 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.shipList {
+.main {
   background: rgba(16, 142, 233, 1);
-  height: 80px;
-  line-height: 80px;
-  padding: 20px;
-  color: #fff;
-  img {
-    height: 100%;
-    float: left;
-    vertical-align: middle;
-  }
-  span {
-    display: inline-block;
-    font-size: 40px;
-    line-height: 80px;
-    margin-left: 20px;
-  }
-  .van-icon {
-    float: right;
-    line-height: 80px;
-    font-size: 40px;
-  }
-}
-.container {
-  position: relative;
-  height: 380px;
-  background: rgba(16, 142, 233, 1);
-  p {
-    padding-top: 24px;
-    padding-left: 32px;
-    font-size: 30px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 1);
-
-    span {
-      font-size: 48px;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 1);
-    }
-  }
-
-  .sys {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-top: -110px;
-    margin-left: -110px;
-
+  margin: 24px;
+  border-radius: 15px;
+  .shipList {
+    height: 60px;
+    line-height: 60px;
+    padding: 20px;
+    color: #fff;
     img {
-      width: 220px;
-      height: 220px;
+      height: 100%;
+      float: left;
+      vertical-align: middle;
+    }
+    > span {
+      display: inline-block;
+      font-size: 34px;
+      line-height: 60px;
+      margin-left: 20px;
+    }
+    > p {
+      float: right;
+      display: flex;
+      align-items: center;
+      img {
+        width: 25px;
+      }
+      span {
+        display: inline-block;
+        font-size: 28px;
+        margin-right: 10px;
+      }
     }
   }
+  .container {
+    display: flex;
+    width: 95%;
+    margin: 0 auto;
+    border-top: 1px solid #88b8ff;
+    > div {
+      width: 50%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 232px;
+      img {
+        width: 72px;
+        height: 72px;
+      }
+      div {
+        height: 72px;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        p {
+          margin-top: 15px;
+          color: #fff;
+        }
+      }
+    }
+  }
+  // .container {
+  //   position: relative;
+  //   height: 380px;
+  //   > p {
+  //     padding-top: 24px;
+  //     padding-left: 32px;
+  //     font-size: 30px;
+  //     font-weight: 500;
+  //     color: rgba(255, 255, 255, 1);
+
+  //     span {
+  //       font-size: 48px;
+  //       font-weight: 400;
+  //       color: rgba(255, 255, 255, 1);
+  //     }
+  //   }
+
+  //   .sys {
+  //     position: absolute;
+  //     left: 50%;
+  //     top: 50%;
+  //     margin-top: -110px;
+  //     margin-left: -110px;
+
+  //     img {
+  //       width: 220px;
+  //       height: 220px;
+  //     }
+  //   }
+  // }
 }
 </style>

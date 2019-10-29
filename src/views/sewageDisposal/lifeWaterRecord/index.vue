@@ -1,157 +1,183 @@
 <template>
-  <div class="container">
-    <div class="content">
-      <van-popup
-        v-model="show"
-        position="top"
-        :style="{ height: '40%' }"
-      >
-        <van-datetime-picker
-          v-model="currentDate"
-          type="year-month"
-          @confirm="confirmDate"
-          @cancel="cancelDate"
-          :formatter="formatter"
-        />
+  <div>
+    <div class="main">
+      <div class="shipList">
+        <img src="../../../assets/img/ehyShip.png">
+        <span>{{shipName}}</span>
+        <p @click="selectShipName">
+          <span>切换</span>
+          <img src="../../../assets/img/qh.png" />
+        </p>
+        <div style="clear:both"></div>
+      </div>
+      <van-popup v-model="showShipName"
+                 round
+                 position="bottom"
+                 :style="{ height: '30%' }">
+        <van-picker :columns="shipColumn"
+                    show-toolbar
+                    @cancel="onCancel"
+                    @confirm="onConfirm" />
       </van-popup>
-      <div class="dateBtn">
-        <span @click="showPopup">{{dateBtn}} <van-icon name="arrow-down"/></span>
-      </div> 
-      <van-pull-refresh
-      v-model="isLoading"
-      @refresh="onRefresh"
-     >
-      <van-list
-        class="main"
-        v-model="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="onLoad"
-      >
-        <div
-          class="card"
-          v-for="item in itemList"
-          :key="item.id"
-        >
-          <div @click="goInfo(item)">
-            <van-row>
-              <van-col span="8" :offset="1">
-                <p>{{item.place}}</p>
-              </van-col>
-              <van-col span="3">
-                <span>{{item.portType===1?'智能':item.portType===2?'普通':"--"}}</span>
-              </van-col>
-              <van-col span="6" :offset="5">
-               <p>{{item.amount}}</p>
-              </van-col>
-            </van-row>
-            <van-row>
-              <van-col span="8" :offset="1">
-                <p>{{item.outletName}}</p>
-              </van-col>           
-            </van-row>
-            <van-row>
-              <van-col span="8" :offset="1">
-                <p v-if="item.portType===1">{{item.startTime}}-{{item.endTime}}</p>
-                <p v-else>{{item.addTimeString}}</p>
-              </van-col>
-              <van-col span="5" :offset="10">
-                <p :class="{status1:item.status===1,status2:item.status===2,status3:item.status===3}">{{item.status===1?'审核通过':item.status===2?'审核中':item.status===3?'审核不通过':"--"}}</p>
-              </van-col>
-            </van-row>
+    </div>
+    <div class="tip">
+      <span>请选择附近上岸站点，也可以直接扫扫码</span>
+      <img src="../../../assets/img/sewage/qr.png"
+           @click="getCode" />
+    </div>
+    <div class="bottom">
+      <div class="bottom-title">
+        <div>
+          <span>附近码头</span>
+          <span>根据船舶AIS定位</span>
+        </div>
+        <div>
+          <span>重新定位</span>
+        </div>
+      </div>
+      <div class="bottom-list">
+        <van-pull-refresh v-model="isLoading"
+                          @refresh="onRefresh">
+          <van-list v-model="loading"
+                    :finished="finished"
+                    finished-text="没有更多了"
+                    @load="onLoad">
+            <div class="card"
+                 v-for="item in itemList"
+                 :key="item.id">
+              <div>
+                <van-row>
+                  <van-col :offset="1"
+                           span="13">
+                    <p>{{item.name}}</p>
+                  </van-col>
+                  <van-col span="3">
+                    <span>{{item.attribute===1?'智能':item.attribute===2?'普通':item.attribute===3?'综合':"不明"}}</span>
+                  </van-col>
+                  <van-col span="6">
+                    <p :class="{status1:item.status===2,status2:item.status===3}">{{item.status===1?'空闲':item.status===2?'工作中':item.status===3?'报修中':"状态不明"}}</p>
+                  </van-col>
+                </van-row>
+                <van-row>
+                  <van-col span="8"
+                           :offset="1">
+                    <p>联系人：{{item.contact}}</p>
+                  </van-col>
+                  <van-col span="2">
+                    <p>{{item.mobile}}</p>
+                  </van-col>
+                  <van-col span="2"
+                           :offset="10">
+                    <p>{{item.distance}}</p>
+                  </van-col>
+                </van-row>
+                <van-row>
+                  <van-col span="8"
+                           :offset="1">
+                    <p>地址：{{item.address}}</p>
+                  </van-col>
+                </van-row>
+                <van-row>
+                  <van-col span="12"
+                           :offset="1">
+                    <span :class="{active:fomesFun1(item.fomesType||'')}">生活垃圾</span>
+                    <span :class="{active:fomesFun2(item.fomesType||'')}">生活污水</span>
+                    <span :class="{active:fomesFun3(item.fomesType||'')}">油污</span>
+                  </van-col>
+                </van-row>
+              </div>
             </div>
-          </div>
-      </van-list>
-    </van-pull-refresh>
+          </van-list>
+        </van-pull-refresh>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { timeChange } from '@/utils/index'
-import { setTitle, getBoat } from '@/utils/cache.js'
-import { sewageReport } from '@/api/sewageDisposal'
+import { setTitle, setBoat, getGoQr, getLng, getLat } from '@/utils/cache.js'
+import { sewagePoint } from '@/api/sewageDisposalNo'
+import { boatList } from '@/api/ehy'
+import { recoveryInfo } from '@/api/sewageDisposal'
 export default {
   data() {
     return {
-      value1: 0,
-      show: false,
-      dateBtn: '选择日期',
-      currentDate: new Date(),
-      value2: '排污类型',
-      option1: [
-        { text: '地区', value: 0 },
-        { text: '新款商品', value: 1 },
-        { text: '活动商品', value: 2 }
-      ],
-      option2: [
-        { text: '排污类型', value: '排污类型' },
-        { text: '生活垃圾', value: '生活垃圾' },
-        { text: '生活污水', value: '生活污水' }
-      ],
-      // itemList: [{
-      //   id: '1',
-      //   status: '生效',
-      //   contact: '张三',
-      //   mobile: '13100000000',
-      //   name: '收集点1（码头）',
-      //   type: '智能',
-      //   address: '余杭区',
-      //   fomesType: '生活垃圾',
-      //   distance: '980m',
-      //   ammount: '500L',
-      //   time: '09-12 20:00',
-      //   life: '生活污水回收'
-      // },
-      // {
-      //   id: '2',
-      //   status: '审核中',
-      //   contact: '张三',
-      //   mobile: '13100000000',
-      //   name: '收集点1（码头）',
-      //   type: '智能',
-      //   address: '余杭区',
-      //   fomesType: '生活污水',
-      //   distance: '970m',
-      //   ammount: '500L',
-      //   time: '09-12 20:00',
-      //   life: '生活污水排放'
-      // }],
-      itemList: [],
+      shipName: null,
+      code: null,
+      showShipName: false,
+      shipColumn: [],
       page: {
         pageSize: 5,
         pageNum: 1,
         total: 0
       },
-      type: 1,
+      currentLon: '',
+      currentLat: '',
+      city: '',
+      area: '',
       isLoading: false,
       finished: false,
-      loading: false
+      loading: false,
+      itemList: []
     }
   },
   created() {
-    this.shipName = getBoat()
     this.lists()
+    this.boatlist()
     setTitle(this.$route.meta.title)
   },
+  mounted() {
+    window.callBackCode = this.callBackCode
+  },
   methods: {
-    onRefresh() {
-      setTimeout(() => {
-        this.$toast('刷新成功')
-        this.page.pageNum = 1
-        this.itemList = []
-        this.lists()
-        this.isLoading = false
-        this.finished = false
-      }, 500)
+    fomesFun1(value) {
+      if (value.indexOf('生活垃圾') !== -1) {
+        return true
+      } else {
+        return false
+      }
     },
-    onLoad() {
-      // 异步更新数据
-      this.page.pageNum++
-      this.lists()
+    fomesFun2(value) {
+      if (value.indexOf('生活污水') !== -1) {
+        return true
+      } else {
+        return false
+      }
     },
+    fomesFun3(value) {
+      if (value.indexOf('油污') !== -1) {
+        return true
+      } else {
+        return false
+      }
+    },
+    boatlist() {
+      boatList(2).then(response => {
+        console.log(response)
+        this.shipList = response.data
+        this.shipName = this.shipList[0].shipName
+        setBoat(this.shipName)
+        this.shipColumn = this.shipList.map(item => item.shipName)
+      })
+    },
+    selectShipName() {
+      this.showShipName = true
+    },
+    onConfirm(value, index) {
+      console.log(value)
+      this.shipName = value
+      setBoat(this.shipName)
+      this.showShipName = false
+    },
+    onCancel() {
+      this.showShipName = false
+    },
+    //
     lists() {
-      sewageReport(this.page.pageNum, this.page.pageSize, this.time, this.type, this.shipName).then(response => {
+      this.currentLon = getLng()
+      this.currentLat = getLat()
+      sewagePoint(this.page.pageNum, this.page.pageSize, this.city, this.area, this.fomesType, this.currentLon, this.currentLat).then(response => {
+        console.log(response)
         this.page.total = response.data.page.total
         this.itemList = this.itemList.concat(response.data.dataList)
         // 加载状态结束
@@ -162,61 +188,129 @@ export default {
         }
       })
     },
-    formatter(type, value) {
-      if (type === 'year') {
-        return `${value}年`
-      } else if (type === 'month') {
-        return `${value}月`
-      }
-      return value
+    onRefresh() {
+      setTimeout(() => {
+        this.$toast('刷新成功')
+        this.page.pageNum = 1
+        this.itemList = []
+        this.lists()
+        this.loading = true
+        this.isLoading = false
+        this.finished = false
+      }, 300)
     },
-    showPopup() {
-      this.show = true
+    onLoad() {
+      // 异步更新数据
+      setTimeout(() => {
+        this.page.pageNum++
+        this.lists()
+      }, 800)
     },
-    cancelDate() {
-      this.time = ''
-      this.dateBtn = '选择日期'
-      this.page.pageNum = 1
-      this.itemList = []
-      this.lists()
-      this.finished = false
-      this.show = false
+    getCode() {
+      getGoQr()
     },
-    confirmDate(value) {
-      console.log(timeChange(value))
-      this.dateBtn = timeChange(value)
-      this.time = timeChange(value)
-      this.page.pageNum = 1
-      this.itemList = []
-      this.lists()
-      this.finished = false
-      this.show = false
+    callBackCode(code) {
+      this.code = code
+      this.$store.commit('setrecoveryCode', this.code)
+      this.getRecoveryInfo()
     },
-    goInfo(item) {
-      this.$router.push({ name: 'lifeWaterRecordInfo', query: { info: item }})
+    getRecoveryInfo() {
+      recoveryInfo(this.shipName, this.code).then(response => {
+        this.$store.commit('setRecoveryInfo', response.data)
+        switch (response.data.type) {
+          case 1:
+            this.$router.push({
+              path: '/lifeSewage'
+            })
+            break
+          case 2:
+            this.$router.push({
+              path: '/oilSewage'
+            })
+            break
+          default:
+            this.$router.push({
+              path: '/rubbishSewage'
+            })
+        }
+      })
     }
   }
+
 }
 </script>
 
-<style scoped lang="scss">
-.container {
-  .content {
-    .dateBtn {
-      padding: 28px;
-      display: table;
+<style lang="scss" scoped>
+.main {
+  background: rgba(16, 142, 233, 1);
+  .shipList {
+    height: 60px;
+    line-height: 60px;
+    padding: 20px;
+    color: #fff;
+    img {
+      height: 100%;
+      float: left;
+      vertical-align: middle;
+    }
+    > span {
+      display: inline-block;
+      font-size: 34px;
+      line-height: 60px;
+      margin-left: 20px;
+    }
+    > p {
+      float: right;
+      display: flex;
+      align-items: center;
+      img {
+        width: 25px;
+      }
       span {
-        display: table-cell;
-        height: 54px;
-        width: 180px;
-        vertical-align: middle;
-        background-color: #fff;
-        font-size: 24px;
-        text-align: center;
-        line-height: 54px;
-        border-radius: 80px;
+        display: inline-block;
+        font-size: 28px;
+        margin-right: 10px;
       }
     }
+  }
+}
+.tip {
+  color: #666;
+  font-size: 24px;
+  display: flex;
+  padding: 20px;
+  justify-content: space-between;
+  line-height: 60px;
+  img {
+    width: 60px;
+    height: 60px;
+  }
+}
+.bottom {
+  .bottom-title {
+    background-color: #fff;
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+    align-items: center;
+    div:nth-child(1) {
+      span:nth-child(1) {
+        font-size: 36px;
+        font-weight: bold;
+        color: #000;
+      }
+      span:nth-child(2) {
+        font-size: 24px;
+        color: #888;
+      }
+    }
+    div:nth-child(2) {
+      span {
+        color: #108ee9;
+      }
+    }
+  }
+  .bottom-list {
     .card {
       padding: 20px 0 40px 0;
       background-color: #fff;
@@ -230,13 +324,19 @@ export default {
         .van-row:nth-child(1) {
           .van-col:nth-child(1) {
             p {
-              font-size: 34px;
+              text-align: left;
             }
           }
           .van-col:nth-child(3) {
             p {
               font-size: 34px;
               text-align: right;
+            }
+            .status1 {
+              color: #09bb07;
+            }
+            .status2 {
+              color: #f76260;
             }
           }
           .van-col:nth-child(2) {
@@ -251,29 +351,25 @@ export default {
             }
           }
         }
-        .van-row:nth-child(2) {
-        }
+        .van-row:nth-child(2),
         .van-row:nth-child(3) {
-          .van-col:nth-child(1) {
-            p {
-              color: #999999;
-              font-size: 28px;
-            }
+          p {
+            color: #666666;
+            font-size: 28px;
           }
-          .van-col:nth-child(2) {
-            p {
-              font-size: 28px;
-              text-align: center;
-            }
-            .status1 {
-              color: #09bb07;
-            }
-            .status2 {
-              color: #ffbe00;
-            }
-            .status3 {
-              color: red;
-            }
+        }
+        .van-row:nth-child(4) {
+          span {
+            border: 1px solid #999999;
+            padding: 0 2px;
+            color: #999999;
+            font-size: 20px;
+            text-align: center;
+            line-height: 30px;
+          }
+          .active {
+            color: #1890ff;
+            border-color: #1890ff;
           }
         }
       }
