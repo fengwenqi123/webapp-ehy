@@ -2,6 +2,7 @@ import storage from 'good-storage'
 
 const Token = 'Token'
 const userInfo = 'userInfo'
+const boatName = 'boatName'
 
 // 页面退出
 export function getFinishWeb() {
@@ -58,7 +59,7 @@ export function getOrderId() {
 // 获取token
 export function getToken() {
   return Android.getAccount()
-  // return 'BtCqjqFFD6JmNk2M5nKeNd'
+  // return 'G3CfR5vVBRBaHUoxHynPfK'
 }
 
 // 获取船名
@@ -88,4 +89,12 @@ export function getUser() {
 
 export function setUser(user) {
   return storage.set(userInfo, user)
+}
+
+export function setBoat(boat) {
+  return storage.set(boatName, boat)
+}
+
+export function getBoat() {
+  return storage.get(boatName, [])
 }

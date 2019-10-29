@@ -31,7 +31,7 @@
 
 <script>
 import { recoveryInfo, allPoints } from '@/api/sewageDisposal'
-import { getGoQr } from '@/utils/cache.js'
+import { getGoQr, setBoat } from '@/utils/cache.js'
 import { boatList } from '@/api/ehy'
 
 export default {
@@ -57,6 +57,7 @@ export default {
     onConfirm(value, index) {
       console.log(value)
       this.shipName = value
+      setBoat(this.shipName)
       this.showShipName = false
     },
     onCancel() {
@@ -67,6 +68,7 @@ export default {
         console.log(response)
         this.shipList = response.data
         this.shipName = this.shipList[0].shipName
+        setBoat(this.shipName)
         this.shipColumn = this.shipList.map(item => item.shipName)
       })
     },
