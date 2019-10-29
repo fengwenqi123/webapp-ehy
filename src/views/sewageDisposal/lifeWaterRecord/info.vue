@@ -38,13 +38,21 @@
         <span>排放容积（L）</span>
         <span>{{item.amount}}</span>
       </li>
-      <li>
+      <li v-if="item.portType===1">
         <span>排放开始时间</span>
         <span>{{item.startTime}}</span>
       </li>
-      <li>
+      <li v-if="item.portType===1">
         <span>排放结束时间</span>
         <span>{{item.endTime}}</span>
+      </li>
+      <li v-if="item.portType===2">
+        <span>排放登记时间</span>
+        <span>{{item.addTimeString}}</span>
+      </li>
+      <li v-if="item.portType===2">
+        <span>排放审核时间</span>
+        <span>{{item.modifyTimeString}}</span>
       </li>
     </ul>
     <ul>
@@ -53,11 +61,11 @@
       </li>
       <li>
         <span>基础分</span>
-        <span>0</span>
+        <span>10分</span>
       </li>
       <li>
         <span>定位设备加分</span>
-        <span>10分</span>
+        <span>0分</span>
       </li>
       <li>
         <span>船载生活污水柜加分</span>
@@ -65,7 +73,7 @@
       </li>
       <li>
         <span>合计积分</span>
-        <span>20分</span>
+        <span>10分</span>
       </li>
     </ul>
     <div class="bottom" v-if="item.status===1">

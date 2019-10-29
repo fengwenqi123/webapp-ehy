@@ -52,10 +52,11 @@
             </van-row>
             <van-row>
               <van-col span="8" :offset="1">
-                <p>{{item.startTime}}-{{item.endTime}}</p>
+                <p v-if="item.portType===1">{{item.startTime}}-{{item.endTime}}</p>
+                <p v-else>{{item.addTimeString}}</p>
               </van-col>
               <van-col span="5" :offset="10">
-                <p :class="{status1:item.status===1,status2:item.status===2,status3:item.status===3}">{{item.status===1?'生效':item.status===2?'审核中':item.status===3?'失效':"--"}}</p>
+                <p :class="{status1:item.status===1,status2:item.status===2,status3:item.status===3}">{{item.status===1?'审核通过':item.status===2?'审核中':item.status===3?'审核不通过':"--"}}</p>
               </van-col>
             </van-row>
             </div>
