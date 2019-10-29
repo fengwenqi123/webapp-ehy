@@ -27,38 +27,41 @@
 </template>
 
 <script>
-import { search } from '@/api/competencyCertificate'
-import { setTitle } from '@/utils/cache.js'
-export default {
-  name: 'index',
-  data() {
-    return {
-      form: {
-        name: null,
-        idCard: null
-      }
-    }
-  },
-  created() {
-    setTitle(this.$route.meta.title)
-  },
-  methods: {
-    submit() {
-      search(this.form.name, this.form.idCard).then(response => {
-        let data = null
-        if (response.data.dataList) {
-          data = response.data.dataList
+  import { search } from '@/api/competencyCertificate'
+  import { setTitle } from '@/utils/cache.js'
+  import { Toast } from 'vant'
+  export default {
+    name: 'index',
+    data() {
+      return {
+        form: {
+          name: null,
+          idCard: null
         }
-        this.$router.push({
-          path: '/cerDetails',
-          query: {
-            data
+      }
+    },
+    created() {
+      setTitle(this.$route.meta.title)
+    },
+    methods: {
+      submit() {
+        search(this.form.name, this.form.idCard).then(response => {
+          let data = null
+          if (response.data.dataList.length > 0) {
+            data = response.data.dataList
+            this.$router.push({
+              path: '/cerDetails',
+              query: {
+                data
+              }
+            })
+          } else {
+            Toast('查无数据')
           }
         })
-      })
+      }
     }
   }
-}
 </script>
 
 <style scoped lang="scss">
