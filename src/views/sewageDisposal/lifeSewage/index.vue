@@ -83,9 +83,6 @@ export default {
     ])
   },
   created() {
-    if (this.recoveryInfo.attribute === 1) {
-      this.submit()
-    }
   },
   mounted() {
     setTitle(this.$route.meta.title)
@@ -111,7 +108,7 @@ export default {
         })
         setTimeout(() => {
           this.$router.push({
-            path: '/successAuto'
+            path: '/successWaterAuto'
           })
         }, 2000)
       })

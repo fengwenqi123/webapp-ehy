@@ -48,12 +48,15 @@
 
 <script>
 import { recoveryInfo, allPoints } from '@/api/sewageDisposal'
-import { getGoQr, setBoat } from '@/utils/cache.js'
+import { getGoQr, setBoat, getBoat } from '@/utils/cache.js'
 import { boatList } from '@/api/ehy'
+import { Toast } from 'vant'
+import { discharge } from '@/api/sewageDisposal'
 
 export default {
   data() {
     return {
+      recoveryInfo: null,
       point: 0,
       code: null,
       shipName: null,
@@ -84,8 +87,13 @@ export default {
       boatList(2).then(response => {
         console.log(response)
         this.shipList = response.data
-        this.shipName = this.shipList[0].shipName
-        setBoat(this.shipName)
+        console.log('船舶', getBoat())
+        if (getBoat().length > 0) {
+          this.shipName = getBoat()
+        } else {
+          this.shipName = this.shipList[0].shipName
+          setBoat(this.shipName)
+        }
         this.shipColumn = this.shipList.map(item => item.shipName)
       })
     },
@@ -107,14 +115,45 @@ export default {
     getCode() {
       getGoQr()
     },
+    submitWater() {
+      const obj = {
+        type: 1,
+        shipName: this.recoveryInfo.shipName,
+        code: this.code,
+        orderWay: 1
+      }
+      discharge(obj).then(response => {
+        Toast.success({
+          message: `${response.msg}，请稍等...`,
+          duration: 2000
+        })
+        setTimeout(() => {
+          this.$router.push({
+            path: '/successWaterAuto'
+          })
+        }, 2000)
+      })
+    },
     getRecoveryInfo() {
       recoveryInfo(this.shipName, this.code).then(response => {
+        this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
         switch (response.data.type) {
           case 1:
-            this.$router.push({
-              path: '/lifeSewage'
-            })
+            switch (response.data.attribute) {
+              case 1:
+                this.submitWater()
+                break
+              case 2:
+                this.$router.push({
+                  path: '/lifeSewage'
+                })
+                break
+              default:
+                this.$router.push({
+                  path: '/lifeSewage'
+                })
+            }
             break
           case 2:
             this.$router.push({

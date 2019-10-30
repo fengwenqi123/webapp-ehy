@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { Toast } from 'vant'
 export default {
   data() {
     return {
@@ -49,16 +50,20 @@ export default {
         }, {
           value: '积分商城',
           icon: require('@/assets/img/jfsc.png'),
-          path: ''
+          path: '/sewageIntegral'
         }
       ]
     }
   },
   methods: {
     pathTo(path) {
-      this.$router.push({
-        path
-      })
+      if (path === '') {
+        Toast('即将开放，敬请期待...')
+      } else {
+        this.$router.push({
+          path
+        })
+      }
     }
   }
 }

@@ -38,7 +38,7 @@ const sewageDisposal = [
   {
     path: '/lifeWaterRecordInfo',
     name: 'lifeWaterRecordInfo',
-    component: () => import('@/views/sewageDisposal/lifeWaterRecord/info'),
+    component: () => import('@/views/sewageDisposal/landRecord/info'),
     meta: { title: '生活污水排放记录' }
   },
   {
@@ -54,10 +54,10 @@ const sewageDisposal = [
     meta: { title: '回收成功' }
   },
   {
-    path: '/successAuto',
-    name: 'successAuto',
-    component: () => import('@/views/sewageDisposal/lifeSewage/successAuto'),
-    meta: { title: '回收成功' }
+    path: '/successWaterAuto',
+    name: 'successWaterAuto',
+    component: () => import('@/views/sewageDisposal/lifeSewage/successWaterAuto'),
+    meta: { title: '污水回收成功' }
   },
   {
     path: '/rubbishSewage',

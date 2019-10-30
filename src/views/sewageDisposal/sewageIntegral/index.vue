@@ -1,9 +1,11 @@
 <template>
   <div class="container">
     <div class="header">
-      <div class="left" @click="selectDateFn">
+      <div class="left"
+           @click="selectDateFn">
         {{ selectDate }}
-        <img src="../../../assets/img/sewage/down.png" alt="" />
+        <img src="../../../assets/img/sewage/down.png"
+             alt="" />
       </div>
       <div class="right">
         <p>累积加分{{ jf }}</p>
@@ -11,45 +13,47 @@
       </div>
     </div>
     <div class="list">
-    <van-pull-refresh
-      v-model="isLoading"
-      @refresh="onRefresh"
-     >
-      <van-list
-        class="main"
-        v-model="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="onLoad"
-      >
-      <ul>
-        <li>
-          <div class="item" v-for="item in itemList" :key="item.id">
-            <div class="left">
-              <img src="../../../assets/img/sewage/integral.png" alt="" />
-              <div class="content">
-                <div class="val1">
-                 {{item.name}}
+      <van-pull-refresh v-model="isLoading"
+                        @refresh="onRefresh">
+        <van-list class="main"
+                  v-model="loading"
+                  :finished="finished"
+                  finished-text="没有更多了"
+                  @load="onLoad">
+          <ul>
+            <li>
+              <div class="item"
+                   v-for="item in itemList"
+                   :key="item.id">
+                <div class="left">
+                  <img src="../../../assets/img/sewage/integral.png"
+                       alt="" />
+                  <div class="content">
+                    <div class="val1">
+                      {{item.name}}
+                    </div>
+                    <div class="val2">
+                      {{item.type===1?'生活污水':item.type===2?'油污':item.type===3?'生活垃圾':"--"}}
+                    </div>
+                    <div class="val3">
+                      {{item.addTimeString}}
+                    </div>
+                  </div>
                 </div>
-                <div class="val2">
-                  {{item.type===1?'生活污水':item.type===2?'油污':item.type===3?'生活垃圾':"--"}}
-                </div>
-                <div class="val3">
-                 {{item.addTimeString}}
+                <div class="right">
+                  <p><span v-if="item.totalPoint>0"> + </span><span>{{item.totalPoint}}</span></p>
                 </div>
               </div>
-            </div>
-            <div class="right">
-              <p><span v-if="item.totalPoint>0"> + </span>{{item.totalPoint}}</p>
-            </div>
-          </div>
-        </li> 
-      </ul> 
-    </van-list>
-    </van-pull-refresh>
+            </li>
+          </ul>
+        </van-list>
+      </van-pull-refresh>
     </div>
-    <van-popup v-model="show" round position="bottom">
-      <DatetimePicker @sendDate="sendDate" @cancel="cancel" />
+    <van-popup v-model="show"
+               round
+               position="bottom">
+      <DatetimePicker @sendDate="sendDate"
+                      @cancel="cancel" />
     </van-popup>
   </div>
 </template>
@@ -224,9 +228,12 @@ export default {
           }
           .right {
             p {
-              font-size: 40px;
-              font-weight: 400;
-              color: rgba(241, 157, 82, 1);
+              display: flex;
+              span {
+                font-size: 40px;
+                font-weight: 400;
+                color: rgba(241, 157, 82, 1);
+              }
             }
           }
         }

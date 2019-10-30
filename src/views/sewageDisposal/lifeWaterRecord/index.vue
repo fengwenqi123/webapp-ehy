@@ -95,9 +95,11 @@
 </template>
 
 <script>
-import { setTitle, setBoat, getGoQr, getLng, getLat } from '@/utils/cache.js'
+import { setTitle, setBoat, getBoat, getGoQr, getLng, getLat } from '@/utils/cache.js'
 import { sewagePoint } from '@/api/sewageDisposalNo'
 import { boatList } from '@/api/ehy'
+import { Toast } from 'vant'
+import { discharge } from '@/api/sewageDisposal'
 import { recoveryInfo } from '@/api/sewageDisposal'
 export default {
   data() {
@@ -155,8 +157,7 @@ export default {
       boatList(2).then(response => {
         console.log(response)
         this.shipList = response.data
-        this.shipName = this.shipList[0].shipName
-        setBoat(this.shipName)
+        this.shipName = getBoat()
         this.shipColumn = this.shipList.map(item => item.shipName)
       })
     },
@@ -176,6 +177,8 @@ export default {
     lists() {
       this.currentLon = getLng()
       this.currentLat = getLat()
+      // this.currentLon = '120.1'
+      // this.currentLat = '30.86'
       sewagePoint(this.page.pageNum, this.page.pageSize, this.city, this.area, this.fomesType, this.currentLon, this.currentLat).then(response => {
         console.log(response)
         this.page.total = response.data.page.total
@@ -214,14 +217,45 @@ export default {
       this.$store.commit('setrecoveryCode', this.code)
       this.getRecoveryInfo()
     },
+    submitWater() {
+      const obj = {
+        type: 1,
+        shipName: this.recoveryInfo.shipName,
+        code: this.code,
+        orderWay: 1
+      }
+      discharge(obj).then(response => {
+        Toast.success({
+          message: `${response.msg}，请稍等...`,
+          duration: 2000
+        })
+        setTimeout(() => {
+          this.$router.push({
+            path: '/successWaterAuto'
+          })
+        }, 2000)
+      })
+    },
     getRecoveryInfo() {
       recoveryInfo(this.shipName, this.code).then(response => {
+        this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
         switch (response.data.type) {
           case 1:
-            this.$router.push({
-              path: '/lifeSewage'
-            })
+            switch (response.data.attribute) {
+              case 1:
+                this.submitWater()
+                break
+              case 2:
+                this.$router.push({
+                  path: '/lifeSewage'
+                })
+                break
+              default:
+                this.$router.push({
+                  path: '/lifeSewage'
+                })
+            }
             break
           case 2:
             this.$router.push({
