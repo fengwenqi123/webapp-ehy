@@ -35,11 +35,11 @@
           <p>扫码排放</p>
         </div>
       </div>
-      <div>
+      <div @click="goPoint">
         <img src="../../../assets/img/ls.png" />
         <div>
           <p>可用绿水分</p>
-          <p>831</p>
+          <p>{{point}}</p>
         </div>
       </div>
     </div>
@@ -71,6 +71,9 @@ export default {
     window.callBackCode = this.callBackCode
   },
   methods: {
+    goPoint() {
+      this.$router.push('/sewageIntegral')
+    },
     selectShipName() {
       this.showShipName = true
     },
@@ -125,7 +128,7 @@ export default {
       discharge(obj).then(response => {
         Toast.success({
           message: `${response.msg}，请稍等...`,
-          duration: 2000
+          duration: 1000
         })
         setTimeout(() => {
           this.$router.push({

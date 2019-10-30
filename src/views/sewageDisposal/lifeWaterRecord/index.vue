@@ -43,18 +43,19 @@
                     finished-text="没有更多了"
                     @load="onLoad">
             <div class="card"
+                 @click="goOutLet(item)"
                  v-for="item in itemList"
                  :key="item.id">
               <div>
                 <van-row>
                   <van-col :offset="1"
-                           span="13">
-                    <p>{{item.name}}</p>
+                           span="15">
+                    <p>{{item.city}}{{item.area}}{{item.name}}</p>
                   </van-col>
                   <van-col span="3">
                     <span>{{item.attribute===1?'智能':item.attribute===2?'普通':item.attribute===3?'综合':"不明"}}</span>
                   </van-col>
-                  <van-col span="6">
+                  <van-col span="4">
                     <p :class="{status1:item.status===2,status2:item.status===3}">{{item.status===1?'空闲':item.status===2?'工作中':item.status===3?'报修中':"状态不明"}}</p>
                   </van-col>
                 </van-row>
@@ -132,6 +133,9 @@ export default {
     window.callBackCode = this.callBackCode
   },
   methods: {
+    goOutLet(item) {
+      this.$router.push({ name: 'lifeSewageOutLet', query: { info: item }})
+    },
     fomesFun1(value) {
       if (value.indexOf('生活垃圾') !== -1) {
         return true

@@ -50,7 +50,7 @@ export default {
         }, {
           value: '积分商城',
           icon: require('@/assets/img/jfsc.png'),
-          path: '/sewageIntegral'
+          path: ''
         }
       ]
     }

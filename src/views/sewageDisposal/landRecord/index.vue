@@ -34,7 +34,7 @@
                   <span>{{item.portType===1?'智能':item.portType===2?'普通':"--"}}</span>
                 </van-col>
                 <van-col span="6">
-                  <p>{{item.amount}} m³</p>
+                  <p>{{item.amount||'--'}} m³</p>
                 </van-col>
               </van-row>
               <van-row>
@@ -50,7 +50,10 @@
                   <p v-else>{{item.addTimeString}}</p>
                 </van-col>
                 <van-col span="5">
-                  <p :class="{status1:item.status===1,status2:item.status===2,status3:item.status===3}">{{item.status===1?'审核通过':item.status===2?'审核中':item.status===3?'审核不通过':"--"}}</p>
+                  <p v-if="item.status!==4"
+                     :class="{status1:item.auditStatus===1,status2:item.auditStatus===2,status3:item.auditStatus===3}">{{item.auditStatus===1?'审核通过':item.auditStatus===2?'审核中':item.auditStatus===3?'审核不通过':"--"}}</p>
+                  <p v-else
+                     class="status3">排污取消</p>
                 </van-col>
               </van-row>
             </div>

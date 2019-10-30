@@ -133,7 +133,7 @@ export default {
       points(this.selectDate).then(response => {
         console.log(response)
         this.jf = response.data.sumOne
-        this.kf = response.data.sumOne
+        this.kf = response.data.sumTwo
       })
     },
     lists() {
