@@ -142,6 +142,6 @@ export function getCurrentMonthLast() {
 // 中国标准时间转yyyy-mm
 export function timeChange(date) {
   var y = date.getFullYear()
-  var m = date.getMonth() + 1
+  var m = getzf(date.getMonth() + 1)
   return y + '-' + m
 }

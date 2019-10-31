@@ -1,26 +1,27 @@
 <template>
   <div class="list">
-    <van-pull-refresh v-model="refreshing"
-                      @refresh="onRefresh"
-                      class="list-refresh">
-      <van-list v-model="loading"
-                :finished="finished"
-                finished-text="没有更多了"
-                @load="onLoad">
+    <van-pull-refresh
+      v-model="refreshing"
+      @refresh="onRefresh"
+      class="list-refresh"
+    >
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+      >
         <ul>
-          <li v-for="(item,index) in list"
-              :key="index">
+          <li v-for="(item, index) in list" :key="index">
             <div class="item">
               <div class="left">
-                <img :src="item.status===2?already:wait"
-                     alt="">
+                <img :src="item.status === 2 ? already : wait" alt="" />
               </div>
               <div class="active">
-                <p class="p1">{{item.company}}</p>
-                <p class="p2">快递单号：{{item.courierNumber}}</p>
+                <p class="p1">{{ item.company }}</p>
+                <p class="p2">快递单号：{{ item.courierNumber }}</p>
               </div>
-              <div class="xq"
-                   @click="details(item)">
+              <div class="xq" @click="details(item)">
                 查看详情
                 <i class="el-icon-third-xiangyou"></i>
               </div>
@@ -57,33 +58,31 @@ export default {
       refreshing: false
     }
   },
-  created() {
-  },
+  created() {},
   methods: {
     details(item) {
       this.$store.commit('setExpInfo', item)
-      this.$router.push(
-        {
-          path: '/expDetail'
-        }
-      )
+      this.$router.push({
+        path: '/expDetail'
+      })
     },
     onLoad() {
       this.page.pageNum += 1
       this.getList()
     },
     getList() {
-      expList(this.page.pageNum, this.page.pageSize, this.Token).then(response => {
-        this.list = this.list.concat(response.data.dataList)
-        this.page = response.data.page
-        this.refreshing = false
-        // 加载状态结束
-        this.loading = false
-        // 数据全部加载完成
-        if (this.page.pageNum * this.page.pageSize >= this.page.total) {
-          this.finished = true
-        }
-      })
+      expList(this.page.pageNum, this.page.pageSize, this.Token)
+        .then(response => {
+          this.list = this.list.concat(response.data.dataList)
+          this.page = response.data.page
+          this.refreshing = false
+          // 加载状态结束
+          this.loading = false
+          // 数据全部加载完成
+          if (this.page.pageNum * this.page.pageSize >= this.page.total) {
+            this.finished = true
+          }
+        })
         .catch(error => {
           console.log(error)
           this.loading = false

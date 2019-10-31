@@ -4,6 +4,7 @@ import jinhua from './modules/jinhua'
 import gyt from './modules/gyt'
 import sewageDisposal from './modules/sewageDisposal'
 import ehy from './modules/ehy'
+import integralMall from './modules/integralMall'
 
 Vue.use(Router)
 
@@ -18,6 +19,7 @@ export default new Router({
     ...gyt,
     ...sewageDisposal,
     ...ehy,
+    ...integralMall,
     {
       path: '/exp',
       name: 'exp',
