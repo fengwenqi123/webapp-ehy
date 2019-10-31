@@ -33,13 +33,19 @@ const sewageDisposal = [
     path: '/lifeWaterRecord',
     name: 'lifeWaterRecord',
     component: () => import('@/views/sewageDisposal/lifeWaterRecord'),
-    meta: { title: '生活污水排放记录' }
+    meta: { title: '生活污水排放' }
   },
   {
     path: '/lifeWaterRecordInfo',
     name: 'lifeWaterRecordInfo',
-    component: () => import('@/views/sewageDisposal/lifeWaterRecord/info'),
+    component: () => import('@/views/sewageDisposal/landRecord/info'),
     meta: { title: '生活污水排放记录' }
+  },
+  {
+    path: '/lifeSewageOutLet',
+    name: 'lifeSewageOutLet',
+    component: () => import('@/views/sewageDisposal/lifeWaterRecord/outLetList'),
+    meta: { title: '生活污水排污口' }
   },
   {
     path: '/lifeSewage',
@@ -53,6 +59,13 @@ const sewageDisposal = [
     component: () => import('@/views/sewageDisposal/lifeSewage/success'),
     meta: { title: '回收成功' }
   },
+  {
+    path: '/successWaterAuto',
+    name: 'successWaterAuto',
+    component: () => import('@/views/sewageDisposal/lifeSewage/successWaterAuto'),
+    meta: { title: '污水回收成功' }
+  },
+
   {
     path: '/rubbishSewage',
     name: 'rubbishSewage',
@@ -76,6 +89,12 @@ const sewageDisposal = [
     name: 'unrecognized',
     component: () => import('@/views/sewageDisposal/result/unrecognized'),
     meta: { title: '无法识别' }
+  },
+  {
+    path: '/landRecord',
+    name: 'landRecord',
+    component: () => import('@/views/sewageDisposal/landRecord'),
+    meta: { title: '上岸记录' }
   }
 ]
 export default sewageDisposal

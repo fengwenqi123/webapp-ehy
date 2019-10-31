@@ -1,85 +1,88 @@
 <template>
   <div class="container">
     <div class="content">
-     <van-popup
-        v-model="showType"
-        position="bottom"
-      >
-        <van-picker :columns="columns" show-toolbar  @cancel="onCancel" @confirm="onConfirm" />
+      <van-popup v-model="showType"
+                 position="bottom">
+        <van-picker :columns="columns"
+                    show-toolbar
+                    @cancel="onCancel"
+                    @confirm="onConfirm" />
       </van-popup>
-      <van-popup
-        v-model="showArea"
-        position="bottom"
-      >
-        <van-area :area-list="areaList" @cancel="onCancelArea" @confirm="onConfirmArea"/>
+      <van-popup v-model="showArea"
+                 position="bottom">
+        <van-area :area-list="areaList"
+                  @cancel="onCancelArea"
+                  @confirm="onConfirmArea" />
       </van-popup>
       <div class="dateBtn">
-        <span @click="showPopupArea">{{areaBtn}} <van-icon name="arrow-down"/></span>
+        <span @click="showPopupArea">{{areaBtn}}
+          <van-icon name="arrow-down" /></span>
       </div>
       <div class="dateBtn">
-        <span @click="showPopupType">{{typeBtn}} <van-icon name="arrow-down"/></span>
-      </div>  
-      <van-pull-refresh
-      v-model="isLoading"
-      @refresh="onRefresh"
-     >
-      <van-list
-        class="main"
-        v-model="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="onLoad"
-      >
-        <div
-          class="card"
-          v-for="item in itemList"
-          :key="item.id"
-        >
-          <div>
-            <van-row>
-              <van-col :offset="1" span="8">
-                <p>{{item.name}}</p>
-              </van-col>
-              <van-col span="3">
-                <span>{{item.attribute===1?'智能':item.attribute===2?'普通':item.attribute===3?'综合':"不明"}}</span>
-              </van-col>
-              <van-col span="6" :offset="5">
-                <p :class="{status1:item.status===2,status2:item.status===3}">{{item.status===1?'空闲':item.status===2?'工作中':item.status===3?'报修中':"状态不明"}}</p>
-              </van-col>
-            </van-row>
-            <van-row>
-              <van-col span="8" :offset="1">
-                <p>联系人：{{item.contact}}</p>
-              </van-col>
-              <van-col span="2">
-                <p>{{item.mobile}}</p>
-              </van-col>
-              <van-col span="2" :offset="10">
-                <p>{{item.distance}}</p>
-              </van-col>
-            </van-row>
-            <van-row>
-              <van-col span="8" :offset="1">
-                <p>地址：{{item.address}}</p>
-              </van-col>
-            </van-row>
-            <van-row>
-              <van-col span="12" :offset="1">
-                <span :class="{active:fomesFun1(item.fomesType||'')}">生活垃圾</span>
-                <span :class="{active:fomesFun2(item.fomesType||'')}">生活污水</span>
-                <span :class="{active:fomesFun3(item.fomesType||'')}">油污</span>
-              </van-col>
-            </van-row>
+        <span @click="showPopupType">{{typeBtn}}
+          <van-icon name="arrow-down" /></span>
+      </div>
+      <van-pull-refresh v-model="isLoading"
+                        @refresh="onRefresh">
+        <van-list class="main"
+                  v-model="loading"
+                  :finished="finished"
+                  finished-text="没有更多了"
+                  @load="onLoad">
+          <div class="card"
+               v-for="item in itemList"
+               :key="item.id">
+            <div>
+              <van-row>
+                <van-col :offset="1"
+                         span="8">
+                  <p>{{item.name}}</p>
+                </van-col>
+                <van-col span="3">
+                  <span>{{item.attribute===1?'智能':item.attribute===2?'普通':item.attribute===3?'综合':"不明"}}</span>
+                </van-col>
+                <van-col span="6"
+                         :offset="5">
+                  <p :class="{status1:item.status===2,status2:item.status===3}">{{item.status===1?'空闲':item.status===2?'工作中':item.status===3?'报修中':"状态不明"}}</p>
+                </van-col>
+              </van-row>
+              <van-row>
+                <van-col span="8"
+                         :offset="1">
+                  <p>联系人：{{item.contact}}</p>
+                </van-col>
+                <van-col span="2">
+                  <p>{{item.mobile}}</p>
+                </van-col>
+                <van-col span="2"
+                         :offset="10">
+                  <p>{{item.distance}}</p>
+                </van-col>
+              </van-row>
+              <van-row>
+                <van-col span="8"
+                         :offset="1">
+                  <p>地址：{{item.address}}</p>
+                </van-col>
+              </van-row>
+              <van-row>
+                <van-col span="12"
+                         :offset="1">
+                  <span :class="{active:fomesFun1(item.fomesType||'')}">生活垃圾</span>
+                  <span :class="{active:fomesFun2(item.fomesType||'')}">生活污水</span>
+                  <span :class="{active:fomesFun3(item.fomesType||'')}">油污</span>
+                </van-col>
+              </van-row>
             </div>
           </div>
-      </van-list>
-    </van-pull-refresh>
+        </van-list>
+      </van-pull-refresh>
     </div>
   </div>
 </template>
 
 <script>
-import { sewagePoint } from '@/api/sewageDisposal'
+import { sewagePoint } from '@/api/sewageDisposalNo'
 import { getLat, getLng, setTitle } from '@/utils/cache'
 export default {
   data() {

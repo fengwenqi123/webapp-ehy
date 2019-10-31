@@ -1,95 +1,115 @@
 <template>
   <div class="container">
-    <ul>
-      <li v-for="item in list" :key="item.value">
-        <div class="item" @click="pathTo(item.path)">
-          <div class="left">
-            <img :src="item.icon" :alt="item.value" />
-            <div class="value">
-              {{ item.value }}
-            </div>
-          </div>
-          <div class="right">
-            <img src="../../../assets/img/sewage/Path.png" />
-          </div>
-        </div>
-      </li>
-    </ul>
+    <p>回收服务</p>
+    <div class="container-child">
+      <div v-for="item in list"
+           :key="item.src"
+           @click="pathTo(item.path)">
+        <img :src="item.icon" />
+        <span>{{item.value}}</span>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { Toast } from 'vant'
 export default {
   data() {
     return {
       list: [
         {
-          value: '油污水回收记录',
-          icon: require('@/assets/img/sewage/ywshs.png'),
-          path: ''
-        },
-        {
-          value: '生活垃圾回收记录',
-          icon: require('@/assets/img/sewage/shlj.png'),
-          path: ''
-        },
-        {
-          value: '生活污水回收记录',
-          icon: require('@/assets/img/sewage/shws.png'),
+          value: '生活污水',
+          icon: require('@/assets/img/shws.png'),
           path: '/lifeWaterRecord'
         },
         {
+          value: '生活垃圾',
+          icon: require('@/assets/img/shlj.png'),
+          path: ''
+        },
+        {
+          value: '油污水',
+          icon: require('@/assets/img/yws.png'),
+          path: ''
+        },
+        {
           value: '回收点位置查询',
-          icon: require('@/assets/img/sewage/hsdwz.png'),
+          icon: require('@/assets/img/hsdwz.png'),
           path: '/sewagePointSearch'
         },
         {
           value: '无法上岸问题上报',
-          icon: require('@/assets/img/sewage/wfsa.png'),
+          icon: require('@/assets/img/wfsa.png'),
           path: '/unableToLand'
+        },
+        {
+          value: '上岸记录',
+          icon: require('@/assets/img/sajl.png'),
+          path: '/landRecord'
+        }, {
+          value: '积分商城',
+          icon: require('@/assets/img/jfsc.png'),
+          path: ''
         }
       ]
     }
   },
   methods: {
     pathTo(path) {
-      this.$router.push({
-        path
-      })
+      if (path === '') {
+        Toast('即将开放，敬请期待...')
+      } else {
+        this.$router.push({
+          path
+        })
+      }
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .container {
-  ul {
-    li {
-      padding: 0 32px;
-      .item {
-        height: 94px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid #eeeeee;
-        .left {
-          display: flex;
-          img {
-            width: 32px;
-            height: 32px;
-            margin-right: 35px;
-          }
-          .value {
-            font-size: 32px;
-            font-weight: 500;
-            color: rgba(51, 51, 51, 1);
-          }
-        }
-        .right {
-          img {
-            width: 16px;
-          }
-        }
+  width: 100% !important;
+  p {
+    background-color: #fff;
+    border-bottom: 1px solid #d8d8d8;
+    margin: 0 24px;
+    line-height: 88px;
+    padding-left: 20px;
+    color: #666666;
+    font-size: 32px;
+  }
+  .container-child {
+    margin: 0 24px;
+    background-color: #fff;
+    flex-wrap: wrap;
+    display: flex;
+    div {
+      width: 33.1%;
+      height: 210px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      border-bottom: 1px solid #d8d8d8;
+      img {
+        width: 96px;
+        height: 96px;
+      }
+      span {
+        font-size: 26px;
+        padding: 10px 0;
+      }
+      &:nth-child(3n) {
+        border-left: 2px solid #d8d8d8;
+      }
+      &:nth-child(3n + 1) {
+        border-right: 2px solid #d8d8d8;
+      }
+      &:last-child {
+        border-bottom: 0;
       }
     }
   }

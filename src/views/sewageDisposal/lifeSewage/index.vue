@@ -15,58 +15,51 @@
     </div>
     <div class="main-list">
       <van-cell-group>
-        <van-field
-          v-model="type"
-          label="回收类型"
-          disabled
-          clickable
-          input-align="right"
-        />
-        <van-field
-          v-model="recoveryInfo.shipName"
-          label="船舶名称"
-          disabled
-          clickable
-          input-align="right"
-        />
-        <van-field
-          v-model="recoveryInfo.siteName"
-          label="回收点"
-          disabled
-          clickable
-          input-align="right"
-        />
-        <van-field
-          v-model="recoveryInfo.name"
-          label="排放口"
-          disabled
-          clickable
-          input-align="right"
-        />
-        <van-field
-          v-model="recoveryInfo.attribute===1?'智能':'普通'"
-          label="排放口类型"
-          disabled
-          clickable
-          input-align="right"
-        />
-        <van-field
-          v-if="recoveryInfo.attribute!==1"
-          v-model="amount"
-          label="排放容积(L)"
-          placeholder="请输入排放容积"
-          type="number"
-          clickable
-          input-align="right"
-        />
+        <van-field v-model="type"
+                   label="回收类型"
+                   disabled
+                   clickable
+                   input-align="right" />
+        <van-field v-model="recoveryInfo.shipName"
+                   label="船舶名称"
+                   disabled
+                   clickable
+                   input-align="right" />
+        <van-field v-model="recoveryInfo.siteName"
+                   label="回收点"
+                   disabled
+                   clickable
+                   input-align="right" />
+        <van-field v-model="recoveryInfo.name"
+                   label="排放口"
+                   disabled
+                   clickable
+                   input-align="right" />
+        <van-field v-model="recoveryInfo.attribute===1?'智能':'普通'"
+                   label="排放口类型"
+                   disabled
+                   clickable
+                   input-align="right" />
+        <van-field style="margin-top:10px;"
+                   v-if="recoveryInfo.attribute!==1"
+                   v-model="amount"
+                   label="排放容积(L)"
+                   placeholder="请输入排放容积"
+                   type="number"
+                   clickable
+                   input-align="right" />
       </van-cell-group>
       <div class="submit">
-        <van-button @click="submit"  v-if="recoveryInfo.attribute===1" class="button" type="info" size="large"
-          >确认开始排放</van-button
-        >
-        <van-button @click="submit1" v-else class="button" type="info" size="large"
-        >确认排放</van-button
-        >
+        <van-button @click="submit"
+                    v-if="recoveryInfo.attribute===1"
+                    class="button"
+                    type="info"
+                    size="large">确认开始排放</van-button>
+        <van-button @click="submit1"
+                    v-else
+                    class="button"
+                    type="info"
+                    size="large">确认排放</van-button>
       </div>
     </div>
     <errors></errors>
@@ -88,6 +81,8 @@ export default {
       'recoveryInfo',
       'recoveryCode'
     ])
+  },
+  created() {
   },
   mounted() {
     setTitle(this.$route.meta.title)
@@ -113,7 +108,7 @@ export default {
         })
         setTimeout(() => {
           this.$router.push({
-            path: '/success'
+            path: '/successWaterAuto'
           })
         }, 2000)
       })
