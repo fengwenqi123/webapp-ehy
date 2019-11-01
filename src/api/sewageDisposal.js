@@ -47,12 +47,12 @@ export function questionReport(form) {
 }
 
 // 累计积分
-export function points(time) {
+export function points(time, shipName) {
   return request({
     url: '/poi/sewage/selectSum',
     method: 'GET',
     params: {
-      time
+      time, shipName
     }
   })
 }

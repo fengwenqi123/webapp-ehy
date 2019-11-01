@@ -14,7 +14,7 @@
       <img src="../../../assets/img/lifeWater.png"
            alt="" />
     </div>
-    <div class="main">
+    <!-- <div class="main">
       <div class="title">预计可获得积分</div>
       <ul>
         <li>
@@ -40,7 +40,7 @@
         <p>合计积分</p>
         <p>20<span>分</span></p>
       </div>
-    </div>
+    </div> -->
     <div class="submit"
          @click="backHome">
       <van-button class="button"

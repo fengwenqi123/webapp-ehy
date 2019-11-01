@@ -1,7 +1,7 @@
 import request from '@/utils/requestNo'
 
 // 排污点列表
-export function pwList(pageNum, pageSize, time, type) {
+export function pwList(pageNum, pageSize, time, type, shipName) {
   return request({
     url: '/poi/sewage',
     method: 'GET',
@@ -9,7 +9,8 @@ export function pwList(pageNum, pageSize, time, type) {
       pageNum,
       pageSize,
       time,
-      type
+      type,
+      shipName
     }
   })
 }

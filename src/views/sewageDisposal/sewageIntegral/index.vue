@@ -24,6 +24,7 @@
             <li>
               <div class="item"
                    v-for="item in itemList"
+                   v-if="item.status===2"
                    :key="item.id">
                 <div class="left">
                   <img src="../../../assets/img/sewage/integral.png"
@@ -61,7 +62,7 @@
 <script>
 import DatetimePicker from './DatetimePicker'
 import { parseTime } from '@/utils/index'
-import { setTitle } from '@/utils/cache.js'
+import { setTitle, getBoat } from '@/utils/cache.js'
 import { pwList } from '@/api/sewageDisposal1'
 import { points } from '@/api/sewageDisposal'
 export default {
@@ -81,6 +82,7 @@ export default {
         pageNum: 1,
         total: 0
       },
+      shipName: getBoat(),
       itemList: [],
       isLoading: false,
       finished: false,
@@ -130,14 +132,14 @@ export default {
       this.lists()
     },
     point() {
-      points(this.selectDate).then(response => {
+      points(this.selectDate, this.shipName).then(response => {
         console.log(response)
         this.jf = response.data.sumOne
         this.kf = response.data.sumTwo
       })
     },
     lists() {
-      pwList(this.page.pageNum, this.page.pageSize, this.selectDate, this.type).then(response => {
+      pwList(this.page.pageNum, this.page.pageSize, this.selectDate, this.type, this.shipName).then(response => {
         this.page.total = response.data.page.total
         this.itemList = this.itemList.concat(response.data.dataList)
         // 加载状态结束

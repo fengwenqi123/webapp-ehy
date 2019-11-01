@@ -40,15 +40,15 @@
                    disabled
                    clickable
                    input-align="right" />
-        <van-field style="margin-top:10px;"
-                   v-if="recoveryInfo.attribute!==1"
-                   v-model="amount"
-                   label="排放容积(L)"
-                   placeholder="请输入排放容积"
-                   type="number"
-                   clickable
-                   input-align="right" />
       </van-cell-group>
+      <van-field style="margin-top:20px"
+                 v-if="recoveryInfo.attribute!==1"
+                 v-model="amount"
+                 label="排放容积(L)"
+                 placeholder="请输入排放容积"
+                 type="number"
+                 clickable
+                 input-align="right" />
       <div class="submit">
         <van-button @click="submit"
                     v-if="recoveryInfo.attribute===1"

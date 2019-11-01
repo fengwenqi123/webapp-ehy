@@ -111,9 +111,13 @@ export default {
       })
     },
     callBackCode(code) {
-      this.code = code
-      this.$store.commit('setrecoveryCode', this.code)
-      this.getRecoveryInfo()
+      if (/^[0-9]+$/.test(code) && code.length === 20) {
+        this.code = code
+        this.$store.commit('setrecoveryCode', this.code)
+        this.getRecoveryInfo()
+      } else {
+        this.$router.push({ path: '/unrecognized' })
+      }
     },
     getCode() {
       getGoQr()

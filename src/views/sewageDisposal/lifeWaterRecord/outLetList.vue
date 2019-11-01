@@ -10,16 +10,16 @@
            :key="item.id">
         <p>
           <span>{{item.name}}</span>
-          <span @click="getRecoveryInfo(item)">点击开始排放
-            <van-icon name="down" /></span>
+          <span>{{item.attribute===1?'智能':item.attribute===2?'普通':item.attribute===3?'综合':"不明"}}</span>
         </p>
+        <p> <span @click="getRecoveryInfo(item)">点击开始排放</span></p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { setTitle, getBoat } from '@/utils/cache.js'
+import { setTitle, getBoat, setOutlet, getOutlet } from '@/utils/cache.js'
 import { recoveryInfo } from '@/api/sewageDisposal'
 import { Toast } from 'vant'
 import { discharge } from '@/api/sewageDisposal'
@@ -33,8 +33,13 @@ export default {
     }
   },
   created() {
-    this.item = this.$route.query.info
-    console.log(this.item)
+    if (this.$route.query.info.outlet) {
+      this.item = this.$route.query.info
+      setOutlet(this.item)
+    } else {
+      this.item = getOutlet()
+      console.log(this.item)
+    }
     setTitle(this.$route.meta.title)
   },
   methods: {
@@ -63,6 +68,7 @@ export default {
       recoveryInfo(this.shipName, this.code).then(response => {
         this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
+        this.$store.commit('setrecoveryCode', this.code)
         switch (response.data.type) {
           case 1:
             switch (response.data.attribute) {
@@ -116,17 +122,30 @@ export default {
       border-bottom: 1px solid #eee;
     }
     div {
-      p {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+      p:nth-child(1) {
         padding: 0 20px;
-        line-height: 100px;
-        border-bottom: 1px solid #eee;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        line-height: 150px;
         span:nth-child(1) {
           color: #888;
+          font-size: 32px;
         }
         span:nth-child(2) {
+          padding: 4px 15px;
+          border-radius: 20px;
+          color: #fff;
+          font-size: 24px;
+          background-color: #108ee9;
+        }
+      }
+      p:nth-child(2) {
+        padding: 0 20px;
+        line-height: 150px;
+        span {
+          font-size: 32px;
           color: #108ee9;
         }
       }
