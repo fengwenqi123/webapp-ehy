@@ -11,12 +11,12 @@ export function sewagePoint(pageNum, pageSize, city, area, fomesType, currentLon
 }
 
 // 生活污水排污记录
-export function sewageReport(pageNum, pageSize, time, type, shipName) {
+export function sewageReport(pageNum, pageSize, time, type, shipName, auditStatus) {
   return request({
     url: '/sewage/sewageInfo/getRecord',
     method: 'GET',
     params: {
-      pageNum, pageSize, time, type, shipName
+      pageNum, pageSize, time, type, shipName, auditStatus
     }
   })
 }

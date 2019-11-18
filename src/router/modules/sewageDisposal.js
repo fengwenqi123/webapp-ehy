@@ -95,6 +95,18 @@ const sewageDisposal = [
     name: 'landRecord',
     component: () => import('@/views/sewageDisposal/landRecord'),
     meta: { title: '上岸记录' }
+  },
+  {
+    path: '/portCheck',
+    name: 'portCheck',
+    component: () => import('@/views/sewageDisposal/portCheck'),
+    meta: { title: '码头审核' }
+  },
+  {
+    path: '/portCheckInfo',
+    name: 'portCheckInfo',
+    component: () => import('@/views/sewageDisposal/portCheck/info'),
+    meta: { title: '码头审核详情' }
   }
 ]
 export default sewageDisposal

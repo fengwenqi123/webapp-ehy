@@ -13,8 +13,31 @@
         </p>
       </div>
     </div>
+
     <div class="main-list">
-      <van-cell-group>
+      <div class="list-top">
+        <p>
+          <span>回收类型</span>
+          <span>{{type}}</span>
+        </p>
+        <p>
+          <span>船舶名称</span>
+          <span>{{recoveryInfo.shipName}}</span>
+        </p>
+        <p>
+          <span>回收点</span>
+          <span>{{recoveryInfo.siteName}}</span>
+        </p>
+        <p>
+          <span>排放口</span>
+          <span>{{recoveryInfo.name}}</span>
+        </p>
+        <p>
+          <span>排放口类型</span>
+          <span>{{recoveryInfo.attribute===1?'智能':'普通'}}</span>
+        </p>
+      </div>
+      <!-- <van-cell-group>
         <van-field v-model="type"
                    label="回收类型"
                    disabled
@@ -40,12 +63,12 @@
                    disabled
                    clickable
                    input-align="right" />
-      </van-cell-group>
+      </van-cell-group> -->
       <van-field style="margin-top:20px"
                  v-if="recoveryInfo.attribute!==1"
                  v-model="amount"
-                 label="排放容积(L)"
-                 placeholder="请输入排放容积"
+                 label="排放量(L)"
+                 placeholder="请输入排放量"
                  type="number"
                  clickable
                  input-align="right" />
@@ -62,7 +85,7 @@
                     size="large">确认排放</van-button>
       </div>
     </div>
-    <errors></errors>
+    <errors :info="info"></errors>
   </div>
 </template>
 
@@ -86,11 +109,14 @@ export default {
   },
   mounted() {
     setTitle(this.$route.meta.title)
+    this.info = this.recoveryInfo
   },
   data() {
     return {
       amount: null,
-      type: '生活污水回收'
+      type: '生活污水回收',
+      // recoveryInfo: { siteName: '122' },
+      info: {}
     }
   },
   methods: {
@@ -157,6 +183,22 @@ export default {
     .right {
       p:nth-child(2) {
         margin-top: 14px;
+      }
+    }
+  }
+  .main-list {
+    .list-top {
+      padding: 0 20px;
+      background-color: #108ee9;
+      border-top: 1px solid #fff;
+      p {
+        display: flex;
+        height: 80px;
+        justify-content: space-between;
+        align-items: center;
+        span {
+          color: #fff;
+        }
       }
     }
   }

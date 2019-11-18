@@ -2,94 +2,89 @@
   <div class="container">
     <div class="content">
       <van-cell-group>
-        <van-field
-          v-model="form.questionName"
-          label="问题类型"
-          is-link
-          disabled
-          input-align="right"
-          arrow-direction="down"
-          placeholder="请选择问题类型"
-          @click="questionShow = true"
-        />
-        <van-field
-          v-model="form.deviceType"
-          label="设备类型"
-          is-link
-          disabled
-          input-align="right"
-          arrow-direction="down"
-          placeholder="请选择设备类型"
-          @click="deviceShow = true"
-          v-show="form.questionType === 2"
-        />
-        <van-field
-          v-model="form.siteName"
-          label="回收点"
-          is-link
-          disabled
-          input-align="right"
-          arrow-direction="down"
-          placeholder="请选择回收点"
-          @click="siteShow = true"
-        />
-        <van-field
-          v-model="form.outletName"
-          label="排放口"
-          is-link
-          disabled
-          input-align="right"
-          arrow-direction="down"
-          placeholder="请选择排放口"
-          @click="outletShow = true"
-          v-show="form.questionType === 2"
-        />
-        <van-field
-          v-model="form.describe"
-          label="问题描述"
-          input-align="right"
-          placeholder="请输入问题描述"
-        />
+        <van-field v-model="form.questionName"
+                   label="问题类型"
+                   is-link
+                   disabled
+                   input-align="right"
+                   arrow-direction="down"
+                   placeholder="请选择问题类型"
+                   @click="questionShow = true" />
+        <van-field v-model="form.deviceType"
+                   label="设备类型"
+                   is-link
+                   disabled
+                   input-align="right"
+                   arrow-direction="down"
+                   placeholder="请选择设备类型"
+                   @click="deviceShow = true"
+                   v-show="form.questionType === 2" />
+        <van-field v-model="form.siteName"
+                   label="回收点"
+                   is-link
+                   disabled
+                   input-align="right"
+                   arrow-direction="down"
+                   placeholder="请选择回收点"
+                   @click="siteShow = true" />
+        <van-field v-model="form.outletName"
+                   label="排放口"
+                   is-link
+                   disabled
+                   input-align="right"
+                   arrow-direction="down"
+                   placeholder="请选择排放口"
+                   @click="outletShow = true"
+                   v-show="form.questionType === 2" />
+        <van-field v-model="form.describe"
+                   label="问题描述"
+                   input-align="right"
+                   placeholder="请输入问题描述" />
       </van-cell-group>
-      <div class="submit" @click="submit">
-        <van-button class="button" type="info" size="large"
-          >确认上报</van-button
-        >
+      <div class="submit"
+           @click="submit">
+        <van-button class="button"
+                    type="info"
+                    size="large">确认上报</van-button>
       </div>
     </div>
-    <van-action-sheet
-      v-model="questionShow"
-      :actions="actions"
-      round
-      close-on-click-action
-      @select="onSelect"
-      cancel-text="取消"
-    />
-    <van-action-sheet
-      v-model="deviceShow"
-      :actions="deviceActions"
-      round
-      close-on-click-action
-      @select="onSelectDevice"
-      cancel-text="取消"
-    />
-    <van-popup v-model="siteShow" round position="bottom">
-      <van-picker
-        show-toolbar
-        title="回收点"
-        :columns="siteColumns"
-        @cancel="siteShow = false"
-        @confirm="siteOnConfirm"
-      />
+    <van-action-sheet v-model="questionShow"
+                      :actions="actions"
+                      round
+                      close-on-click-action
+                      @select="onSelect"
+                      cancel-text="取消" />
+    <van-action-sheet v-model="deviceShow"
+                      :actions="deviceActions"
+                      round
+                      close-on-click-action
+                      @select="onSelectDevice"
+                      cancel-text="取消" />
+    <van-popup v-model="siteShow"
+               style="background:#F2F3F4"
+               :style="{ height: '100%' }"
+               position="bottom">
+      <van-field v-model="keyword"
+                 style="margin-bottom:5px"
+                 clearable
+                 label="关键字"
+                 @input="searchSite"
+                 placeholder="请输入关键字查询" />
+      <van-picker show-toolbar
+                  class="siteColumns"
+                  title="回收点"
+                  :columns="siteColumns"
+                  @cancel="siteShow = false"
+                  @confirm="siteOnConfirm" />
     </van-popup>
-    <van-popup v-model="outletShow" round position="bottom">
-      <van-picker
-        show-toolbar
-        title="排放口"
-        :columns="outletColumns"
-        @cancel="outletShow = false"
-        @confirm="outletOnConfirm"
-      />
+    <van-popup v-model="outletShow"
+               round
+               position="bottom">
+      <van-picker show-toolbar
+                  title="排放口"
+                  :columns="outletColumns"
+                  @cancel="outletShow = false"
+                  @confirm="outletOnConfirm" />
     </van-popup>
   </div>
 </template>
@@ -143,6 +138,7 @@ export default {
           name: '普通油污'
         }
       ],
+      keyword: '',
       siteColumns: [],
       outletColumns: [],
       questionShow: false,
@@ -153,6 +149,13 @@ export default {
   },
   created() {
     this.getRecoveryPointList()
+    console.log('11',
+      Object.keys(this.$route.query).length > 0)
+    if (Object.keys(this.$route.query).length > 0) {
+      console.log(this.$route.query)
+      this.form.siteName = this.$route.query.infos.siteName
+      // this.form.siteName = this.$route.query.infos.siteName
+    }
   },
   mounted() {
     setTitle(this.$route.meta.title)
@@ -165,10 +168,14 @@ export default {
     onSelectDevice(item) {
       this.form.deviceType = item.name
     },
+    searchSite() {
+      console.log(this.keyword)
+      this.getRecoveryPointList()
+    },
     // 获取回收点
     getRecoveryPointList() {
       this.siteColumns = []
-      recoveryPointList().then(response => {
+      recoveryPointList(this.keyword).then(response => {
         response.data.map(item => {
           this.siteColumns.push(item.name)
         })
@@ -284,6 +291,11 @@ export default {
         color: rgba(255, 255, 255, 1);
       }
     }
+  }
+}
+.siteColumns {
+  .van-picker__columns {
+    height: 100% !important;
   }
 }
 </style>

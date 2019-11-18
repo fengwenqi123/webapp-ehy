@@ -71,3 +71,29 @@
     font-weight: 400;
   }
 }
+
+.lifeSewageVan{
+  .van-cell-group{
+    background-color:#108ee9 !important;
+    // .van-cell {
+    //   background-color:#108ee9 !important;
+    //   color:#fff;
+    // }
+  }
+}
+
+.siteColumns {
+  .van-picker__columns {
+    height: 100% !important;
+  }
+  .van-picker-column__item--selected{
+    border:2px solid #108ee9;
+    font-size:35px;
+    color:#108ee9;
+    font-weight:bold;
+  }
+//   .van-picker-column__item {
+//     padding: 0 5px;
+//     color: #108ee9;
+// }
+}

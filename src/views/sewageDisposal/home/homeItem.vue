@@ -51,6 +51,10 @@ export default {
           value: '积分商城',
           icon: require('@/assets/img/jfsc.png'),
           path: ''
+        }, {
+          value: '码头',
+          icon: require('@/assets/img/jfsc.png'),
+          path: '/portCheck'
         }
       ]
     }
@@ -108,8 +112,12 @@ export default {
       &:nth-child(3n + 1) {
         border-right: 2px solid #d8d8d8;
       }
+      &:nth-last-child(2) {
+        border-bottom: 0;
+      }
       &:last-child {
         border-bottom: 0;
+        border-right: 2px solid #d8d8d8;
       }
     }
   }

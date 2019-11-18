@@ -9,9 +9,11 @@ export default {
   data() {
     return {}
   },
+  props: ['info'],
   methods: {
     goRepair() {
-      this.$router.push({ name: 'unableToLand' })
+      console.log(this.info)
+      this.$router.push({ name: 'unableToLand', query: { infos: this.info }})
     }
   }
 }

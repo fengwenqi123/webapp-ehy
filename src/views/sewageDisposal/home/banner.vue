@@ -38,7 +38,7 @@
       <div @click="goPoint">
         <img src="../../../assets/img/ls.png" />
         <div>
-          <p>可用绿水分</p>
+          <p>可用上岸分</p>
           <p>{{point}}</p>
         </div>
       </div>
