@@ -21,10 +21,13 @@ export function discharge(form) {
     data
   })
 }
-export function recoveryPointList() {
+export function recoveryPointList(keyword) {
   return request({
     url: '/sewage/sewageSite/list',
-    method: 'GET'
+    method: 'GET',
+    params: {
+      keyword
+    }
   })
 }
 
@@ -47,12 +50,12 @@ export function questionReport(form) {
 }
 
 // 累计积分
-export function points(time) {
+export function points(time, shipName) {
   return request({
     url: '/poi/sewage/selectSum',
     method: 'GET',
     params: {
-      time
+      time, shipName
     }
   })
 }
@@ -62,6 +65,28 @@ export function allPoints() {
   return request({
     url: '/poi/shipPoint/sumByToken',
     method: 'GET'
+  })
+}
+
+// 船舶在排污点定位信息
+export function boatPosition(siteId, shipName) {
+  return request({
+    url: '/sewage/sewageInfo/insertInfo',
+    method: 'GET',
+    params: {
+      siteId,
+      shipName
+    }
+  })
+}
+
+// 上岸记录审核
+export function portCheckStatus(id, auditStatus) {
+  const data = qs.stringify({ id, auditStatus })
+  return request({
+    url: '/sewage/sewageInfo/updateAuditStatus',
+    method: 'POST',
+    data
   })
 }
 

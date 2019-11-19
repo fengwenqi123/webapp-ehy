@@ -38,7 +38,7 @@
       <div @click="goPoint">
         <img src="../../../assets/img/ls.png" />
         <div>
-          <p>可用绿水分</p>
+          <p>可用上岸分</p>
           <p>{{point}}</p>
         </div>
       </div>
@@ -111,9 +111,13 @@ export default {
       })
     },
     callBackCode(code) {
-      this.code = code
-      this.$store.commit('setrecoveryCode', this.code)
-      this.getRecoveryInfo()
+      if (/^[0-9]+$/.test(code) && code.length === 20) {
+        this.code = code
+        this.$store.commit('setrecoveryCode', this.code)
+        this.getRecoveryInfo()
+      } else {
+        this.$router.push({ path: '/unrecognized' })
+      }
     },
     getCode() {
       getGoQr()

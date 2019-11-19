@@ -67,8 +67,9 @@ export default {
   h1 {
     text-align: center;
     width: 100%;
-    min-height: 1rem;
-    line-height: 1rem;
+    min-height: 0.8rem;
+    line-height: 0.8rem;
+    padding-top: 0.2rem;
     font-size: 0.5rem;
   }
   .title-type {
@@ -79,7 +80,7 @@ export default {
     }
     span:last-child {
       color: #888;
-      padding-left: 1rem;
+      padding-left: 0.5rem;
     }
   }
   p {

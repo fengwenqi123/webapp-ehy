@@ -78,14 +78,18 @@
       </li>
     </ul>
     <div class="bottom"
-         v-if="item.status===3">
-      <van-button type="info">下载排污电子单据</van-button>
+         v-if="item.auditStatus===2">
+      <van-button type="info"
+                  @click="checkGo(item)">审核通过</van-button>
+      <van-button type="danger"
+                  @click="checkNo(item)">审核不通过</van-button>
     </div>
   </div>
 </template>
 
 <script>
 import { setTitle } from '@/utils/cache.js'
+import { portCheckStatus } from '@/api/sewageDisposal'
 export default {
   data() {
     return {
@@ -96,6 +100,24 @@ export default {
     console.log(this.$route.query.info)
     this.item = this.$route.query.info
     setTitle(this.$route.meta.title)
+  },
+  methods: {
+    checkGo(item) {
+      console.log(item)
+      portCheckStatus(item.id, 1).then(response => {
+        console.log(response)
+        this.$router.push({ name: 'portCheck' })
+      }
+      )
+    },
+    checkNo(item) {
+      console.log(item)
+      portCheckStatus(item.id, 3).then(response => {
+        console.log(response)
+        this.$router.push({ name: 'portCheck' })
+      }
+      )
+    }
   }
 }
 </script>
@@ -180,6 +202,7 @@ export default {
     width: 94%;
     padding: 3%;
     .van-button {
+      margin-top: 20px;
       width: 100%;
       border-radius: 10px;
     }

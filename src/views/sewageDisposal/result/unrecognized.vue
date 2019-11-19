@@ -2,7 +2,8 @@
   <div class="container">
     <div class="header">
       <div class="content">
-        <img src="../../../assets/img/sewage/unrecognized.png" alt="" />
+        <img src="../../../assets/img/sewage/unrecognized.png"
+             alt="" />
         <p>无法识别</p>
         <span>
           设备二维码无法识别，请确认是否正确扫
@@ -11,7 +12,10 @@
       </div>
     </div>
     <div class="submit">
-      <van-button class="button" type="info" size="large">返回首页</van-button>
+      <van-button class="button"
+                  type="info"
+                  size="large"
+                  @click="goHome">返回首页</van-button>
     </div>
     <errors></errors>
   </div>
@@ -26,6 +30,11 @@ export default {
   },
   mounted() {
     setTitle(this.$route.meta.title)
+  },
+  methods: {
+    goHome() {
+      this.$router.push({ name: 'sewageDisposal' })
+    }
   }
 }
 </script>

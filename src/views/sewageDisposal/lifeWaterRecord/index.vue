@@ -32,7 +32,7 @@
           <span>根据船舶AIS定位</span>
         </div>
         <div>
-          <span>重新定位</span>
+          <span @click="getDW">重新定位</span>
         </div>
       </div>
       <div class="bottom-list">
@@ -49,33 +49,34 @@
               <div>
                 <van-row>
                   <van-col :offset="1"
-                           span="15">
-                    <p>{{item.city}}{{item.area}}{{item.name}}</p>
+                           span="19">
+                    <p>{{item.name}}</p>
                   </van-col>
-                  <van-col span="3">
+                  <!-- <van-col span="3">
                     <span>{{item.attribute===1?'智能':item.attribute===2?'普通':item.attribute===3?'综合':"不明"}}</span>
+                  </van-col> -->
+                  <van-col :span="4">
+                    <p :class="{status1:item.status===1||item.status===2,status2:item.status===3}">{{item.status===1?'正常':item.status===2?'正常':item.status===3?'故障':"--"}}</p>
                   </van-col>
-                  <van-col span="4">
-                    <p :class="{status1:item.status===2,status2:item.status===3}">{{item.status===1?'空闲':item.status===2?'工作中':item.status===3?'报修中':"状态不明"}}</p>
-                  </van-col>
+
+                  <!-- </van-col> -->
                 </van-row>
                 <van-row>
                   <van-col span="8"
                            :offset="1">
-                    <p>联系人：{{item.contact}}</p>
+                    <p>联系人：{{item.contact||'--'}}</p>
                   </van-col>
-                  <van-col span="2">
+                  <van-col span="15">
                     <p>{{item.mobile}}</p>
                   </van-col>
-                  <van-col span="2"
-                           :offset="10">
-                    <p>{{item.distance}}</p>
-                  </van-col>
                 </van-row>
                 <van-row>
-                  <van-col span="8"
+                  <van-col span="18"
                            :offset="1">
-                    <p>地址：{{item.address}}</p>
+                    <p>地址：{{item.city}}{{item.area}}{{item.address}}</p>
+                  </van-col>
+                  <van-col span="5">
+                    <p style="font-weight:bold;color:#1890ff">{{parseInt(item.distance)||'--'}} m</p>
                   </van-col>
                 </van-row>
                 <van-row>
@@ -179,10 +180,10 @@ export default {
     },
     //
     lists() {
-      this.currentLon = getLng()
-      this.currentLat = getLat()
-      // this.currentLon = '120.1'
-      // this.currentLat = '30.86'
+      // this.currentLon = getLng()
+      // this.currentLat = getLat()
+      this.currentLon = '120.1'
+      this.currentLat = '30.86'
       sewagePoint(this.page.pageNum, this.page.pageSize, this.city, this.area, this.fomesType, this.currentLon, this.currentLat).then(response => {
         console.log(response)
         this.page.total = response.data.page.total
@@ -194,6 +195,9 @@ export default {
           this.finished = true
         }
       })
+    },
+    getDW() {
+      this.lists()
     },
     onRefresh() {
       setTimeout(() => {
@@ -217,9 +221,13 @@ export default {
       getGoQr()
     },
     callBackCode(code) {
-      this.code = code
-      this.$store.commit('setrecoveryCode', this.code)
-      this.getRecoveryInfo()
+      if (/^[0-9]+$/.test(code) && code.length === 20) {
+        this.code = code
+        this.$store.commit('setrecoveryCode', this.code)
+        this.getRecoveryInfo()
+      } else {
+        this.$router.push({ path: '/unrecognized' })
+      }
     },
     submitWater() {
       const obj = {
@@ -398,20 +406,27 @@ export default {
         }
         .van-row:nth-child(4) {
           span {
-            border: 1px solid #999999;
-            padding: 0 2px;
-            color: #999999;
+            background-color: #999999;
+            padding: 4px 15px;
+            border-radius: 15px;
+            color: #fff;
             font-size: 20px;
             text-align: center;
             line-height: 30px;
           }
           .active {
-            color: #1890ff;
-            border-color: #1890ff;
+            color: #fff;
+            background-color: #1890ff;
           }
         }
       }
     }
   }
+}
+.status1 {
+  color: #09bb07;
+}
+.status2 {
+  color: #f76260;
 }
 </style>

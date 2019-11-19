@@ -2,8 +2,9 @@
   <div class="container">
     <div class="header">
       <div class="content">
-        <img src="../../../assets/img/sewage/success.png"
-             alt="" />
+        <!-- <img src="../../../assets/img/sewage/success.png"
+             alt="" /> -->
+        <span class="time">{{count}}</span>
         <p>设备远程启动成功</p>
         <div class="line">
           <span>请点击设备按钮完成回收作业</span>
@@ -14,7 +15,7 @@
       <img src="../../../assets/img/lifeWater.png"
            alt="" />
     </div>
-    <div class="main">
+    <!-- <div class="main">
       <div class="title">预计可获得积分</div>
       <ul>
         <li>
@@ -40,7 +41,7 @@
         <p>合计积分</p>
         <p>20<span>分</span></p>
       </div>
-    </div>
+    </div> -->
     <div class="submit"
          @click="backHome">
       <van-button class="button"
@@ -58,9 +59,33 @@ export default {
     ...mapGetters(['recoveryInfo'])
   },
   mounted() {
+    this.startCount()
     setTitle(this.$route.meta.title)
   },
+  data() {
+    return {
+      count: 60,
+      interval: null
+    }
+  },
+  beforeDestroy() {
+    clearInterval(this.interval)
+    this.interval = null
+  },
   methods: {
+    startCount() {
+      this.interval = setInterval(() => {
+        if (this.count > 0) {
+          this.count--
+          console.log(this.count)
+        } else {
+          clearInterval(this.interval)
+          this.$router.push({
+            path: '/sewageDisposal'
+          })
+        }
+      }, 1000)
+    },
     backHome() {
       this.$router.push({
         path: '/sewageDisposal'
@@ -77,7 +102,17 @@ export default {
       padding: 50px 0;
       background: #fff;
       text-align: center;
-
+      .time {
+        background: #108ee9;
+        color: #fff;
+        display: inline-block;
+        line-height: 150px;
+        font-size: 60px;
+        font-weight: bold;
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+      }
       img {
         width: 130px;
         height: 130px;

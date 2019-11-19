@@ -2,7 +2,7 @@
   <div class="container">
     <div class="content">
       <van-popup v-model="show"
-                 position="top"
+                 position="bottom"
                  :style="{ height: '40%' }">
         <van-datetime-picker v-model="currentDate"
                              type="year-month"
@@ -10,8 +10,20 @@
                              @cancel="cancelDate"
                              :formatter="formatter" />
       </van-popup>
+      <van-popup v-model="showStatus"
+                 position="bottom"
+                 :style="{ height: '40%' }">
+        <van-picker show-toolbar
+                    title="审核状态"
+                    :columns="columnStatus"
+                    @confirm="confirmStatus"
+                    @cancel="cancelStatus" />
+      </van-popup>
       <div class="dateBtn">
         <span @click="showPopup">{{dateBtn}}
+          <van-icon name="arrow-down" /></span>
+        <span @click="showPopupStatus"
+              style="margin-left:10px;">{{statusBtn}}
           <van-icon name="arrow-down" /></span>
       </div>
       <van-pull-refresh v-model="isLoading"
@@ -23,10 +35,11 @@
                   @load="onLoad">
           <div class="card"
                v-for="item in itemList"
+               v-if="item.status!==4"
                :key="item.id">
             <div @click="goInfo(item)">
               <van-row>
-                <van-col span="12"
+                <van-col span="13"
                          :offset="1">
                   <p>{{item.siteName}}</p>
                 </van-col>
@@ -50,10 +63,7 @@
                   <p v-else>{{item.addTimeString}}</p>
                 </van-col>
                 <van-col span="5">
-                  <p v-if="item.status!==4"
-                     :class="{status1:item.auditStatus===1,status2:item.auditStatus===2,status3:item.auditStatus===3}">{{item.auditStatus===1?'审核通过':item.auditStatus===2?'审核中':item.auditStatus===3?'审核不通过':"--"}}</p>
-                  <p v-else
-                     class="status3">排污取消</p>
+                  <p :class="{status1:item.auditStatus===1,status2:item.auditStatus===2,status3:item.auditStatus===3}">{{item.auditStatus===1?'审核通过':item.auditStatus===2?'待审核':item.auditStatus===3?'审核不通过':"--"}}</p>
                 </van-col>
               </van-row>
             </div>
@@ -73,9 +83,13 @@ export default {
     return {
       value1: 0,
       show: false,
+      showStatus: false,
       dateBtn: '选择日期',
+      statusBtn: '待审核',
+      auditStatus: 2,
       currentDate: new Date(),
       value2: '排污类型',
+      columnStatus: ['审核通过', '待审核', '审核不通过'],
       option1: [
         { text: '地区', value: 0 },
         { text: '新款商品', value: 1 },
@@ -123,7 +137,7 @@ export default {
       }, 800)
     },
     lists() {
-      sewageReport(this.page.pageNum, this.page.pageSize, this.time, this.type, this.shipName).then(response => {
+      sewageReport(this.page.pageNum, this.page.pageSize, this.time, this.type, this.shipName, this.auditStatus).then(response => {
         this.page.total = response.data.page.total
         this.itemList = this.itemList.concat(response.data.dataList)
         console.log('列表', this.itemList)
@@ -145,6 +159,11 @@ export default {
     },
     showPopup() {
       this.show = true
+      this.showStatus = false
+    },
+    showPopupStatus() {
+      this.show = false
+      this.showStatus = true
     },
     cancelDate() {
       this.time = ''
@@ -165,8 +184,27 @@ export default {
       this.finished = false
       this.show = false
     },
+    cancelStatus() {
+      this.auditStatus = 2
+      this.statusBtn = '待审核'
+      this.page.pageNum = 1
+      this.itemList = []
+      this.lists()
+      this.finished = false
+      this.showStatus = false
+    },
+    confirmStatus(value) {
+      console.log(value)
+      this.statusBtn = value
+      this.auditStatus = value === '待审核' ? 2 : value === '审核通过' ? 1 : value === '审核不通过' ? 3 : ''
+      this.page.pageNum = 1
+      this.itemList = []
+      this.lists()
+      this.finished = false
+      this.showStatus = false
+    },
     goInfo(item) {
-      this.$router.push({ name: 'lifeWaterRecordInfo', query: { info: item }})
+      this.$router.push({ name: 'portCheckInfo', query: { info: item } })
     }
   }
 }
@@ -176,17 +214,16 @@ export default {
 .container {
   .content {
     .dateBtn {
+      display: flex;
       padding: 28px;
-      display: table;
       span {
-        display: table-cell;
-        height: 54px;
-        width: 180px;
-        vertical-align: middle;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-left: 20px;
+        padding: 15px 28px;
         background-color: #fff;
         font-size: 24px;
-        text-align: center;
-        line-height: 54px;
         border-radius: 80px;
       }
     }

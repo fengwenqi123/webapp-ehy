@@ -1,43 +1,93 @@
 <template>
   <div class="main">
     <div class="top">
-      <p>您当前位于</p>
-      <p>{{item.city}}{{item.area}}{{item.name}}</p>
+      <van-row type="flex"
+               style="color:#fff"
+               align="center">
+        <van-col :span="2">
+          <van-icon name="location-o"
+                    class="location" />
+        </van-col>
+        <van-col :span="22">
+          <p>{{item.city}}{{item.area}}{{item.name}}</p>
+        </van-col>
+      </van-row>
+      <div class="top-box">
+        <div>
+          <span>船舶名称</span>
+          <span>{{shipName}}</span>
+        </div>
+        <div>
+          <span>AIS定位距离</span>
+          <span style="display:flex;align-items:center">{{distance}}
+            <van-icon name="checked"
+                      class="yes"
+                      v-if="positionStatus" />
+            <van-icon name="clear"
+                      class="close"
+                      v-if="!positionStatus" />
+          </span>
+        </div>
+        <div>
+          <span>最新定位时间</span>
+          <span>{{receiveTimeString||'--'}}</span>
+        </div>
+      </div>
     </div>
     <div class="middle">
-      <h2>码头设备</h2>
+      <!-- <h2>码头设备</h2> -->
       <div v-for="item in item.outlet"
            :key="item.id">
         <p>
           <span>{{item.name}}</span>
-          <span @click="getRecoveryInfo(item)">点击开始排放
-            <van-icon name="down" /></span>
+          <span>{{item.attribute===1?'智能':item.attribute===2?'普通':item.attribute===3?'综合':"不明"}}</span>
         </p>
+        <p> <span @click="getRecoveryInfo(item)">点击开始排放</span></p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { setTitle, getBoat } from '@/utils/cache.js'
+import { setTitle, getBoat, setOutlet, getOutlet } from '@/utils/cache.js'
 import { recoveryInfo } from '@/api/sewageDisposal'
 import { Toast } from 'vant'
-import { discharge } from '@/api/sewageDisposal'
+import { discharge, boatPosition } from '@/api/sewageDisposal'
 export default {
   data() {
     return {
       item: null,
       recoveryInfo: null,
       code: null,
-      shipName: null
+      distance: null,
+      positionStatus: null,
+      receiveTimeString: null,
+      shipName: getBoat()
     }
   },
   created() {
-    this.item = this.$route.query.info
-    console.log(this.item)
+    if (this.$route.query.info.outlet) {
+      this.item = this.$route.query.info
+      console.log(this.item)
+      setOutlet(this.item)
+      this.getBoatPosition()
+    } else {
+      this.item = getOutlet()
+      console.log(this.item)
+    }
     setTitle(this.$route.meta.title)
   },
   methods: {
+    getBoatPosition() {
+      // this.item.id = '6'
+      // this.shipName = '浙安吉货1860'
+      boatPosition(this.item.id, this.shipName).then(response => {
+        console.log(response)
+        this.positionStatus = response.data.positionStatus
+        this.distance = response.data.distance
+        this.receiveTimeString = response.data.receiveTimeString
+      })
+    },
     submitWater() {
       const obj = {
         type: 1,
@@ -63,6 +113,7 @@ export default {
       recoveryInfo(this.shipName, this.code).then(response => {
         this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
+        this.$store.commit('setrecoveryCode', this.code)
         switch (response.data.type) {
           case 1:
             switch (response.data.attribute) {
@@ -100,11 +151,36 @@ export default {
 .main {
   .top {
     background-color: #108ee9;
-    padding: 20px;
+    padding: 40px 20px;
     p {
       color: #fff;
       font-size: 32px;
       line-height: 60px;
+    }
+    .location {
+      font-weight: bold;
+      font-size: 36px;
+    }
+    .top-box {
+      color: #fff;
+      padding: 0 50px;
+      .yes {
+        font-size: 36px;
+        margin-left: 5px;
+        color: #09bb07;
+      }
+      .close {
+        font-size: 36px;
+        margin-left: 5px;
+        color: #f76260;
+      }
+      div {
+        display: flex;
+        height: 80px;
+        font-size: 28px;
+        justify-content: space-between;
+        align-items: center;
+      }
     }
   }
   .middle {
@@ -116,17 +192,30 @@ export default {
       border-bottom: 1px solid #eee;
     }
     div {
-      p {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+      p:nth-child(1) {
         padding: 0 20px;
-        line-height: 100px;
-        border-bottom: 1px solid #eee;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        line-height: 150px;
         span:nth-child(1) {
           color: #888;
+          font-size: 32px;
         }
         span:nth-child(2) {
+          padding: 4px 15px;
+          border-radius: 20px;
+          color: #fff;
+          font-size: 24px;
+          background-color: #108ee9;
+        }
+      }
+      p:nth-child(2) {
+        padding: 0 20px;
+        line-height: 150px;
+        span {
+          font-size: 32px;
           color: #108ee9;
         }
       }
