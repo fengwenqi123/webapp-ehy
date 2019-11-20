@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import { getUser, getMemberDetail } from '@/api/exp.js'
 import { getToken } from '@/utils/cache.js'
 import { Toast } from 'vant'
 export default {
@@ -53,32 +52,15 @@ export default {
           value: '积分商城',
           icon: require('@/assets/img/jfsc.png'),
           path: ''
-        }, {
-          value: '码头',
-          icon: require('@/assets/img/portimg.png'),
-          path: '/portCheck'
         }
       ]
     }
   },
   created() {
-    this.getMemberDetail()
   },
   methods: {
     getTokens() {
       return getToken()
-    },
-    getMemberDetail() {
-      getUser(this.getTokens()).then(response => {
-        // console.log(response)
-        getMemberDetail(this.getTokens(), response.data.id).then(response => {
-          console.log(response.data)
-          if (response.data.tags !== '9') {
-            this.list.pop()
-            console.log(this.list)
-          }
-        })
-      })
     },
     pathTo(path) {
       if (path === '') {

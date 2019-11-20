@@ -76,7 +76,7 @@
                     <p>地址：{{item.city}}{{item.area}}{{item.address}}</p>
                   </van-col>
                   <van-col span="5">
-                    <p style="font-weight:bold;color:#1890ff">{{parseInt(item.distance)||'--'}} m</p>
+                    <p style="font-weight:bold;color:#1890ff">{{parseInt(item.distance)||'--'}} km</p>
                   </van-col>
                 </van-row>
                 <van-row>
@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     goOutLet(item) {
-      this.$router.push({ name: 'lifeSewageOutLet', query: { info: item }})
+      this.$router.push({ name: 'lifeSewageOutLet', query: { info: item } })
     },
     fomesFun1(value) {
       if (value.indexOf('生活垃圾') !== -1) {
@@ -180,10 +180,10 @@ export default {
     },
     //
     lists() {
-      // this.currentLon = getLng()
-      // this.currentLat = getLat()
-      this.currentLon = '120.1'
-      this.currentLat = '30.86'
+      this.currentLon = getLng()
+      this.currentLat = getLat()
+      // this.currentLon = '120.1'
+      // this.currentLat = '30.86'
       sewagePoint(this.page.pageNum, this.page.pageSize, this.city, this.area, this.fomesType, this.currentLon, this.currentLat).then(response => {
         console.log(response)
         this.page.total = response.data.page.total

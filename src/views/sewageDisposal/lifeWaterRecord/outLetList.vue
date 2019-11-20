@@ -81,6 +81,7 @@ export default {
     getBoatPosition() {
       // this.item.id = '6'
       // this.shipName = '浙安吉货1860'
+      console.log('123', this.shipName)
       boatPosition(this.item.id, this.shipName).then(response => {
         console.log(response)
         this.positionStatus = response.data.positionStatus

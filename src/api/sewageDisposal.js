@@ -71,7 +71,7 @@ export function allPoints() {
 // 船舶在排污点定位信息
 export function boatPosition(siteId, shipName) {
   return request({
-    url: '/sewage/sewageInfo/insertInfo',
+    url: '/poi/sewage/getShipPositionInfo',
     method: 'GET',
     params: {
       siteId,
