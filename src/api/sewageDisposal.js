@@ -90,3 +90,11 @@ export function portCheckStatus(id, auditStatus) {
   })
 }
 
+// 获得积分
+export function getSewagePoint() {
+  return request({
+    url: '/poi/deductionRule',
+    method: 'GET'
+  })
+}
+

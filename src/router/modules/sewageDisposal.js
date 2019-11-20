@@ -107,6 +107,12 @@ const sewageDisposal = [
     name: 'portCheckInfo',
     component: () => import('@/views/sewageDisposal/portCheck/info'),
     meta: { title: '码头审核详情' }
+  },
+  {
+    path: '/pointHelp',
+    name: 'pointHelp',
+    component: () => import('@/views/sewageDisposal/sewageIntegral/help'),
+    meta: { title: '排污积分说明' }
   }
 ]
 export default sewageDisposal

@@ -204,7 +204,7 @@ export default {
       this.showStatus = false
     },
     goInfo(item) {
-      this.$router.push({ name: 'portCheckInfo', query: { info: item } })
+      this.$router.push({ name: 'portCheckInfo', query: { info: item }})
     }
   }
 }
