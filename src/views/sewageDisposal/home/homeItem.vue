@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { getUser, getMemberDetail } from '@/api/exp.js'
+import { getToken } from '@/utils/cache.js'
 import { Toast } from 'vant'
 export default {
   data() {
@@ -53,13 +55,31 @@ export default {
           path: ''
         }, {
           value: '码头',
-          icon: require('@/assets/img/jfsc.png'),
+          icon: require('@/assets/img/portimg.png'),
           path: '/portCheck'
         }
       ]
     }
   },
+  created() {
+    this.getMemberDetail()
+  },
   methods: {
+    getTokens() {
+      return getToken()
+    },
+    getMemberDetail() {
+      getUser(this.getTokens()).then(response => {
+        // console.log(response)
+        getMemberDetail(this.getTokens(), response.data.id).then(response => {
+          console.log(response.data)
+          if (response.data.tags !== '9') {
+            this.list.pop()
+            console.log(this.list)
+          }
+        })
+      })
+    },
     pathTo(path) {
       if (path === '') {
         Toast('即将开放，敬请期待...')
@@ -106,17 +126,11 @@ export default {
         font-size: 26px;
         padding: 10px 0;
       }
-      &:nth-child(3n) {
+      &:nth-child(3n + 2) {
         border-left: 2px solid #d8d8d8;
-      }
-      &:nth-child(3n + 1) {
         border-right: 2px solid #d8d8d8;
       }
-      &:nth-last-child(2) {
-        border-bottom: 0;
-      }
       &:last-child {
-        border-bottom: 0;
         border-right: 2px solid #d8d8d8;
       }
     }
