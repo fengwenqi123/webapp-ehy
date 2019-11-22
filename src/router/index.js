@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import jinhua from './modules/jinhua'
 import gyt from './modules/gyt'
+import etc from './modules/etc'
 import sewageDisposal from './modules/sewageDisposal'
 import ehy from './modules/ehy'
 import integralMall from './modules/integralMall'
@@ -20,6 +21,7 @@ export default new Router({
     ...sewageDisposal,
     ...ehy,
     ...integralMall,
+    ...etc,
     {
       path: '/exp',
       name: 'exp',

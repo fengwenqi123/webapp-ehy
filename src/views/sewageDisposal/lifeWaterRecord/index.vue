@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { setTitle, setBoat, getBoat, getGoQr, getLng, getLat } from '@/utils/cache.js'
+import { setTitle, setBoat, getBoat, getGoQr } from '@/utils/cache.js'
 import { sewagePoint } from '@/api/sewageDisposalNo'
 import { boatList } from '@/api/ehy'
 import { Toast } from 'vant'

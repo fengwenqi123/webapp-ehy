@@ -272,7 +272,7 @@ export default {
     }
   },
   created() {
-    setTitle('过闸申报')
+    // setTitle('过闸申报')
     Vue.prototype.jhType = 'jh'
     // this.guoZhaInfoByBaoGangId()
     this.basicInfo()

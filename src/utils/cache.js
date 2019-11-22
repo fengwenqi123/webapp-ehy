@@ -59,8 +59,8 @@ export function getOrderId() {
 }
 // 获取token
 export function getToken() {
-  // return Android.getAccount()
-  return 'H5HLLpv44m5hNbyuT7H58K'
+  return Android.getAccount()
+  // return 'Q2qVciuVQaCddUYksN9Gyc'
 }
 
 // 获取船名
