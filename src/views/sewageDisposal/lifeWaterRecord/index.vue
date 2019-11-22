@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { setTitle, setBoat, getBoat, getGoQr } from '@/utils/cache.js'
+import { setTitle, setBoat, getBoat, getGoQr, getLng, getLat } from '@/utils/cache.js'
 import { sewagePoint } from '@/api/sewageDisposalNo'
 import { boatList } from '@/api/ehy'
 import { Toast } from 'vant'
@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     goOutLet(item) {
-      this.$router.push({ name: 'lifeSewageOutLet', query: { info: item }})
+      this.$router.push({ name: 'lifeSewageOutLet', query: { info: item } })
     },
     fomesFun1(value) {
       if (value.indexOf('生活垃圾') !== -1) {
