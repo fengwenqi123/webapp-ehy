@@ -468,7 +468,14 @@
         })
         dataObj.goodList = arr
         postBaoGang(JSON.stringify(dataObj)).then(response => {
-          this.$router.back()
+          this.$toast('申报成功！\n' +
+            '\n' +
+            '过闸金额：221（元）\n' +
+            '\n' +
+            '等待过闸····')
+          setTimeout(() => {
+            this.$router.back()
+          }, 1500)
         })
       }
     }
