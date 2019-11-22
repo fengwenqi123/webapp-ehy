@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { getToken } from '@/utils/cache.js'
 import { Toast } from 'vant'
 export default {
   data() {
@@ -51,15 +52,16 @@ export default {
           value: '积分商城',
           icon: require('@/assets/img/jfsc.png'),
           path: ''
-        }, {
-          value: '码头',
-          icon: require('@/assets/img/jfsc.png'),
-          path: '/portCheck'
         }
       ]
     }
   },
+  created() {
+  },
   methods: {
+    getTokens() {
+      return getToken()
+    },
     pathTo(path) {
       if (path === '') {
         Toast('即将开放，敬请期待...')
@@ -106,17 +108,11 @@ export default {
         font-size: 26px;
         padding: 10px 0;
       }
-      &:nth-child(3n) {
+      &:nth-child(3n + 2) {
         border-left: 2px solid #d8d8d8;
-      }
-      &:nth-child(3n + 1) {
         border-right: 2px solid #d8d8d8;
       }
-      &:nth-last-child(2) {
-        border-bottom: 0;
-      }
       &:last-child {
-        border-bottom: 0;
         border-right: 2px solid #d8d8d8;
       }
     }

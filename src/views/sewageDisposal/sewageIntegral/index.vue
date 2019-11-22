@@ -56,6 +56,8 @@
       <DatetimePicker @sendDate="sendDate"
                       @cancel="cancel" />
     </van-popup>
+    <span class="xf-button"
+          @click="goHelp">帮助</span>
   </div>
 </template>
 
@@ -105,6 +107,9 @@ export default {
     }
   },
   methods: {
+    goHelp() {
+      this.$router.push({ name: 'pointHelp' })
+    },
     selectDateFn() {
       this.show = true
     },
@@ -156,6 +161,20 @@ export default {
 
 <style scoped lang="scss">
 .container {
+  .xf-button {
+    color: #fff;
+    display: inline-block;
+    position: fixed;
+    right: 10px;
+    bottom: 50px;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+    background-color: #0294fd;
+    border-radius: 50%;
+    opacity: 0.6;
+  }
   .header {
     padding: 22px 32px;
     display: flex;

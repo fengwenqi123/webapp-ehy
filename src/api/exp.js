@@ -24,6 +24,16 @@ export function getUser(accessToken) {
   })
 }
 
+export function getMemberDetail(accessToken, id) {
+  return request({
+    url: '/member/user/detail',
+    method: 'GET',
+    params: {
+      accessToken, id
+    }
+  })
+}
+
 // 快递列表跳转订单详情接口
 export function findExpressorderInfo(orderId) {
   return request({

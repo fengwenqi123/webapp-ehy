@@ -71,7 +71,7 @@ export function allPoints() {
 // 船舶在排污点定位信息
 export function boatPosition(siteId, shipName) {
   return request({
-    url: '/sewage/sewageInfo/insertInfo',
+    url: '/poi/sewage/getShipPositionInfo',
     method: 'GET',
     params: {
       siteId,
@@ -87,6 +87,14 @@ export function portCheckStatus(id, auditStatus) {
     url: '/sewage/sewageInfo/updateAuditStatus',
     method: 'POST',
     data
+  })
+}
+
+// 获得积分
+export function getSewagePoint() {
+  return request({
+    url: '/poi/deductionRule',
+    method: 'GET'
   })
 }
 
