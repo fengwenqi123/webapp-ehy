@@ -60,7 +60,7 @@ export function getOrderId() {
 // 获取token
 export function getToken() {
   return Android.getAccount()
-  // return 'oxj3wYLLC6BhpU9aPrFs7'
+  // return 'GsQZcWBYz5QM8verkeT1WB'
 }
 
 // 获取船名
@@ -78,6 +78,10 @@ export function getCbsbh() {
 // 是否从违章进去
 export function isWz() {
   return Android.isWz()
+}
+// 获得码头id
+export function getWharfId() {
+  return Android.getWharfId()
 }
 
 export function setToken(token) {

@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     goOutLet(item) {
-      this.$router.push({ name: 'lifeSewageOutLet', query: { info: item } })
+      this.$router.push({ name: 'lifeSewageOutLet', query: { info: item }})
     },
     fomesFun1(value) {
       if (value.indexOf('生活垃圾') !== -1) {
@@ -182,8 +182,8 @@ export default {
     lists() {
       this.currentLon = getLng()
       this.currentLat = getLat()
-      // this.currentLon = '120.1'
-      // this.currentLat = '30.86'
+      // this.currentLon = '119.5811'
+      // this.currentLat = '30.1342'
       sewagePoint(this.page.pageNum, this.page.pageSize, this.city, this.area, this.fomesType, this.currentLon, this.currentLat).then(response => {
         console.log(response)
         this.page.total = response.data.page.total
