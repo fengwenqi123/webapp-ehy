@@ -15,22 +15,22 @@
       <tr>
         <td>基础分</td>
         <td>加分</td>
-        <td></td>
+        <td>{{jc}}</td>
       </tr>
       <tr>
         <td>定位匹配</td>
         <td>加分</td>
-        <td></td>
+        <td>{{dwpp}}</td>
       </tr>
       <tr>
         <td>生活污水柜使用</td>
         <td>加分</td>
-        <td></td>
+        <td>{{shwugsy}}</td>
       </tr>
       <tr>
         <td>回收点审核</td>
         <td>加分</td>
-        <td></td>
+        <td>{{hsdsh}}</td>
       </tr>
       <tr class="title">
         <td colspan="3">污水设备故障上报</td>
@@ -38,7 +38,7 @@
       <tr>
         <td>故障上报</td>
         <td>加分</td>
-        <td></td>
+        <td>{{gzsb}}</td>
       </tr>
       <tr class="title">
         <td colspan="3">上岸异常扣分</td>
@@ -46,12 +46,12 @@
       <tr>
         <td>长期未上岸扣分</td>
         <td>扣分</td>
-        <td></td>
+        <td>{{cqwsakf}}</td>
       </tr>
       <tr>
         <td>违法排放扣分</td>
         <td>扣分</td>
-        <td></td>
+        <td>{{wfpfkf}}</td>
       </tr>
     </table>
     <div class="help">
@@ -75,12 +75,44 @@ import { setTitle } from '@/utils/cache.js'
 import { getSewagePoint } from '@/api/sewageDisposal'
 export default {
   created() {
-    getSewagePoint().then(response => {
+    getSewagePoint(1).then(response => {
       console.log(response)
+      this.itemList = response.data
+      this.itemList.forEach(item => {
+        console.log(item.name.split('-')[1])
+        if (item.name.split('-')[1]) {
+          switch (item.name.split('-')[1]) {
+            case '长期未上岸扣分': this.cqwsakf = item.fraction; break
+            case '回收点审核': this.hsdsh = item.fraction; break
+            case '生活污水柜使用': this.shwugsy = item.fraction; break
+            case '定位匹配': this.dwpp = item.fraction; break
+            case '基础分': this.jc = item.fraction; break
+            default: ''
+          }
+        } else {
+          switch (item.name) {
+            case '违法排放扣分': this.wfpfkf = item.fraction; break
+            case '污水设备故障上报': this.gzsb = item.fraction; break
+            default: ''
+          }
+        }
+      })
     })
   },
   mounted() {
     setTitle(this.$route.meta.title)
+  },
+  data() {
+    return {
+      itemList: [],
+      jc: '',
+      dwpp: '',
+      shwugsy: '',
+      hsdsh: '',
+      gzsb: '',
+      cqwsakf: '',
+      wfpfkf: ''
+    }
   }
 }
 </script>

@@ -12,58 +12,50 @@
     </div>
     <div class="main-list">
       <van-cell-group>
-        <van-field
-          v-model="type"
-          label="回收类型"
-          disabled
-          clickable
-          input-align="right"
-        />
-        <van-field
-          v-model="recoveryInfo.shipName"
-          label="船舶名称"
-          disabled
-          clickable
-          input-align="right"
-        />
-        <van-field
-          v-model="recoveryInfo.siteName"
-          label="回收点"
-          disabled
-          clickable
-          input-align="right"
-        />
-        <van-field
-          v-model="recoveryInfo.name"
-          label="排放口"
-          disabled
-          clickable
-          input-align="right"
-        />
-        <van-field
-          v-model="recoveryInfo.attribute===1?'智能':'普通'"
-          label="排放口类型"
-          disabled
-          clickable
-          input-align="right"
-        />
-        <van-field
-          v-if="recoveryInfo.attribute!==1"
-          v-model="amount"
-          label="排放容积(L)"
-          placeholder="请输入排放容积"
-          type="number"
-          clickable
-          input-align="right"
-        />
+        <van-field v-model="type"
+                   label="回收类型"
+                   disabled
+                   clickable
+                   input-align="right" />
+        <van-field v-model="recoveryInfo.shipName"
+                   label="船舶名称"
+                   disabled
+                   clickable
+                   input-align="right" />
+        <van-field v-model="recoveryInfo.siteName"
+                   label="回收点"
+                   disabled
+                   clickable
+                   input-align="right" />
+        <van-field v-model="recoveryInfo.name"
+                   label="排放口"
+                   disabled
+                   clickable
+                   input-align="right" />
+        <van-field v-model="recoveryInfo.attribute===1?'智能':'普通'"
+                   label="排放口类型"
+                   disabled
+                   clickable
+                   input-align="right" />
+        <van-field v-if="recoveryInfo.attribute!==1"
+                   v-model="amount"
+                   label="排放容积(L)"
+                   placeholder="请输入排放容积"
+                   type="number"
+                   clickable
+                   input-align="right" />
       </van-cell-group>
       <div class="submit">
-        <van-button @click="submit"  v-if="recoveryInfo.attribute===1" class="button" type="info" size="large"
-        >确认开始排放</van-button
-        >
-        <van-button @click="submit1" v-else class="button" type="info" size="large"
-        >确认排放</van-button
-        >
+        <van-button @click="submit"
+                    v-if="recoveryInfo.attribute===1"
+                    class="button"
+                    type="info"
+                    size="large">确认开始排放</van-button>
+        <van-button @click="submit1"
+                    v-else
+                    class="button"
+                    type="info"
+                    size="large">确认排放</van-button>
       </div>
     </div>
     <errors></errors>
@@ -75,7 +67,7 @@ import errors from '@/views/sewageDisposal/errorTip'
 import { mapGetters } from 'vuex'
 import { Toast } from 'vant'
 import { discharge } from '@/api/sewageDisposal'
-import { setTitle } from '@/utils/cache.js'
+import { setTitle, getLat, getLng } from '@/utils/cache.js'
 export default {
   components: {
     errors
@@ -125,7 +117,9 @@ export default {
         shipName: this.recoveryInfo.shipName,
         code: this.recoveryCode,
         amount: this.amount,
-        orderWay: 1
+        orderWay: 1,
+        currentLon: getLng(),
+        currentLat: getLat()
       }
       discharge(obj).then(response => {
         Toast.success({

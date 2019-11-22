@@ -94,7 +94,7 @@ import errors from '@/views/sewageDisposal/errorTip'
 import { mapGetters } from 'vuex'
 import { Toast } from 'vant'
 import { discharge } from '@/api/sewageDisposal'
-import { setTitle } from '@/utils/cache.js'
+import { setTitle, getLat, getLng } from '@/utils/cache.js'
 export default {
   components: {
     errors
@@ -150,7 +150,9 @@ export default {
         code: this.recoveryCode,
         amount: this.amount,
         orderWay: 1,
-        status: 3
+        status: 3,
+        currentLon: getLng(),
+        currentLat: getLat()
       }
       discharge(obj).then(response => {
         Toast.success({

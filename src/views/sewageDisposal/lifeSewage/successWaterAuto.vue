@@ -7,7 +7,7 @@
         <span class="time">{{count}}</span>
         <p>设备远程启动成功</p>
         <div class="line">
-          <span>请点击设备按钮完成回收作业</span>
+          <span>超过60秒排污将自动取消</span>
         </div>
       </div>
     </div>

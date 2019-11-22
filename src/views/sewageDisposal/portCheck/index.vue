@@ -76,8 +76,8 @@
 
 <script>
 import { timeChange } from '@/utils/index'
-import { setTitle, getBoat } from '@/utils/cache.js'
-import { sewageReport } from '@/api/sewageDisposalNo'
+import { setTitle, getWharfId } from '@/utils/cache.js'
+import { sewageReportPort } from '@/api/sewageDisposalNo'
 export default {
   data() {
     return {
@@ -113,7 +113,8 @@ export default {
     }
   },
   created() {
-    this.shipName = getBoat()
+    this.shipName = ''
+    this.wharfId = getWharfId()
     this.lists()
     setTitle(this.$route.meta.title)
   },
@@ -137,7 +138,8 @@ export default {
       }, 800)
     },
     lists() {
-      sewageReport(this.page.pageNum, this.page.pageSize, this.time, this.type, this.shipName, this.auditStatus).then(response => {
+      // this.wharfId = '4'
+      sewageReportPort(this.page.pageNum, this.page.pageSize, this.time, this.type, this.shipName, this.auditStatus, this.wharfId).then(response => {
         this.page.total = response.data.page.total
         this.itemList = this.itemList.concat(response.data.dataList)
         console.log('列表', this.itemList)
