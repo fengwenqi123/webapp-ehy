@@ -21,7 +21,7 @@
         <span>船舶名称</span>
         <span>{{item.shipName}}</span>
       </li>
-      <li>
+      <li class="matou">
         <span>回收点</span>
         <span>{{item.siteName}}</span>
       </li>
@@ -146,13 +146,21 @@ export default {
         &:nth-child(1) {
           color: #888888;
           text-align: left;
-          width: 40%;
+          width: 35%;
         }
         &:nth-child(2) {
           color: #333333;
           text-align: right;
-          width: 52%;
+          width: 62%;
         }
+      }
+    }
+    .matou {
+      span:nth-child(1) {
+        width: 15%;
+      }
+      span:nth-child(2) {
+        width: 83%;
       }
     }
   }

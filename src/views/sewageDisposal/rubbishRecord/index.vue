@@ -82,7 +82,7 @@
                 <van-row>
                   <van-col span="12"
                            :offset="1">
-                    <span class="active">生活污水</span>
+                    <span class="active">生活垃圾</span>
                   </van-col>
                 </van-row>
               </div>
@@ -121,7 +121,7 @@ export default {
       finished: false,
       loading: false,
       itemList: [],
-      classify: 1
+      classify: 3
     }
   },
   created() {

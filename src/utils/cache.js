@@ -9,7 +9,10 @@ const outletList = 'outletList'
 export function getFinishWeb() {
   return Android.finishWeb()
 }
-
+// 获取码头
+export function getWharfId() {
+  return Android.getWharfId()
+}
 // 获取城市
 export function getCity() {
   return Android.getCity()
@@ -60,7 +63,7 @@ export function getOrderId() {
 // 获取token
 export function getToken() {
   return Android.getAccount()
-  // return 'Q2qVciuVQaCddUYksN9Gyc'
+  // return '8XNr5E8n1Pt6GQqMdFrZ6K'
 }
 
 // 获取船名

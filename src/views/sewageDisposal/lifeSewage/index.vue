@@ -64,14 +64,19 @@
                    clickable
                    input-align="right" />
       </van-cell-group> -->
-      <van-field style="margin-top:20px"
-                 v-if="recoveryInfo.attribute!==1"
-                 v-model="amount"
-                 label="排放量(L)"
-                 placeholder="请输入排放量"
-                 type="number"
-                 clickable
-                 input-align="right" />
+      <div class="submitField">
+        <van-field style="margin-top:20px"
+                   class="submitNumber"
+                   v-if="recoveryInfo.attribute!==1"
+                   v-model="amount"
+                   label="排放量"
+                   placeholder="请输入排放量"
+                   type="number"
+                   clickable
+                   error-message="请输入100-1000的数字"
+                   input-align="right" />
+        <span v-if="recoveryInfo.attribute!==1">(L)</span>
+      </div>
       <div class="submit">
         <van-button @click="submit"
                     v-if="recoveryInfo.attribute===1"
@@ -141,9 +146,18 @@ export default {
     },
     submit1() {
       if (!this.amount) {
-        Toast('请先输入容积')
+        Toast('请先输入排放量')
         return
       }
+      if (this.amount < 100) {
+        Toast('请输入大于100的值')
+        return
+      }
+      if (this.amount > 1000) {
+        Toast('请输入小于1000的值')
+        return
+      }
+
       const obj = {
         type: 1,
         shipName: this.recoveryInfo.shipName,
@@ -203,6 +217,16 @@ export default {
         }
       }
     }
+  }
+}
+.submitField {
+  position: relative;
+  span {
+    position: absolute;
+    color: red;
+    font-weight: bold;
+    left: 140px;
+    top: 20%;
   }
 }
 </style>

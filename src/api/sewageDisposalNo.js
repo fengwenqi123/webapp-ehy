@@ -1,11 +1,11 @@
 import request from '@/utils/requestNo'
 // 排污收集点列表
-export function sewagePoint(pageNum, pageSize, city, area, fomesType, currentLon, currentLat) {
+export function sewagePoint(pageNum, pageSize, city, area, fomesType, currentLon, currentLat, classify) {
   return request({
     url: '/sewage/sewageSite/',
     method: 'GET',
     params: {
-      pageNum, pageSize, city, area, fomesType, currentLon, currentLat
+      pageNum, pageSize, city, area, fomesType, currentLon, currentLat, classify
     }
   })
 }

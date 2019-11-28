@@ -92,7 +92,7 @@ export default {
         pageNum: 1,
         total: 0
       },
-      type: 1,
+      type: '',
       isLoading: false,
       finished: false,
       loading: false
