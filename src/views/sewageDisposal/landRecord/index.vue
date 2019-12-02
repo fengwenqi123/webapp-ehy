@@ -113,12 +113,12 @@ export default {
         this.loading = true
         this.isLoading = false
         this.finished = false
-      }, 500)
+      }, 300)
     },
     onLoad() {
       // 异步更新数据
       setTimeout(() => {
-        this.page.pageNum++
+        this.page.pageNum += 1
         this.lists()
       }, 800)
     },

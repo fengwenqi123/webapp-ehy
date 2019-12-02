@@ -105,8 +105,8 @@ export default {
       itemList: [],
       page: {
         pageSize: 5,
-        pageNum: 0,
-        total: 1
+        pageNum: 1,
+        total: 0
       },
       type: 1,
       isLoading: false,
@@ -132,17 +132,17 @@ export default {
         this.loading = true
         this.isLoading = false
         this.finished = false
-      }, 300)
+      }, 500)
     },
     onLoad() {
       // 异步更新数据
       setTimeout(() => {
+        this.page.pageNum += 1
         this.lists()
-        this.page.pageNum++
-      }, 800)
+      }, 1000)
     },
     lists() {
-      this.wharfId = '1'
+      // this.wharfId = '4'
       sewageReport(this.page.pageNum, this.page.pageSize, this.time, this.type, this.shipName, this.auditStatus, this.wharfId).then(response => {
         this.page.total = response.data.page.total
         this.itemList = this.itemList.concat(response.data.dataList)
