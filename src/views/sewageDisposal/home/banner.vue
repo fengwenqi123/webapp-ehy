@@ -38,7 +38,7 @@
       <div @click="goPoint">
         <img src="../../../assets/img/ls.png" />
         <div>
-          <p>可用上岸分</p>
+          <p>可用绿水分</p>
           <p>{{point}}</p>
         </div>
       </div>
@@ -123,13 +123,13 @@ export default {
       getGoQr()
     },
     submitWater() {
-      const obj = {
+      const obj1 = {
         type: 1,
         shipName: this.recoveryInfo.shipName,
         code: this.code,
         orderWay: 1
       }
-      discharge(obj).then(response => {
+      discharge(obj1).then(response => {
         Toast.success({
           message: `${response.msg}，请稍等...`,
           duration: 1000
@@ -137,6 +137,27 @@ export default {
         setTimeout(() => {
           this.$router.push({
             path: '/successWaterAuto'
+          })
+        }, 2000)
+      })
+    },
+    submitRubbish() {
+      const obj3 = {
+        type: 3,
+        shipName: this.recoveryInfo.shipName,
+        code: this.code,
+        refuseType: parseFloat(this.recoveryInfo.type) - 2,
+        orderWay: 1
+      }
+      // alert(JSON.stringify(obj3))
+      discharge(obj3).then(response => {
+        Toast.success({
+          message: `${response.msg}，请稍等...`,
+          duration: 2000
+        })
+        setTimeout(() => {
+          this.$router.push({
+            path: '/successRubbishAuto'
           })
         }, 2000)
       })
@@ -168,9 +189,20 @@ export default {
             })
             break
           default:
-            this.$router.push({
-              path: '/rubbishSewage'
-            })
+            switch (response.data.attribute) {
+              case 1:
+                this.submitRubbish()
+                break
+              case 2:
+                this.$router.push({
+                  path: '/rubbishSewage'
+                })
+                break
+              default:
+                this.$router.push({
+                  path: '/rubbishSewage'
+                })
+            }
         }
       })
     }

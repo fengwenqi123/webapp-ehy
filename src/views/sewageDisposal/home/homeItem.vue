@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <p>回收服务</p>
     <div class="container-child">
       <div v-for="item in list"
            :key="item.src"
@@ -27,7 +26,7 @@ export default {
         {
           value: '生活垃圾',
           icon: require('@/assets/img/shlj.png'),
-          path: ''
+          path: '/rubbishRecord'
         },
         {
           value: '油污水',
@@ -49,7 +48,7 @@ export default {
           icon: require('@/assets/img/sajl.png'),
           path: '/landRecord'
         }, {
-          value: '积分商城',
+          value: '积分兑换',
           icon: require('@/assets/img/jfsc.png'),
           path: ''
         }
@@ -88,6 +87,7 @@ export default {
     font-size: 32px;
   }
   .container-child {
+    border-radius: 15px;
     margin: 0 24px;
     background-color: #fff;
     flex-wrap: wrap;
@@ -114,6 +114,7 @@ export default {
       }
       &:last-child {
         border-right: 2px solid #d8d8d8;
+        border-bottom: 0;
       }
     }
   }

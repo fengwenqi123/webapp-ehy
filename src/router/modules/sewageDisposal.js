@@ -57,7 +57,7 @@ const sewageDisposal = [
     path: '/success',
     name: 'success',
     component: () => import('@/views/sewageDisposal/lifeSewage/success'),
-    meta: { title: '回收成功' }
+    meta: { title: '污水回收成功' }
   },
   {
     path: '/successWaterAuto',
@@ -71,6 +71,30 @@ const sewageDisposal = [
     name: 'rubbishSewage',
     component: () => import('@/views/sewageDisposal/rubbishSewage'),
     meta: { title: '生活垃圾投放' }
+  },
+  {
+    path: '/successRubbish',
+    name: 'success',
+    component: () => import('@/views/sewageDisposal/rubbishSewage/success'),
+    meta: { title: '生活垃圾回收成功' }
+  },
+  {
+    path: '/successRubbishAuto',
+    name: 'successRubbishAuto',
+    component: () => import('@/views/sewageDisposal/rubbishSewage/successRubbishAuto'),
+    meta: { title: '生活垃圾回收成功' }
+  },
+  {
+    path: '/rubbishRecord',
+    name: 'rubbishRecord',
+    component: () => import('@/views/sewageDisposal/rubbishRecord'),
+    meta: { title: '生活垃圾排放' }
+  },
+  {
+    path: '/rubbishSewageOutLet',
+    name: 'rubbishSewageOutLet',
+    component: () => import('@/views/sewageDisposal/rubbishRecord/outLetList'),
+    meta: { title: '生活垃圾排污口' }
   },
   {
     path: '/oilSewage',

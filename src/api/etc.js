@@ -1,5 +1,5 @@
 import request from '@/utils/request2'
-import qs from 'qs'
+// import qs from 'qs'
 export function lists(type) {
   return request({
     url: '/rfid/etc/report/list',

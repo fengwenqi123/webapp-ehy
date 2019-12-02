@@ -33,7 +33,9 @@
                   :finished="finished"
                   finished-text="没有更多了"
                   @load="onLoad">
+          <!-- <van-checkbox name="a">复选框 a</van-checkbox> -->
           <div class="card"
+               name="item.id"
                v-for="item in itemList"
                v-if="item.status!==4"
                :key="item.id">
@@ -77,7 +79,7 @@
 <script>
 import { timeChange } from '@/utils/index'
 import { setTitle, getWharfId } from '@/utils/cache.js'
-import { sewageReportPort } from '@/api/sewageDisposalNo'
+import { sewageReport } from '@/api/sewageDisposalNo'
 export default {
   data() {
     return {
@@ -116,6 +118,8 @@ export default {
     this.shipName = ''
     this.wharfId = getWharfId()
     this.lists()
+  },
+  mounted() {
     setTitle(this.$route.meta.title)
   },
   methods: {
@@ -133,13 +137,13 @@ export default {
     onLoad() {
       // 异步更新数据
       setTimeout(() => {
-        this.page.pageNum++
+        this.page.pageNum += 1
         this.lists()
-      }, 800)
+      }, 1000)
     },
     lists() {
       // this.wharfId = '4'
-      sewageReportPort(this.page.pageNum, this.page.pageSize, this.time, this.type, this.shipName, this.auditStatus, this.wharfId).then(response => {
+      sewageReport(this.page.pageNum, this.page.pageSize, this.time, this.type, this.shipName, this.auditStatus, this.wharfId).then(response => {
         this.page.total = response.data.page.total
         this.itemList = this.itemList.concat(response.data.dataList)
         console.log('列表', this.itemList)
@@ -206,7 +210,7 @@ export default {
       this.showStatus = false
     },
     goInfo(item) {
-      this.$router.push({ name: 'portCheckInfo', query: { info: item }})
+      this.$router.push({ name: 'portCheckInfo', query: { info: item } })
     }
   }
 }
