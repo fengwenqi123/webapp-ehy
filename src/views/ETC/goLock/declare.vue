@@ -470,7 +470,7 @@
         postBaoGang(JSON.stringify(dataObj)).then(response => {
           this.$toast('申报成功！\n' +
             '\n' +
-            '过闸金额：221（元）\n' +
+            '过闸金额：0（元）\n' +
             '\n' +
             '等待过闸····')
           setTimeout(() => {
