@@ -63,7 +63,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-html {
+.container {
   user-select: text;
 }
 .news {
