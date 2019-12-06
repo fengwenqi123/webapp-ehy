@@ -1,7 +1,9 @@
 <template>
   <div class="container">
-    <div class="top"
-         v-if="item.status===2">
+    <div
+      class="top"
+      v-if="item.status===2"
+    >
       <div>
         <img src="../../../assets/img/sewage/wait.png" />
       </div>
@@ -77,12 +79,18 @@
         <span>10分</span>
       </li>
     </ul>
-    <div class="bottom"
-         v-if="item.auditStatus===2">
-      <van-button type="info"
-                  @click="checkGo(item)">审核通过</van-button>
-      <van-button type="danger"
-                  @click="checkNo(item)">审核不通过</van-button>
+    <div
+      class="bottom"
+      v-if="item.auditStatus===2"
+    >
+      <van-button
+        type="info"
+        @click="checkGo(item)"
+      >审核通过</van-button>
+      <van-button
+        type="danger"
+        @click="checkNo(item)"
+      >审核不通过</van-button>
     </div>
   </div>
 </template>

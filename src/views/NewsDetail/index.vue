@@ -23,9 +23,9 @@ export default {
   name: 'index',
   data() {
     return {
-      id: getId(),
+      id: getId() || '',
       loadingSpinner: true,
-      obj: ''
+      obj: {}
     }
   },
   created() {
@@ -59,6 +59,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style scoped lang="scss">
@@ -90,3 +91,6 @@ export default {
   }
 }
 </style>
+
+
+

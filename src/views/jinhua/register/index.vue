@@ -8,8 +8,10 @@
       <p>过闸申报</p>
     </header> -->
 
-    <div class="register"
-         v-if="isCancel">
+    <div
+      class="register"
+      v-if="isCancel"
+    >
       <ul>
         <li>
           <span>船舶名称</span>
@@ -25,9 +27,11 @@
         </li>
         <li>
           <span>联系方式</span>
-          <input type="number"
-                 placeholder="请输入联系方式"
-                 v-model="input.phone">
+          <input
+            type="number"
+            placeholder="请输入联系方式"
+            v-model="input.phone"
+          >
         </li>
         <li class="list-title">港口选择</li>
         <li>
@@ -38,18 +42,24 @@
           <span>目的港</span>
           <span @click="endPort()">{{endPortText}}</span>
         </li>
-        <li class="list-title"
-            v-if="isGoods">货种选择</li>
-        <li class="goods-add"
-            @click="addGoods()"
-            v-if="isGoods">
+        <li
+          class="list-title"
+          v-if="isGoods"
+        >货种选择</li>
+        <li
+          class="goods-add"
+          @click="addGoods()"
+          v-if="isGoods"
+        >
           <span>添加货种</span>
           <van-icon name="add-o" />
         </li>
-        <li class="goods-list"
-            v-for="(item,index) in goodsArr"
-            :key="index"
-            @click="goodsDel(item,index)">
+        <li
+          class="goods-list"
+          v-for="(item,index) in goodsArr"
+          :key="index"
+          @click="goodsDel(item,index)"
+        >
           <label>{{item.name}}</label>
           <label>{{item.load}}吨</label>
           <van-icon name="close" />
@@ -61,27 +71,35 @@
         </li>
         <li>
           <span>实际吃水（m）</span>
-          <input type="number"
-                 placeholder="请输入实际吃水量"
-                 v-model="input.water">
+          <input
+            type="number"
+            placeholder="请输入实际吃水量"
+            v-model="input.water"
+          >
         </li>
         <li>
           <span>申报干舷（m）</span>
-          <input type="number"
-                 placeholder="请输入申报干舷"
-                 v-model="input.freeboard">
+          <input
+            type="number"
+            placeholder="请输入申报干舷"
+            v-model="input.freeboard"
+          >
         </li>
         <li>
           <span>拖泥深度（m）</span>
-          <input type="number"
-                 placeholder="请输入拖泥深度"
-                 v-model="input.depth">
+          <input
+            type="number"
+            placeholder="请输入拖泥深度"
+            v-model="input.depth"
+          >
         </li>
         <li>
           <span>净空高度（m）</span>
-          <input type="number"
-                 placeholder="请输入净空高度"
-                 v-model="input.height">
+          <input
+            type="number"
+            placeholder="请输入净空高度"
+            v-model="input.height"
+          >
         </li>
         <li class="list-title">船舶信息</li>
         <li>
@@ -90,69 +108,91 @@
         </li>
         <li>
           <span>船舶净吨位</span>
-          <input type="number"
-                 placeholder="请输入船舶净吨位"
-                 v-model="input.tonnage">
+          <input
+            type="number"
+            placeholder="请输入船舶净吨位"
+            v-model="input.tonnage"
+          >
         </li>
         <li>
           <span>C级参考载重吨</span>
-          <input type="number"
-                 placeholder="请输入参考载重吨"
-                 v-model="input.DWT">
+          <input
+            type="number"
+            placeholder="请输入参考载重吨"
+            v-model="input.DWT"
+          >
         </li>
         <li>
           <span>船舶长度（m）</span>
-          <input type="number"
-                 placeholder="请输入船舶长度"
-                 v-model="input.length">
+          <input
+            type="number"
+            placeholder="请输入船舶长度"
+            v-model="input.length"
+          >
         </li>
       </ul>
 
       <div class="login-click padding">
-        <van-button type="info"
-                    size="large"
-                    :disabled="buttonFlag"
-                    @click="portSumitClick()">确认报港</van-button>
+        <van-button
+          type="info"
+          size="large"
+          :disabled="buttonFlag"
+          @click="portSumitClick()"
+        >确认报港</van-button>
       </div>
       <!-- 装载方式 -->
-      <van-dialog v-model="show"
-                  title="装载方式"
-                  :show-confirm-button="false"
-                  :close-on-click-overlay="true">
+      <van-dialog
+        v-model="show"
+        title="装载方式"
+        :show-confirm-button="false"
+        :close-on-click-overlay="true"
+      >
         <ul class="dialog-ul load-ul">
-          <li v-for="(item,index) in actions"
-              :key="index"
-              @click="onSelect(item)">{{item.name}}</li>
+          <li
+            v-for="(item,index) in actions"
+            :key="index"
+            @click="onSelect(item)"
+          >{{item.name}}</li>
         </ul>
       </van-dialog>
       <!-- 起始港 -->
-      <van-dialog v-model="startPortShow"
-                  title="起始港"
-                  :show-confirm-button="false"
-                  :close-on-click-overlay="true">
+      <van-dialog
+        v-model="startPortShow"
+        title="起始港"
+        :show-confirm-button="false"
+        :close-on-click-overlay="true"
+      >
         <ul class="dialog-ul">
-          <li v-for="(item,index) in portItems"
-              :key="index"
-              @click="startPortSelect(item)">{{item.name}}</li>
+          <li
+            v-for="(item,index) in portItems"
+            :key="index"
+            @click="startPortSelect(item)"
+          >{{item.name}}</li>
         </ul>
       </van-dialog>
       <!-- 目的港 -->
-      <van-dialog v-model="endPortShow"
-                  title="目的港"
-                  :show-confirm-button="false"
-                  :close-on-click-overlay="true">
+      <van-dialog
+        v-model="endPortShow"
+        title="目的港"
+        :show-confirm-button="false"
+        :close-on-click-overlay="true"
+      >
         <ul class="dialog-ul">
-          <li v-for="(item,index) in portItems"
-              :key="index"
-              @click="endPortSelect(item)">{{item.name}}</li>
+          <li
+            v-for="(item,index) in portItems"
+            :key="index"
+            @click="endPortSelect(item)"
+          >{{item.name}}</li>
         </ul>
       </van-dialog>
       <!-- 货种 -->
-      <van-dialog v-model="goodsShow"
-                  title="添加货种"
-                  @confirm="goodsSubmit"
-                  :show-confirm-button="false"
-                  :close-on-click-overlay="true">
+      <van-dialog
+        v-model="goodsShow"
+        title="添加货种"
+        @confirm="goodsSubmit"
+        :show-confirm-button="false"
+        :close-on-click-overlay="true"
+      >
         <ul class="goods-ul">
           <li @click="goodsList()">
             <span>货种名称</span>
@@ -160,38 +200,50 @@
           </li>
           <li>
             <span>载货吨位</span>
-            <input type="number"
-                   placeholder="请输入载货吨位"
-                   v-model="goodLoad">
+            <input
+              type="number"
+              placeholder="请输入载货吨位"
+              v-model="goodLoad"
+            >
           </li>
         </ul>
         <div class="login-click padding">
-          <van-button type="info"
-                      size="large"
-                      @click="goodsSubmit()">添加</van-button>
+          <van-button
+            type="info"
+            size="large"
+            @click="goodsSubmit()"
+          >添加</van-button>
         </div>
       </van-dialog>
       <!-- 货种列表 -->
-      <van-dialog v-model="goodsListShow"
-                  title="货种"
-                  :show-confirm-button="false"
-                  :close-on-click-overlay="true">
+      <van-dialog
+        v-model="goodsListShow"
+        title="货种"
+        :show-confirm-button="false"
+        :close-on-click-overlay="true"
+      >
         <ul class="dialog-ul">
-          <li v-for="(item,index) in goodsItems"
-              :key="index"
-              @click="goodsSelect(item)">{{item.name}}</li>
+          <li
+            v-for="(item,index) in goodsItems"
+            :key="index"
+            @click="goodsSelect(item)"
+          >{{item.name}}</li>
         </ul>
       </van-dialog>
     </div>
-    <van-dialog v-model="otherShow"
-                title="货种名称"
-                @confirm="otherGoods"
-                :close-on-click-overlay="true"
-                show-cancel-button>
+    <van-dialog
+      v-model="otherShow"
+      title="货种名称"
+      @confirm="otherGoods"
+      :close-on-click-overlay="true"
+      show-cancel-button
+    >
       <div class="other-goods">
-        <input type="text"
-               placeholder="请输入货种名称"
-               v-model="goodName">
+        <input
+          type="text"
+          placeholder="请输入货种名称"
+          v-model="goodName"
+        >
       </div>
 
     </van-dialog>
@@ -205,7 +257,7 @@
 <script>
 import { getBasicInfo, getShipInfo, postBaoGang, getGuoZhaInfoByBaoGangId } from '@/api/JHport'
 import cjbLoading from '@/components/cjbLoading'
-import { setTitle } from '@/utils/cache'
+// import { setTitle } from '@/utils/cache'
 import Vue from 'vue'
 import {
   Toast

@@ -1,48 +1,66 @@
 <template>
   <div class="container">
     <div class="content">
-      <van-popup v-model="show"
-                 position="bottom"
-                 :style="{ height: '40%' }">
-        <van-datetime-picker v-model="currentDate"
-                             type="year-month"
-                             @confirm="confirmDate"
-                             @cancel="cancelDate"
-                             :formatter="formatter" />
+      <van-popup
+        v-model="show"
+        position="bottom"
+        :style="{ height: '40%' }"
+      >
+        <van-datetime-picker
+          v-model="currentDate"
+          type="year-month"
+          @confirm="confirmDate"
+          @cancel="cancelDate"
+          :formatter="formatter"
+        />
       </van-popup>
-      <van-popup v-model="showStatus"
-                 position="bottom"
-                 :style="{ height: '40%' }">
-        <van-picker show-toolbar
-                    title="审核状态"
-                    :columns="columnStatus"
-                    @confirm="confirmStatus"
-                    @cancel="cancelStatus" />
+      <van-popup
+        v-model="showStatus"
+        position="bottom"
+        :style="{ height: '40%' }"
+      >
+        <van-picker
+          show-toolbar
+          title="审核状态"
+          :columns="columnStatus"
+          @confirm="confirmStatus"
+          @cancel="cancelStatus"
+        />
       </van-popup>
       <div class="dateBtn">
         <span @click="showPopup">{{dateBtn}}
           <van-icon name="arrow-down" /></span>
-        <span @click="showPopupStatus"
-              style="margin-left:10px;">{{statusBtn}}
+        <span
+          @click="showPopupStatus"
+          style="margin-left:10px;"
+        >{{statusBtn}}
           <van-icon name="arrow-down" /></span>
       </div>
-      <van-pull-refresh v-model="isLoading"
-                        @refresh="onRefresh">
-        <van-list class="main"
-                  v-model="loading"
-                  :finished="finished"
-                  finished-text="没有更多了"
-                  @load="onLoad">
+      <van-pull-refresh
+        v-model="isLoading"
+        @refresh="onRefresh"
+      >
+        <van-list
+          class="main"
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+        >
           <!-- <van-checkbox name="a">复选框 a</van-checkbox> -->
-          <div class="card"
-               name="item.id"
-               v-for="item in itemList"
-               v-if="item.status!==4"
-               :key="item.id">
+          <div
+            class="card"
+            name="item.id"
+            v-for="item in itemList"
+            v-if="item.status!==4"
+            :key="item.id"
+          >
             <div @click="goInfo(item)">
               <van-row>
-                <van-col span="13"
-                         :offset="1">
+                <van-col
+                  span="13"
+                  :offset="1"
+                >
                   <p>{{item.siteName}}</p>
                 </van-col>
                 <van-col span="3">
@@ -53,14 +71,18 @@
                 </van-col>
               </van-row>
               <van-row>
-                <van-col span="8"
-                         :offset="1">
+                <van-col
+                  span="8"
+                  :offset="1"
+                >
                   <p>{{item.outletName}}</p>
                 </van-col>
               </van-row>
               <van-row>
-                <van-col span="18"
-                         :offset="1">
+                <van-col
+                  span="18"
+                  :offset="1"
+                >
                   <p v-if="item.portType===1">{{item.startTime}}-{{item.endTime}}</p>
                   <p v-else>{{item.addTimeString}}</p>
                 </van-col>
@@ -210,7 +232,7 @@ export default {
       this.showStatus = false
     },
     goInfo(item) {
-      this.$router.push({ name: 'portCheckInfo', query: { info: item } })
+      this.$router.push({ name: 'portCheckInfo', query: { info: item }})
     }
   }
 }
