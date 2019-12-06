@@ -63,6 +63,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+html {
+  user-select: text;
+}
 .news {
   padding: 0.4rem;
   h1 {
