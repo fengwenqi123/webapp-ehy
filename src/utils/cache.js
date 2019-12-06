@@ -10,6 +10,11 @@ export function getFinishWeb() {
   return Android.finishWeb()
 }
 
+// 获取码头
+export function getWharfId() {
+  return Android.getWharfId()
+}
+
 // 获取城市
 export function getCity() {
   return Android.getCity()
