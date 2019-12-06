@@ -14,7 +14,7 @@
                  position="bottom"
                  :style="{ height: '40%' }">
         <van-picker show-toolbar
-                    title="审核状态"
+                    title="确认状态"
                     :columns="columnStatus"
                     @confirm="confirmStatus"
                     @cancel="cancelStatus" />
@@ -65,7 +65,7 @@
                   <p v-else>{{item.addTimeString}}</p>
                 </van-col>
                 <van-col span="5">
-                  <p :class="{status1:item.auditStatus===1,status2:item.auditStatus===2,status3:item.auditStatus===3}">{{item.auditStatus===1?'审核通过':item.auditStatus===2?'待审核':item.auditStatus===3?'审核不通过':"--"}}</p>
+                  <p :class="{status1:item.auditStatus===1,status2:item.auditStatus===2,status3:item.auditStatus===3}">{{item.auditStatus===1?'确认通过':item.auditStatus===2?'待确认':item.auditStatus===3?'确认不通过':"--"}}</p>
                 </van-col>
               </van-row>
             </div>
@@ -87,11 +87,11 @@ export default {
       show: false,
       showStatus: false,
       dateBtn: '选择日期',
-      statusBtn: '待审核',
+      statusBtn: '待确认',
       auditStatus: 2,
       currentDate: new Date(),
       value2: '排污类型',
-      columnStatus: ['审核通过', '待审核', '审核不通过'],
+      columnStatus: ['确认通过', '待确认', '确认不通过'],
       option1: [
         { text: '地区', value: 0 },
         { text: '新款商品', value: 1 },
@@ -192,7 +192,7 @@ export default {
     },
     cancelStatus() {
       this.auditStatus = 2
-      this.statusBtn = '待审核'
+      this.statusBtn = '待确认'
       this.page.pageNum = 1
       this.itemList = []
       this.lists()
@@ -202,7 +202,7 @@ export default {
     confirmStatus(value) {
       console.log(value)
       this.statusBtn = value
-      this.auditStatus = value === '待审核' ? 2 : value === '审核通过' ? 1 : value === '审核不通过' ? 3 : ''
+      this.auditStatus = value === '待确认' ? 2 : value === '确认通过' ? 1 : value === '确认不通过' ? 3 : ''
       this.page.pageNum = 1
       this.itemList = []
       this.lists()
@@ -210,7 +210,7 @@ export default {
       this.showStatus = false
     },
     goInfo(item) {
-      this.$router.push({ name: 'portCheckInfo', query: { info: item } })
+      this.$router.push({ name: 'portCheckInfo', query: { info: item }})
     }
   }
 }
