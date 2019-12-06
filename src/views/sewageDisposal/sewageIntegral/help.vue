@@ -6,52 +6,23 @@
            class="point-table">
       <tr>
         <th>项目</th>
-        <th>积分类型</th>
         <th>分值</th>
       </tr>
       <tr class="title">
-        <td colspan="3">生活污水上岸</td>
+        <td colspan="2">加分项</td>
       </tr>
-      <tr>
-        <td>基础分</td>
-        <td>加分</td>
-        <td>{{jc}}</td>
-      </tr>
-      <tr>
-        <td>定位匹配</td>
-        <td>加分</td>
-        <td>{{dwpp}}</td>
-      </tr>
-      <tr>
-        <td>生活污水柜使用</td>
-        <td>加分</td>
-        <td>{{shwugsy}}</td>
-      </tr>
-      <tr>
-        <td>回收点审核</td>
-        <td>加分</td>
-        <td>{{hsdsh}}</td>
+      <tr v-for="item in jfList"
+          :key="item.id">
+        <td>{{item.name}}</td>
+        <td style="color:green;font-weight:bold">+ {{item.fraction}}</td>
       </tr>
       <tr class="title">
-        <td colspan="3">污水设备故障上报</td>
+        <td colspan="2">扣分项</td>
       </tr>
-      <tr>
-        <td>故障上报</td>
-        <td>加分</td>
-        <td>{{gzsb}}</td>
-      </tr>
-      <tr class="title">
-        <td colspan="3">上岸异常扣分</td>
-      </tr>
-      <tr>
-        <td>长期未上岸扣分</td>
-        <td>扣分</td>
-        <td>{{cqwsakf}}</td>
-      </tr>
-      <tr>
-        <td>违法排放扣分</td>
-        <td>扣分</td>
-        <td>{{wfpfkf}}</td>
+      <tr v-for="item in kfList"
+          :key="item.id">
+        <td>{{item.name}}</td>
+        <td style="color:red;font-weight:bold">- {{item.fraction}}</td>
       </tr>
     </table>
     <div class="help">
@@ -77,26 +48,9 @@ export default {
   created() {
     getSewagePoint(1).then(response => {
       console.log(response)
-      this.itemList = response.data
-      this.itemList.forEach(item => {
-        console.log(item.name.split('-')[1])
-        if (item.name.split('-')[1]) {
-          switch (item.name.split('-')[1]) {
-            case '长期未上岸扣分': this.cqwsakf = item.fraction; break
-            case '回收点审核': this.hsdsh = item.fraction; break
-            case '生活污水柜使用': this.shwugsy = item.fraction; break
-            case '定位匹配': this.dwpp = item.fraction; break
-            case '基础分': this.jc = item.fraction; break
-            default: ''
-          }
-        } else {
-          switch (item.name) {
-            case '违法排放扣分': this.wfpfkf = item.fraction; break
-            case '污水设备故障上报': this.gzsb = item.fraction; break
-            default: ''
-          }
-        }
-      })
+      this.jfList = response.data.filter(item => item.mold === 1).reverse()
+      this.kfList = response.data.filter(item => item.mold === 2).reverse()
+      console.log(this.jfList)
     })
   },
   mounted() {
@@ -104,7 +58,8 @@ export default {
   },
   data() {
     return {
-      itemList: [],
+      jfList: [],
+      kfList: [],
       jc: '',
       dwpp: '',
       shwugsy: '',
