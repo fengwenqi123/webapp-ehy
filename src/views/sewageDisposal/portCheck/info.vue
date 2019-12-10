@@ -60,21 +60,15 @@
       <li>
         <span>积分记录</span>
       </li>
-      <li>
-        <span>基础分</span>
-        <span>10分</span>
-      </li>
-      <li>
-        <span>定位设备加分</span>
-        <span>0分</span>
-      </li>
-      <li>
-        <span>船载生活污水柜加分</span>
-        <span>0分</span>
+      <li v-for="item in jfList"
+          :key="item.id"
+          v-if="item.name === '上岸排放登记基础分' || item.name === '船舶AIS定位与码头匹配' || item.name === '污水柜北斗监测系统符合' || item.name === '登记信息获得码头方确认'">
+        <span>{{item.name}}</span>
+        <span>{{item.fraction}}</span>
       </li>
       <li>
         <span>合计积分</span>
-        <span>10分</span>
+        <span>16分</span>
       </li>
     </ul>
     <div class="bottom"
@@ -89,17 +83,23 @@
 
 <script>
 import { setTitle } from '@/utils/cache.js'
+import { getSewagePoint } from '@/api/sewageDisposal'
 import { portCheckStatus } from '@/api/sewageDisposal'
 export default {
   data() {
     return {
-      item: {}
+      item: {},
+      jfList: []
     }
   },
   created() {
     console.log(this.$route.query.info)
     this.item = this.$route.query.info
     setTitle(this.$route.meta.title)
+    getSewagePoint(1).then(response => {
+      console.log(response)
+      this.jfList = response.data.filter(item => item.mold === 1).reverse()
+    })
   },
   methods: {
     checkGo(item) {
@@ -168,7 +168,7 @@ export default {
         &:nth-child(1) {
           color: #888888;
           text-align: left;
-          width: 40%;
+          width: 45%;
         }
         &:nth-child(2) {
           color: #333333;
