@@ -1,14 +1,12 @@
 <template>
   <div class="container">
-    <div
-      class="top"
-      v-if="item.status===2"
-    >
+    <div class="top"
+         v-if="item.status===2">
       <div>
         <img src="../../../assets/img/sewage/wait.png" />
       </div>
       <div>
-        <p>等待审核中</p>
+        <p>等待确认中</p>
       </div>
       <div>
         <p>工作人员审核后记录及积分生效</p>
@@ -54,7 +52,7 @@
         <span>{{item.addTimeString}}</span>
       </li>
       <li v-if="item.portType===2">
-        <span>排放审核时间</span>
+        <span>排放确认时间</span>
         <span>{{item.modifyTimeString}}</span>
       </li>
     </ul>
@@ -79,18 +77,12 @@
         <span>10分</span>
       </li>
     </ul>
-    <div
-      class="bottom"
-      v-if="item.auditStatus===2"
-    >
-      <van-button
-        type="info"
-        @click="checkGo(item)"
-      >审核通过</van-button>
-      <van-button
-        type="danger"
-        @click="checkNo(item)"
-      >审核不通过</van-button>
+    <div class="bottom"
+         v-if="item.auditStatus===2">
+      <van-button type="info"
+                  @click="checkGo(item)">确认通过</van-button>
+      <van-button type="danger"
+                  @click="checkNo(item)">确认不通过</van-button>
     </div>
   </div>
 </template>

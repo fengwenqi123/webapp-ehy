@@ -51,7 +51,7 @@
                 </van-col>
                 <van-col span="5">
                   <p v-if="item.status!==4"
-                     :class="{status1:item.auditStatus===1,status2:item.auditStatus===2,status3:item.auditStatus===3}">{{item.auditStatus===1?'审核通过':item.auditStatus===2?'审核中':item.auditStatus===3?'审核不通过':"--"}}</p>
+                     :class="{status1:item.auditStatus===1,status2:item.auditStatus===2,status3:item.auditStatus===3}">{{item.auditStatus===1?'确认通过':item.auditStatus===2?'确认中':item.auditStatus===3?'确认不通过':"--"}}</p>
                   <p v-else
                      class="status3">排污取消</p>
                 </van-col>

@@ -49,7 +49,6 @@ export default {
     getSewagePoint(1).then(response => {
       console.log(response)
       this.jfList = response.data.filter(item => item.mold === 1).reverse()
-      this.kfList = response.data.filter(item => item.mold === 2).reverse()
       console.log(this.jfList)
     })
   },
