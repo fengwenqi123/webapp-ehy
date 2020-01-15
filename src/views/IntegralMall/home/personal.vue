@@ -6,7 +6,7 @@
       </div>
       <ul>
         <li v-for="(item,index) in list" :key="index">
-          <div class="item">
+          <div class="item" @click="orderList(index)">
             <img :src="item.img" alt="">
             <div class="name">{{item.name}}</div>
           </div>
@@ -38,6 +38,16 @@
             img: ydh
           }
         ]
+      }
+    },
+    methods: {
+      orderList(index) {
+        this.$router.push({
+          path: '/orderList',
+          query: {
+            index
+          }
+        })
       }
     }
   }

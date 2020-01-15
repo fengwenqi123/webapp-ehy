@@ -50,7 +50,7 @@ export default {
         }, {
           value: '积分兑换',
           icon: require('@/assets/img/jfsc.png'),
-          path: ''
+          path: '/integralMall'
         }
       ]
     }

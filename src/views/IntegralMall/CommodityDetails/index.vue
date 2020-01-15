@@ -1,97 +1,174 @@
 <template>
-<div class="container">
-  <div class="banner">
-    <van-swipe :autoplay="3000" indicator-color="white">
-      <van-swipe-item>
-        <img src="http://b.hiphotos.baidu.com/image/pic/item/908fa0ec08fa513db777cf78376d55fbb3fbd9b3.jpg" alt="">
-      </van-swipe-item>
-      <van-swipe-item>
-        <img src="http://b.hiphotos.baidu.com/image/pic/item/908fa0ec08fa513db777cf78376d55fbb3fbd9b3.jpg" alt="">
-      </van-swipe-item>
-    </van-swipe>
-  </div>
-  <div class="main">
-    <div class="name">商品名称</div>
-    <div class="tip">需使用300积分兑换</div>
-    <div class="bottom">
-      <div class="left">
-        <img src="../../../assets/img/shop/coin.png" alt="">
-        <span>300</span>
+  <div class="container" v-if="flag">
+    <div class="banner">
+      <van-swipe :autoplay="3000" indicator-color="white">
+        <template v-if="goods.goodsImageList.length>0">
+          <van-swipe-item v-for="(item,index) in goods.goodsImageList" :key="index">
+            <img :src="src+item.originalImg" alt="">
+          </van-swipe-item>
+        </template>
+        <van-swipe-item v-else>
+          <img src="../../../assets/img/nopic.png" alt="">
+        </van-swipe-item>
+      </van-swipe>
+    </div>
+    <div class="main">
+      <div class="name">{{skuList.goodsName}}</div>
+      <div class="bottom">
+        <div class="left">
+          <img src="../../../assets/img/shop/coin.png" alt="">
+          <span>{{skuList.price}}</span>
+        </div>
+        <div class="right">
+          月销{{goods.salesVolume}}件
+        </div>
       </div>
-      <div class="right">
-        月销2件
+      <div class="tip">库存{{goods.goodsSkuList[0].amount}}件</div>
+    </div>
+    <div class="address">
+      <div class="label">选择兑换地点</div>
+      <div class="value" @click="showPicker=true">
+        <span>{{address}}</span>
+        <img src="../../../assets/img/shop/bottom.png" alt="">
       </div>
     </div>
-  </div>
-  <div class="address">
-    <div class="label">选择兑换地点</div>
-    <div class="value">
-      <span>湖州市杭湖申线城东服务区</span>
-      <img src="../../../assets/img/shop/bottom.png" alt="">
+    <div class="button" @click="exchange">
+      <van-button type="info" size="large">立即兑换</van-button>
     </div>
+    <van-popup
+      v-model="showPicker"
+      position="bottom"
+    >
+      <van-picker
+        show-toolbar
+        :columns="columns"
+        @cancel="showPicker = false"
+        @confirm="onConfirm"
+      />
+    </van-popup>
   </div>
-  <div class="button">
-    <van-button type="info" size="large">立即兑换</van-button>
-  </div>
-</div>
 </template>
 
 <script>
+  import { GoodsDetail, place } from '@/api/shopList'
+
   export default {
-    name: 'index'
+    data() {
+      return {
+        id: this.$route.query.id,
+        parentCategoryId: null,
+        goods: null,
+        src: 'https://api.cjbe88.com/storage/storage/',
+        flag: false,
+        address: null,
+        skuList: null,
+        showPicker: false,
+        columns: null
+      }
+    },
+    created() {
+      this.findGoodsDetail()
+    },
+    watch: {
+      address() {
+        this.$store.commit('setAddress', this.address)
+      }
+    },
+    methods: {
+      // 查找商品详情
+      findGoodsDetail() {
+        GoodsDetail(this.id).then(response => {
+          this.goods = response.data
+          this.flag = true
+          this.skuList = response.data.goodsSkuList[0]
+          this.parentCategoryId = response.data.parentCategoryId
+          this.findPlace(this.parentCategoryId)
+        })
+      },
+      // 查找兑换地址
+      findPlace(parentCategoryId) {
+        place(parentCategoryId).then(response => {
+          this.address = response.data[0].name
+          this.columns = response.data
+          this.columns.forEach((item) => {
+            item.text = item.name
+          })
+        })
+      },
+      exchange() {
+        this.$store.commit('setGoods', this.goods)
+        this.$router.push({
+          path: '/ConfirmationOrder'
+        })
+      },
+      onConfirm(value) {
+        this.address = value.name
+        this.showPicker = false
+      }
+    }
   }
 </script>
 
 <style scoped lang="scss">
-  .container{
-    .banner{
-      img{
+  .container {
+    .banner {
+      img {
         width: 100%;
+        height: 550px;
       }
     }
-    .main{
+
+    .main {
       padding: 0 32px;
       background: #fff;
-      .name{
+
+      .name {
         padding-top: 30px;
-        font-size:34px;
-        font-weight:600;
-        color:rgba(51,51,51,1);
+        font-size: 34px;
+        font-weight: 600;
+        color: rgba(51, 51, 51, 1);
       }
-      .tip{
-        margin-top: 20px;
-        font-size:28px;
-        font-weight:400;
-        color:rgba(255,162,0,1);
-      }
-      .bottom{
-        margin-top: 20px;
+
+      .tip {
+        padding-top: 10px;
         padding-bottom: 20px;
+        font-size: 28px;
+        font-weight: 400;
+        color: #888888;
+      }
+
+      .bottom {
+        margin-top: 20px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        .left{
+
+        .left {
           display: flex;
           align-items: center;
-          img{
+
+          img {
             width: 20px;
             height: 20px;
           }
-          span{
+
+          span {
             margin-left: 10px;
-            font-size:60px;
-            font-weight:400;
-            color:rgba(255,162,0,1);
+            font-size: 60px;
+            font-weight: 400;
+            color: rgba(255, 162, 0, 1);
           }
         }
-        .right{
-          font-size:28px;
-          font-weight:400;
-          color:rgba(136,136,136,1);
+
+        .right {
+          font-size: 28px;
+          font-weight: 400;
+          color: rgba(136, 136, 136, 1);
         }
       }
     }
-    .address{
+
+    .address {
       margin-top: 20px;
       display: flex;
       align-items: center;
@@ -99,27 +176,32 @@
       padding: 0 32px;
       height: 96px;
       background: #fff;
-      .label{
-        font-size:30px;
-        font-weight:400;
-        color:rgba(51,51,51,1);
+
+      .label {
+        font-size: 30px;
+        font-weight: 400;
+        color: rgba(51, 51, 51, 1);
       }
-      .value{
+
+      .value {
         display: flex;
         align-items: center;
-        span{
-          font-size:30px;
-          font-weight:400;
-          color:rgba(136,136,136,1);
+
+        span {
+          font-size: 30px;
+          font-weight: 400;
+          color: rgba(136, 136, 136, 1);
         }
-        img{
+
+        img {
           margin-left: 10px;
           width: 16px;
           transform: rotate(270deg);
         }
       }
     }
-    .button{
+
+    .button {
       position: fixed;
       bottom: 0px;
       width: 100%;

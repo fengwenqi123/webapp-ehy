@@ -137,6 +137,12 @@ const sewageDisposal = [
     name: 'pointHelp',
     component: () => import('@/views/sewageDisposal/sewageIntegral/help'),
     meta: { title: '排污积分说明' }
+  },
+  {
+    path: '/bill',
+    name: 'bill',
+    component: () => import('@/views/sewageDisposal/landRecord/bill'),
+    meta: { title: '电子单据' }
   }
 ]
 export default sewageDisposal

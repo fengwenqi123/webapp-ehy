@@ -5,6 +5,7 @@ import { Toast, Dialog } from 'vant'
 // 创建axios实例
 const service = axios.create({
   baseURL: 'https://api.cjbe88.com', // 请求地址
+  // baseURL: 'http://cjb.huihangtech.com/api/', // 请求地址
   timeout: 10000 // 请求超时时间
 })
 

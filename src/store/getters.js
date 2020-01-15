@@ -15,6 +15,11 @@ const getters = {
   userInfos: state => state.gyt.userInfos,
   recoveryInfo: state => state.recovery.recoveryInfo,
   recoveryCode: state => state.recovery.recoveryCode,
-  eshipName: state => state.recovery.eshipName
+  eshipName: state => state.recovery.eshipName,
+  goods: state => state.mall.goods,
+  price: state => state.mall.price,
+  address: state => state.mall.address,
+  mallShipName: state => state.mall.mallShipName,
+  integral: state => state.mall.integral
 }
 export default getters

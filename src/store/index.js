@@ -6,6 +6,7 @@ import expDetails from './modules/expDetails'
 import user from './modules/user'
 import gyt from './modules/gyt'
 import recovery from './modules/recovery'
+import mall from './modules/mall'
 
 Vue.use(Vuex)
 
@@ -15,7 +16,8 @@ const store = new Vuex.Store({
     expDetails,
     user,
     gyt,
-    recovery
+    recovery,
+    mall
   },
   getters
 })

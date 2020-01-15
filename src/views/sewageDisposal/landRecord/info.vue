@@ -71,7 +71,7 @@
         <span>16分</span>
       </li>
     </ul>
-    <div class="bottom"
+    <div class="bottom" @click="download"
          v-if="item.status===3">
       <van-button type="info">下载排污电子单据</van-button>
     </div>
@@ -86,17 +86,28 @@ export default {
   data() {
     return {
       item: {},
-      jfList: []
+      jfList: [],
+      show: false
     }
   },
   created() {
     console.log(this.$route.query.info)
     this.item = this.$route.query.info
-    setTitle(this.$route.meta.title)
+    // setTitle(this.$route.meta.title)
     getSewagePoint(1).then(response => {
       console.log(response)
       this.jfList = response.data.filter(item => item.mold === 1).reverse()
     })
+  },
+  methods: {
+    download() {
+      this.$router.push({
+        path: '/bill',
+        query: {
+          item: this.item
+        }
+      })
+    }
   }
 }
 </script>
