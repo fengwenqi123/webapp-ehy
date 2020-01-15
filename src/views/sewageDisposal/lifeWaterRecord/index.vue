@@ -134,7 +134,8 @@ export default {
   },
   methods: {
     goOutLet(item) {
-      this.$router.push({ name: 'lifeSewageOutLet', query: { info: item }})
+      // eslint-disable-next-line object-curly-spacing
+      this.$router.push({ name: 'lifeSewageOutLet', query: { info: item } })
     },
     // fomesFun1(value) {
     //   if (value.indexOf('生活垃圾') !== -1) {
@@ -224,9 +225,28 @@ export default {
         this.code = code
         this.$store.commit('setrecoveryCode', this.code)
         this.getRecoveryInfo()
+      } else if (code.split('?')[1].split('=')[0] === 'locationID') {
+        this.code = code
+        this.$store.commit('setrecoveryCode', this.code.split('?')[1].split('=')[1])
+        this.getSbRecoveryInfo()
       } else {
         this.$router.push({ path: '/unrecognized' })
       }
+    },
+    getSbRecoveryInfo() {
+      recoveryInfo(this.shipName, this.code).then(response => {
+        this.recoveryInfo = response.data
+        this.$store.commit('setRecoveryInfo', response.data)
+        Toast.success({
+          message: `${response.msg}，请稍等...`,
+          duration: 2000
+        })
+        setTimeout(() => {
+          this.$router.push({
+            path: '/successWaterAuto'
+          })
+        }, 2000)
+      })
     },
     submitWater() {
       const obj = {
