@@ -71,6 +71,7 @@
 </template>
 
 <script>
+  import { setTitle } from '@/utils/cache.js'
   export default {
     name: 'bill',
     data() {
@@ -80,6 +81,9 @@
         num2: this.$route.query.item.type === 2 ? this.$route.query.item.amount : null,
         num3: this.$route.query.item.type === 3 ? this.$route.query.item.amount : null
       }
+    },
+    created() {
+      setTitle(this.$route.meta.title)
     }
   }
 </script>
