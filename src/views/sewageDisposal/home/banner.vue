@@ -115,6 +115,10 @@ export default {
         this.code = code
         this.$store.commit('setrecoveryCode', this.code)
         this.getRecoveryInfo()
+      } else if (code.split('?')[1].split('=')[0] === 'locationID') {
+        this.code = code
+        this.$store.commit('setrecoveryCode', this.code.split('?')[1].split('=')[1])
+        this.getSbRecoveryInfo()
       } else {
         this.$router.push({ path: '/unrecognized' })
       }
@@ -158,6 +162,21 @@ export default {
         setTimeout(() => {
           this.$router.push({
             path: '/successRubbishAuto'
+          })
+        }, 2000)
+      })
+    },
+    getSbRecoveryInfo() {
+      recoveryInfo(this.shipName, this.code).then(response => {
+        this.recoveryInfo = response.data
+        this.$store.commit('setRecoveryInfo', response.data)
+        Toast.success({
+          message: `${response.msg}，请稍等...`,
+          duration: 2000
+        })
+        setTimeout(() => {
+          this.$router.push({
+            path: '/successWaterAuto'
           })
         }, 2000)
       })
