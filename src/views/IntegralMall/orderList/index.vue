@@ -22,7 +22,7 @@
 
 <script>
   import all from './all'
-
+  import { setTitle } from '@/utils/cache.js'
   export default {
     components: {
       all
@@ -31,6 +31,9 @@
       return {
         active: this.$route.query.index
       }
+    },
+    mounted() {
+      setTitle(this.$route.meta.title)
     }
   }
 </script>

@@ -68,6 +68,7 @@
   import { mapGetters } from 'vuex'
   import { Toast } from 'vant'
   import { addOrder, confirmexchange } from '@/api/IntegralMall.js'
+  import { setTitle } from '@/utils/cache.js'
   export default {
     name: 'index',
     computed: {
@@ -85,6 +86,9 @@
         orderWay: '1',
         type: '6'
       }
+    },
+    mounted() {
+      setTitle(this.$route.meta.title)
     },
     methods: {
       submit() {

@@ -86,7 +86,7 @@
   import { mapGetters } from 'vuex'
   import { findOrderDetail, cancelexchange } from '@/api/IntegralMall'
   import { Dialog, Toast } from 'vant'
-
+  import { setTitle } from '@/utils/cache.js'
   export default {
     computed: {
       ...mapGetters([
@@ -103,6 +103,7 @@
     },
     created() {
       this.findOrderDetails()
+      setTitle(this.$route.meta.title)
     },
     methods: {
       findOrderDetails() {

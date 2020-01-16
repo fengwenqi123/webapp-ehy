@@ -20,6 +20,7 @@
   import personal from './personal'
   import shopList from './shopList'
   import vheader from './vheader'
+  import { setTitle } from '@/utils/cache.js'
   export default {
     name: 'index',
     data() {
@@ -31,6 +32,9 @@
       personal,
       shopList,
       vheader
+    },
+    mounted() {
+      setTitle(this.$route.meta.title)
     }
   }
 </script>

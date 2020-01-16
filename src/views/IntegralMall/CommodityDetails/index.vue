@@ -51,7 +51,7 @@
 
 <script>
   import { GoodsDetail, place } from '@/api/shopList'
-
+  import { setTitle } from '@/utils/cache.js'
   export default {
     data() {
       return {
@@ -68,6 +68,7 @@
     },
     created() {
       this.findGoodsDetail()
+      setTitle(this.$route.meta.title)
     },
     watch: {
       address() {

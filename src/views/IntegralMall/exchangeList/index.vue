@@ -58,7 +58,7 @@
   import { timeChange } from '@/utils/index'
   import { orderList, IntegralTotal } from '@/api/IntegralMall'
   import { getCurrentMonthFirst, getCurrentMonthLast } from '@/utils/time.js'
-
+  import { setTitle } from '@/utils/cache.js'
   export default {
     name: 'index',
     data() {
@@ -91,6 +91,7 @@
     },
     created() {
       this.findIntegralTotal()
+      setTitle(this.$route.meta.title)
     },
     computed: {
       time() {

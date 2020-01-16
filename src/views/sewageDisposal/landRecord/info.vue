@@ -157,9 +157,9 @@
       li {
         height: 76px;
         width: 100%;
-
+        display: flex;
+        align-items: center;
         span {
-          display: inline-block;
           line-height: 76px;
           font-size: 28px;
 
@@ -173,6 +173,9 @@
             color: #333333;
             text-align: right;
             width: 52%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow:ellipsis;
           }
         }
       }

@@ -18,7 +18,7 @@
     <div class="bottom" @click="showPicker=true">
       切换船舶
     </div>
-    <van-popup v-model="showPicker" position="bottom"  round>
+    <van-popup v-model="showPicker" position="bottom" round>
       <van-picker
         show-toolbar
         title="船名"
@@ -48,7 +48,7 @@
       shopInfo: {
         handler(value, oldValue) {
           this.shipName = value.shipName
-          this.$store.commit('setMallShipName',this.shipName)
+          this.$store.commit('setMallShipName', this.shipName)
           this.findIntegral()
         },
         deep: true
@@ -56,6 +56,9 @@
     },
     created() {
       this.findShipList()
+    },
+    activated() {
+      this.findIntegral()
     },
     methods: {
       Exchange() {
@@ -76,10 +79,12 @@
       },
       // 查船舶积分
       findIntegral() {
-        findIntegralByShipName(this.shipName).then(response => {
-          this.availablePoint = response.data.availablePoint
-          this.$store.commit('setIntegral',this.availablePoint)
-        })
+        if (this.shipName) {
+          findIntegralByShipName(this.shipName).then(response => {
+            this.availablePoint = response.data.availablePoint
+            this.$store.commit('setIntegral', this.availablePoint)
+          })
+        }
       },
       // 关闭popup
       onConfirm(value) {
