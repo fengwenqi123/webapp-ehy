@@ -26,19 +26,20 @@
                :key="item.id">
             <div @click="goInfo(item)">
               <van-row>
-                <van-col span="12"
+                <van-col span="15"
                          :offset="1">
                   <p>{{item.siteName}}</p>
                 </van-col>
                 <van-col span="3">
                   <span>{{item.portType===1?'智能':item.portType===2?'普通':"--"}}</span>
                 </van-col>
-                <van-col span="6">
-                  <p>{{item.amount||'--'}} L</p>
+                <van-col span="4">
+                  <p v-if="item.type===1">{{item.amount}} L</p>
+                  <p v-if="item.type===3">{{item.amount}} g</p>
                 </van-col>
               </van-row>
               <van-row>
-                <van-col span="8"
+                <van-col span="18"
                          :offset="1">
                   <p>{{item.outletName}}</p>
                 </van-col>
@@ -166,7 +167,7 @@ export default {
       this.show = false
     },
     goInfo(item) {
-      this.$router.push({ name: 'lifeWaterRecordInfo', query: { info: item }})
+      this.$router.push({ name: 'lifeWaterRecordInfo', query: { info: item } })
     }
   }
 }

@@ -48,7 +48,7 @@
 
 <script>
 import { recoveryInfo, allPoints } from '@/api/sewageDisposal'
-import { getGoQr, setBoat, getBoat } from '@/utils/cache.js'
+import { getGoQr, setBoat, getBoat, getLat, getLng } from '@/utils/cache.js'
 import { boatList } from '@/api/ehy'
 import { Toast } from 'vant'
 import { discharge } from '@/api/sewageDisposal'
@@ -131,7 +131,9 @@ export default {
         type: 1,
         shipName: this.recoveryInfo.shipName,
         code: this.code,
-        orderWay: 1
+        orderWay: 1,
+        currentLon: getLng(),
+        currentLat: getLat()
       }
       discharge(obj1).then(response => {
         Toast.success({
@@ -151,7 +153,9 @@ export default {
         shipName: this.recoveryInfo.shipName,
         code: this.code,
         refuseType: parseFloat(this.recoveryInfo.type) - 2,
-        orderWay: 1
+        orderWay: 1,
+        currentLon: getLng(),
+        currentLat: getLat()
       }
       // alert(JSON.stringify(obj3))
       discharge(obj3).then(response => {
@@ -167,7 +171,7 @@ export default {
       })
     },
     getSbRecoveryInfo() {
-      recoveryInfo(this.shipName, this.code).then(response => {
+      recoveryInfo(this.shipName, this.code, getLng(), getLat()).then(response => {
         this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
         Toast.success({
@@ -182,9 +186,11 @@ export default {
       })
     },
     getRecoveryInfo() {
-      recoveryInfo(this.shipName, this.code).then(response => {
+      recoveryInfo(this.shipName, this.code, getLng(), getLat()).then(response => {
         this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
+        alert('类型', response.data.type)
+        alert('属性', response.data.attribute)
         switch (response.data.type) {
           case 1:
             switch (response.data.attribute) {

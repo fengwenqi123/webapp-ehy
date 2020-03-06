@@ -2,13 +2,13 @@ import request from '@/utils/request'
 
 import qs from 'qs'
 // 收集点列表
-export function recoveryInfo(shipName, code) {
+export function recoveryInfo(shipName, code, currentLon, currentLat) {
   // alert(shipName)
   return request({
     url: '/sewage/sewageOutlet/findByCode',
     method: 'GET',
     params: {
-      shipName, code
+      shipName, code, currentLon, currentLat
     }
   })
 }
@@ -97,6 +97,17 @@ export function getSewagePoint(type, mold) {
     params: {
       type,
       mold
+    }
+  })
+}
+
+// 排污一次获得的积分
+export function getPointRecord(sewageId) {
+  return request({
+    url: '/poi/sewage/sewageScoreRecord',
+    method: 'GET',
+    params: {
+      sewageId
     }
   })
 }

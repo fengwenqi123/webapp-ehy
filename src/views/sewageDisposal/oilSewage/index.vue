@@ -93,7 +93,9 @@ export default {
         type: 2,
         shipName: this.recoveryInfo.shipName,
         code: this.recoveryCode,
-        orderWay: 1
+        orderWay: 1,
+        currentLon: getLng(),
+        currentLat: getLat()
       }
       discharge(obj).then(response => {
         Toast.success({

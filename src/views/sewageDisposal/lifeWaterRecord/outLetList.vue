@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { setTitle, getBoat, setOutlet, getOutlet } from '@/utils/cache.js'
+import { setTitle, getBoat, setOutlet, getOutlet, getLng, getLat } from '@/utils/cache.js'
 import { recoveryInfo } from '@/api/sewageDisposal'
 import { Toast } from 'vant'
 import { discharge, boatPosition } from '@/api/sewageDisposal'
@@ -94,7 +94,9 @@ export default {
         type: 1,
         shipName: this.recoveryInfo.shipName,
         code: this.code,
-        orderWay: 1
+        orderWay: 1,
+        currentLon: getLng(),
+        currentLat: getLat()
       }
       discharge(obj).then(response => {
         Toast.success({
@@ -114,7 +116,9 @@ export default {
         shipName: this.recoveryInfo.shipName,
         code: this.code,
         refuseType: parseFloat(this.recoveryInfo.type) - 2,
-        orderWay: 1
+        orderWay: 1,
+        currentLon: getLng(),
+        currentLat: getLat()
       }
       // alert(JSON.stringify(obj3))
       discharge(obj3).then(response => {
@@ -132,7 +136,7 @@ export default {
     getRecoveryInfo(item) {
       this.shipName = getBoat()
       this.code = item.code
-      recoveryInfo(this.shipName, this.code).then(response => {
+      recoveryInfo(this.shipName, this.code, getLng(), getLat()).then(response => {
         this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
         this.$store.commit('setrecoveryCode', this.code)
