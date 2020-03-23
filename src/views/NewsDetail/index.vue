@@ -37,7 +37,7 @@ export default {
   methods: {
     getNews() {
       const xhr = new XMLHttpRequest()
-      xhr.open('get', 'https://api.cjbe88.com/news/news/' + this.id, true)
+      xhr.open('get', 'https://api.cjbe88.com/news/navigationInformation/' + this.id, true)
       xhr.send()
       // 4、指定一些回调函数
       xhr.onreadystatechange = () => {
