@@ -189,8 +189,8 @@ export default {
       recoveryInfo(this.shipName, this.code, getLng(), getLat()).then(response => {
         this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
-        alert('类型', response.data.type)
-        alert('属性', response.data.attribute)
+        // alert('类型', response.data.type)
+        // alert('属性', response.data.attribute)
         switch (response.data.type) {
           case 1:
             switch (response.data.attribute) {
