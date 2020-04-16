@@ -102,3 +102,29 @@
     text-align: right;
   }
 }
+.reportTwoRadio{
+  .van-radio__label {
+    color: #999 !important;
+  }
+}
+.ehyReportInfo .van-step--finish .van-step__circle, .van-step--finish .van-step__line {
+  background-color: #1890ff !important;
+}
+
+.ehyReportInfo {
+  .error {
+    .van-step__title--active {
+      color:red !important;
+      
+    }
+    .van-icon{
+      color:red !important;
+     }
+  }
+  .errorLine{
+    .van-step__line{
+      background-color: red !important;
+
+    }
+  }
+}
