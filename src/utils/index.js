@@ -2,6 +2,7 @@
 /**
  * Created by jiachenpan on 16/11/18.
  */
+var pinyin = require('pinyin')
 
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
@@ -71,6 +72,18 @@ export function timeToString(str) {
   return oTime
 }
 
+// new Date()转yy-mm-dd hh:mm:ss
+export function dateToString(date) {
+  var oDate = date,
+    oYear = oDate.getFullYear(),
+    oMonth = oDate.getMonth() + 1,
+    oDay = oDate.getDate(),
+    oHour = oDate.getHours(),
+    oMin = oDate.getMinutes(),
+    oSen = oDate.getSeconds(),
+    oTime = oYear + '-' + getzf(oMonth) + '-' + getzf(oDay) + ' ' + getzf(oHour) + ':' + getzf(oMin) + ':' + getzf(oSen)
+  return oTime
+}
 // 补0操作
 function getzf(num) {
   if (parseInt(num) < 10) {
@@ -145,3 +158,11 @@ export function timeChange(date) {
   var m = getzf(date.getMonth() + 1)
   return y + '-' + m
 }
+
+// 文字转拼音
+export function toPinYin(font) {
+  return pinyin(font, {
+    style: pinyin.STYLE_FIRST_LETTER // 设置拼音风格（首字母）
+  })
+}
+

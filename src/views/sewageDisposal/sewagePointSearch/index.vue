@@ -248,6 +248,9 @@ export default {
         this.finished = false
       }, 300)
     },
+    goOutLet() {
+
+    },
     fomesFun1(value) {
       if (value.indexOf('生活垃圾') !== -1) {
         return true

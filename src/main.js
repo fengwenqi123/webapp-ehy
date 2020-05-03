@@ -10,7 +10,6 @@ import fastclick from 'fastclick'
 import 'lib-flexible'
 import Vant from 'vant'
 import 'vant/lib/index.css'
-
 fastclick.attach(document.body)
 Vue.prototype.expActive = 0
 Vue.config.productionTip = false

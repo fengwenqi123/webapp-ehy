@@ -1,33 +1,33 @@
 <template>
   <div class="container">
     <div class="content">
-      <van-popup v-model="show"
-                 position="top"
-                 :style="{ height: '40%' }">
-        <van-datetime-picker v-model="currentDate"
-                             type="year-month"
-                             @confirm="confirmDate"
-                             @cancel="cancelDate"
-                             :formatter="formatter" />
+      <van-popup v-model="show" position="top" :style="{ height: '40%' }">
+        <van-datetime-picker
+          v-model="currentDate"
+          type="year-month"
+          @confirm="confirmDate"
+          @cancel="cancelDate"
+          :formatter="formatter"
+        />
       </van-popup>
       <div class="dateBtn">
-        <span @click="showPopup">{{dateBtn}}
-          <van-icon name="arrow-down" /></span>
+        <span @click="showPopup">
+          {{dateBtn}}
+          <van-icon name="arrow-down" />
+        </span>
       </div>
-      <van-pull-refresh v-model="isLoading"
-                        @refresh="onRefresh">
-        <van-list class="main"
-                  v-model="loading"
-                  :finished="finished"
-                  finished-text="没有更多了"
-                  @load="onLoad">
-          <div class="card"
-               v-for="item in itemList"
-               :key="item.id">
+      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <van-list
+          class="main"
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+        >
+          <div class="card" v-for="item in itemList" :key="item.id">
             <div @click="goInfo(item)">
               <van-row>
-                <van-col span="15"
-                         :offset="1">
+                <van-col span="15" :offset="1">
                   <p>{{item.siteName}}</p>
                 </van-col>
                 <van-col span="3">
@@ -39,22 +39,21 @@
                 </van-col>
               </van-row>
               <van-row>
-                <van-col span="18"
-                         :offset="1">
+                <van-col span="18" :offset="1">
                   <p>{{item.outletName}}</p>
                 </van-col>
               </van-row>
               <van-row>
-                <van-col span="18"
-                         :offset="1">
+                <van-col span="18" :offset="1">
                   <p v-if="item.portType===1">{{item.startTime}}-{{item.endTime}}</p>
                   <p v-else>{{item.addTimeString}}</p>
                 </van-col>
                 <van-col span="5">
-                  <p v-if="item.status!==4"
-                     :class="{status1:item.auditStatus===1,status2:item.auditStatus===2,status3:item.auditStatus===3}">{{item.auditStatus===1?'确认通过':item.auditStatus===2?'确认中':item.auditStatus===3?'确认不通过':"--"}}</p>
-                  <p v-else
-                     class="status3">排污取消</p>
+                  <p
+                    v-if="item.status!==4"
+                    :class="{status1:item.auditStatus===1,status2:item.auditStatus===2,status3:item.auditStatus===3}"
+                  >{{item.auditStatus===1?'确认通过':item.auditStatus===2?'确认中':item.auditStatus===3?'确认不通过':"--"}}</p>
+                  <p v-else class="status3">排污取消</p>
                 </van-col>
               </van-row>
             </div>
