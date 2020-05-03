@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="header">
-      <pageHeader />
+      <pageHeader/>
     </div>
     <ul>
       <li
@@ -20,79 +20,79 @@
 </template>
 
 <script>
-import { list } from '@/api/about'
-import pageHeader from '@/components/navBar'
+  import { list } from '@/api/about'
+  import pageHeader from '@/components/navBar'
 
-export default {
-  name: 'index',
-  components: {
-    pageHeader
-  },
-  data() {
-    return {
-      dataList: null
-    }
-  },
-  created() {
-    this.getList()
-  },
-  methods: {
-    getList() {
-      list({
-        articleClassId: '',
-        articleClassCode: 'ehy_about',
-        status: 1
-      }).then(response => {
-        if (response.data.length === 1) {
-          this.showContent(
-            response.data[0].content,
-            response.data[0].title,
-            false
-          )
-        } else {
-          this.dataList = response.data
-        }
-      })
+  export default {
+    name: 'index',
+    components: {
+      pageHeader
     },
-    showContent(content, title, flag) {
-      this.$router.push({
-        path: '/aboutContent',
-        query: {
-          content,
-          title,
-          flag
-        }
-      })
+    data() {
+      return {
+        dataList: null
+      }
+    },
+    created() {
+      this.getList()
+    },
+    methods: {
+      getList() {
+        list({
+          articleClassId: '',
+          articleClassCode: 'ehy_about',
+          status: 1
+        }).then(response => {
+          if (response.data.length === 1) {
+            this.showContent(
+              response.data[0].content,
+              response.data[0].title,
+              false
+            )
+          } else {
+            this.dataList = response.data
+          }
+        })
+      },
+      showContent(content, title, flag) {
+        this.$router.push({
+          path: '/aboutContent',
+          query: {
+            content,
+            title,
+            flag
+          }
+        })
+      }
     }
   }
-}
 </script>
 
 <style scoped lang="scss">
-.container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-
-  .header {
-    position: fixed;
+  .container {
+    position: absolute;
     width: 100%;
-    z-index: 9;
-  }
+    height: 100%;
+    background: #fff;
 
-  ul {
-    padding-top: 100px;
+    .header {
+      position: fixed;
+      width: 100%;
+      z-index: 9;
+    }
 
-    li {
-      .item {
-        height: 80px;
-        line-height: 80px;
-        margin: 0 40px;
+    ul {
+      padding-top: 100px;
+
+      li {
+        .item {
+          height: 80px;
+          line-height: 80px;
+          margin: 0 40px;
+        }
+
+        border-bottom: 1px solid #ccc;
       }
-
-      border-bottom: 1px solid #ccc;
     }
   }
-}
 </style>

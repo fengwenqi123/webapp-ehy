@@ -167,7 +167,7 @@ export default {
       this.show = false
     },
     goInfo(item) {
-      this.$router.push({ name: 'lifeWaterRecordInfo', query: { info: item } })
+      this.$router.push({ name: 'lifeWaterRecordInfo', query: { info: item }})
     }
   }
 }

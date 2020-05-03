@@ -1,88 +1,87 @@
 import storage from 'good-storage'
-
+/* eslint-disable no-undef */
 const Token = 'Token'
 const userInfo = 'userInfo'
 const boatName = 'boatName'
 const outletList = 'outletList'
-
+const isProd = process.env.NODE_ENV === 'production'
 // 页面退出
 export function getFinishWeb() {
-  return Android.finishWeb()
+  return isProd ? Android.finishWeb() : null
 }
 
 // 获取码头
 export function getWharfId() {
-  return Android.getWharfId()
+  return isProd ? Android.getWharfId() : null
 }
 
 // 获取城市
 export function getCity() {
-  return Android.getCity()
+  return isProd ? Android.getCity() : null
 }
 
 // 获取新闻详情id
 export function getId() {
-  return Android.getId()
+  return isProd ? Android.getId() : null
 }
 
 // 调用支付
 export function getAliPay(id) {
-  return Android.aliPay(id)
+  return isProd ? Android.aliPay(id) : null
 }
 
 // 调用扫码
 export function getGoQr() {
-  return Android.goQr()
+  return isProd ? Android.goQr() : null
 }
 
 // 扫码返回id
 export function getGoQrId() {
-  return Android.getQrId()
+  return isProd ? Android.getQrId() : null
 }
 
 // 获取code
 export function getCode() {
-  return Android.getCode()
+  return isProd ? Android.getCode() : null
 }
 
 // 设置标题
 export function setTitle(title) {
-  return Android.setTitle(title)
+  return isProd ? Android.setTitle(title) : null
 }
 
 // 获取手机当前的经纬度
 export function getLng() {
-  return Android.getLng()
+  return isProd ? Android.getLng() : null
 }
 
 export function getLat() {
-  return Android.getLat()
+  return isProd ? Android.getLat() : null
 }
 //  获取订单id
 export function getOrderId() {
-  return Android.getOrderId()
+  return isProd ? Android.getOrderId() : null
 }
 // 获取token
 export function getToken() {
-  return Android.getAccount()
-  // return 'RvfJcFedPg2sq12arS8R7x'
+  return isProd ? Android.getAccount() : null
 }
 
 // 获取船名
 export function getShipName() {
-  return Android.getName()
+  return isProd ? Android.getName() : null
 }
 // 获取船舶登记号
 export function getCbdjh() {
-  return Android.getCbdjh()
+  return isProd ? Android.getCbdjh() : null
 }
 // 获取船舶识别号
 export function getCbsbh() {
-  return Android.getCbsbh()
+  return isProd ? Android.getCbsbh() : null
 }
 // 是否从违章进去
 export function isWz() {
-  return Android.isWz()
+  return isProd ? Android.isWz() : null
 }
 
 export function setToken(token) {
