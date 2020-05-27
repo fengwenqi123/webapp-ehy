@@ -8,8 +8,9 @@
                  placeholder="船闸名称"
                  error-message-align="right"
                  required
-                 @focus="lockFocus"
+                 @click="lockFocus"
                  is-link
+                 readonly
                  input-align="right"
                  :rules="[{ required: true, message: '请选择船闸' }]" />
       <van-field v-model="gzgk.gzfx"
@@ -24,10 +25,11 @@
       <van-field v-model="gzgk.gk1"
                  label="始发港"
                  name="始发港"
-                 @focus="selectPort"
+                 @click="selectPort"
                  placeholder="始发港"
                  input-align="right"
                  is-link
+                 readonly
                  error-message-align="right"
                  required
                  :rules="[{ required: true, message: '请选择始发港' }]" />
@@ -36,9 +38,10 @@
                  name="目的港"
                  placeholder="目的港"
                  is-link
+                 readonly
                  input-align="right"
                  error-message-align="right"
-                 @focus="selectNextPort"
+                 @click="selectNextPort"
                  required
                  :rules="[{ required: true, message: '请选择目的港' }]" />
       <span class="title">申请信息</span>
@@ -48,8 +51,9 @@
                  is-link
                  error-message-align="right"
                  required
+                 readonly
                  input-align="right"
-                 @focus="boatFocus"
+                 @click="boatFocus"
                  placeholder="船舶名称"
                  :rules="[{ required: true, message: '请选择船舶' }]" />
       <van-field v-model="gzgk.cjr"
@@ -59,7 +63,6 @@
                  required
                  input-align="right"
                  placeholder="申请人"
-                 readonly
                  :rules="[{required: true, message: '请填写申请人' }]" />
       <van-field v-model="gzgk.lxdh"
                  name="lxdh"
@@ -76,9 +79,10 @@
                  required
                  input-align="right"
                  label="载货"
+                 readonly
                  is-link
                  placeholder="载货"
-                 @focus="zzFocus"
+                 @click="zzFocus"
                  :rules="[{ required: true, message: '请选择载货方式' }]" />
 
       <div v-for="(item,index) in gzhw"
@@ -94,10 +98,11 @@
                    label="货物类型"
                    error-message-align="right"
                    required
+                   readonly
                    placeholder="货物类型"
                    is-link
                    input-align="right"
-                   @focus="cargoFocus(index)"
+                   @click="cargoFocus(index)"
                    :rules="[{ required: true, message: '请选择货物类型' }]" />
         <van-field v-model="item.szhsl"
                    name="实际载货量"
@@ -199,7 +204,8 @@ import { getUserInfos } from '@/api/validate'
 import { dateToString } from '@/utils'
 import { boatList } from '@/api/ehy'
 import { Dialog } from 'vant'
-// import { submitApply } from '@/api/ehyLock'
+import { setTitle } from '@/utils/cache.js'
+import { submitApply } from '@/api/ehyLockHS'
 export default {
   components: {
     cityList
@@ -218,7 +224,6 @@ export default {
       },
       gzhw: [
         {
-          id: '',
           hwlx: '',
           hwmc: '',
           szhsl: ''
@@ -264,23 +269,40 @@ export default {
     }
   },
   created() {
-    this.gzgk.gzfx = this.$route.query.direction
     this.cargoList = this.cargosList.map(item => item.name)
-    getUserInfos().then(res => {
-      console.log(res)
-      this.gzgk.cjr = res.data.name
-      this.gzgk.lxdh = res.data.mobile
-    })
-    boatList(2).then(res => {
-      console.log(res)
-      this.boatLists = res.data.map(item => item.shipName)
-    })
-    this.gzgk.czmc = this.lockList[0]
+    if (this.$route.query.direction) {
+      this.gzgk.gzfx = this.$route.query.direction
+      getUserInfos().then(res => {
+        console.log(res)
+        this.gzgk.cjr = res.data.name
+        this.gzgk.lxdh = res.data.mobile
+      })
+      boatList(2).then(res => {
+        console.log(res)
+        this.boatLists = res.data.map(item => item.shipName)
+      })
+      this.gzgk.czmc = this.lockList[0]
+    }
+    // 重新提交时传过来的数据
+    if (this.$route.query.addInfo) {
+      console.log(JSON.parse(this.$route.query.addInfo))
+      this.gzgk = { ...JSON.parse(this.$route.query.addInfo) }
+      if (this.gzgk.gzfx === '1') {
+        this.gzgk.gzfx = '进'
+      } else {
+        this.gzgk.gzfx = '出'
+      }
+      if (this.gzgk.zz === '空载') {
+        this.gzhw = []
+      } else {
+        this.gzhw = JSON.parse(this.$route.query.addInfo).gzhwList
+      }
+    }
+    setTitle(this.$route.meta.title)
   },
   watch: {
     gzhw: {
       handler(n, o) {
-        console.log(n)
         this.gzgk.zzhwzl = 0
         n.map(item => {
           this.gzgk.zzhwzl += Number(item.szhsl)
@@ -294,7 +316,6 @@ export default {
         if (n === '空载') {
           this.zz = false
           this.gzhw = [{
-            id: '',
             hwlx: '',
             hwmc: '',
             szhsl: ''
@@ -328,11 +349,28 @@ export default {
     //
     onSubmit() {
       this.gzgk.cjsj = dateToString(new Date())
-      let form = {}
-      form.gzgk = this.gzgk
-      form.gzhw = this.gzhw
-      console.log(form)
-      // submitApply()
+      let form = { ...this.gzgk }
+      if (!this.zz) {
+        form.gzhwList = []
+      } else {
+        form.gzhwList = this.gzhw
+      }
+      if (form.id) {
+        delete form.id
+        delete form.appId
+        delete form.approvalBeanList
+        delete form.modifyTimeString
+      }
+      if (form.gzfx === '进') {
+        form.gzfx = '1'
+      } else {
+        form.gzfx = '0'
+      }
+      console.log('form', form)
+      submitApply(form).then(res => {
+        console.log(res)
+        this.$router.push('/lockApply')
+      })
     },
     deleteCargo(index, item) {
       Dialog.confirm({
@@ -349,7 +387,6 @@ export default {
     },
     addCargoList() {
       this.gzhw.push({
-        id: '',
         hwlx: '',
         hwmc: '',
         szhsl: ''
@@ -376,7 +413,7 @@ export default {
     onConfirmCargo(value) {
       console.log(value)
       this.gzhw[this.index].hwlx = value
-      this.gzhw[this.index].id = this.cargosList.filter(item => item.name === value)[0].id
+      // this.gzhw[this.index].id = this.cargosList.filter(item => item.name === value)[0].id
       console.log(this.gzhw)
       this.showCargo = false
     },

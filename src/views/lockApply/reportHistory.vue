@@ -3,7 +3,7 @@
     <div class="selectBtn">
       <span @click="selectShipName">{{shipName}}
         <van-icon name="arrow-down" /></span>
-      <span @click="selectStatus">{{status}}
+      <span @click="selectStatus">{{statusName}}
         <van-icon name="arrow-down" /></span>
       <span @click="selectDate">{{date}}
         <van-icon name="arrow-down" /></span>
@@ -19,37 +19,18 @@
              v-for="item in cardList"
              :key="item.id"
              @click="goInfo(item)">
-          <div class="card-header">
-            <p>{{item.shipName}}</p>
-          </div>
-          <div class="card-content">
-            <van-row>
-              <van-col :span="8">
-                <span>{{item.portName}}</span>
-              </van-col>
-              <van-col :span="8">
-                <img src="../../assets/img/ehy/ehyshiplock.png" />
-              </van-col>
-              <van-col :span="8">
-                <span>{{item.nextPortName}}</span>
-              </van-col>
-            </van-row>
-            <van-row>
-              <van-col :span="8">
-                <span>当前港口</span>
-              </van-col>
-              <van-col :span="8">
-              </van-col>
-              <van-col :span="8">
-                <span>下一港口</span>
-              </van-col>
-            </van-row>
-            <p>
-              <span>{{item.captain}}</span>
-              <span>{{item.checkTime}}</span>
-              <span>{{item.description}}</span>
-            </p>
-          </div>
+          <p>
+            <span>{{item.zwcm}}</span>
+            <span>{{item.modifyTimeString}}</span>
+          </p>
+          <p>
+            <span>船闸：</span>
+            <span>{{item.czmc}}</span>
+          </p>
+          <p>
+            <span>状态：</span>
+            <span>{{item.status===1?'待审批':item.status===2?'审批驳回':item.status===3?'安排过闸':item.status===4?'过闸完成':'--'}}</span>
+          </p>
         </div>
       </van-list>
     </van-pull-refresh>
@@ -70,14 +51,14 @@
       <van-picker :columns="columnsShipName"
                   v-if="showShipName"
                   show-toolbar
-                  title="状态"
+                  title="船舶名称"
                   @cancel="onCancelShipName"
                   @confirm="onChangeShipName" />
     </van-popup>
     <van-popup v-model="showDate"
                position="bottom"
                :style="{ height: '40%' }">
-      <van-datetime-picker type="date"
+      <van-datetime-picker type="year-month"
                            @cancel="onCancelDate"
                            @confirm="onChangeDate" />
     </van-popup>
@@ -88,11 +69,12 @@
 import { setTitle } from '@/utils/cache.js'
 import { dateToString } from '@/utils'
 import { boatList } from '@/api/ehy'
-import { reportList } from '@/api/ehyLock'
+import { reportList } from '@/api/ehyLockHS'
 export default {
   data() {
     return {
-      status: '状态',
+      status: '',
+      statusName: '状态',
       date: '日期',
       shipName: '选择船舶',
       page: {
@@ -106,16 +88,14 @@ export default {
       cardList: [
       ],
       showStatus: false,
-      columnsStatus: ['待审批', '正在安排过闸批次', '审批驳回'],
+      columnsStatus: ['待审批', '审批驳回', '安排过闸', '过闸完成'],
       columnsShipName: [],
       showDate: false,
       showShipName: false,
       list: [],
       loading: false,
       finished: false,
-      isLoading: false,
-      startTime: '',
-      endTime: ''
+      isLoading: false
     }
   },
   components: {
@@ -126,7 +106,6 @@ export default {
       this.columnsShipName = res.data.map(item => item.shipName)
       this.shipName = this.columnsShipName[0]
     })
-
     setTitle(this.$route.meta.title)
   },
   methods: {
@@ -135,26 +114,30 @@ export default {
     },
     selectDate() {
       this.showDate = true
+      this.date = '日期'
     },
     selectShipName() {
       this.showShipName = true
     },
     onCancelStatus() {
       this.showStatus = false
+      this.status = ''
+      this.statusName = '状态'
     },
 
     onChangeStatus(value, index) {
       console.log(value)
-      this.status = value
+      this.statusName = value
       this.showStatus = false
+      this.page.pageNum = 0
+      this.cardList = []
       this.lists()
     },
     onChangeDate(value) {
-      console.log(value)
-      this.date = dateToString(value).split(' ')[0]
-      this.startTime = this.date + ' ' + '00:00:00'
-      this.endTime = this.date + ' ' + '23:59:59'
+      this.date = dateToString(value).substr(0, 7)
       this.showDate = false
+      this.page.pageNum = 0
+      this.cardList = []
       this.lists()
     },
     onCancelDate() {
@@ -163,20 +146,36 @@ export default {
     onChangeShipName(value) {
       this.shipName = value
       this.showShipName = false
+      this.page.pageNum = 0
+      this.cardList = []
       this.lists()
     },
     onCancelShipName() {
       this.showShipName = false
     },
     lists() {
-      // reportList(this.page.pageNum, this.page.pageSize, this.order, this.sort, this.keyword).then(response => {
-      //   console.log(response)
-      //   this.page.total = response.data.page.total
-      //   this.cardList = this.cardList.concat(response.data.dataList)
-      //   console.log(this.cardList)
-      // })
-      reportList(this.page.pageNum, this.page.pageSize, this.status === '状态' ? -1 : this.status, this.shipName, this.startTime, this.endTime).then(res => {
+      if (this.statusName === '状态') {
+        this.status = ''
+      } else if (this.statusName === '待审批') {
+        this.status = 1
+      } else if (this.statusName === '审批驳回') {
+        this.status = 2
+      } else if (this.statusName === '安排过闸') {
+        this.status = 3
+      } else if (this.statusName === '过闸完成') {
+        this.status = 4
+      }
+      console.log(this.status)
+      reportList(this.page.pageNum, this.page.pageSize, this.shipName, this.status, this.date === '日期' ? '' : this.date).then(res => {
         console.log(res)
+        this.page.total = res.data.page.total
+        this.cardList = this.cardList.concat(res.data.dataList)
+        // 加载状态结束
+        this.loading = false
+        // 数据全部加载完成
+        if (this.cardList.length >= this.page.total) {
+          this.finished = true
+        }
       })
     },
     onRefresh() {
@@ -187,26 +186,20 @@ export default {
         this.lists()
         this.isLoading = false
         this.finished = false
-      }, 500)
+      }, 0)
     },
     onLoad() {
       // 异步更新数据
       setTimeout(() => {
         this.page.pageNum++
         this.lists()
-        // 加载状态结束
-        this.loading = false
-        // 数据全部加载完成
-        if (this.cardList.length >= this.page.total) {
-          this.finished = true
-        }
       }, 500)
     },
     go() {
       this.$router.push({ name: 'lockAddReport' })
     },
     goInfo(item) {
-      this.$router.push({ path: '/lockReportDetail', query: { infos: JSON.stringify(item) }})
+      this.$router.push({ path: '/lockReportInfo', query: { infos: JSON.stringify(item) } })
     }
   }
 }
@@ -215,52 +208,35 @@ export default {
 <style lang="scss" scoped>
 .main {
   .card {
+    padding: 20px;
     background-color: #fff;
-    border-top: 1px solid #eee;
-    .card-header {
-      p {
+    border-bottom: 1px solid #eee;
+    p {
+      line-height: 50px;
+      padding: 0 10px;
+      span {
         font-size: 28px;
-        color: #333;
-        line-height: 100px;
-        padding-left: 40px;
       }
     }
-    .card-content {
-      > p {
-        line-height: 150px;
-        color: #999;
-        text-align: right;
-        padding-right: 20px;
-        span {
-          padding: 0 10px;
-        }
+    p:first-child {
+      display: flex;
+      justify-content: space-between;
+      span:nth-child(1) {
+        font-size: 32px;
+        color: #333;
       }
-      .van-row:nth-child(1) {
-        .van-col {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100px;
-          span {
-            font-size: 34px;
-            color: #333;
-          }
-          img {
-            width: 100%;
-          }
-        }
+      span:nth-child(2) {
+        font-size: 28px;
+        color: #888;
       }
-      .van-row:nth-child(2) {
-        .van-col {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 50px;
-          span {
-            font-size: 28px;
-            color: #ccc;
-          }
-        }
+    }
+    p:nth-child(2) {
+      span {
+        color: #888;
+      }
+    }
+    p:nth-child(3) {
+      span {
       }
     }
   }

@@ -16,7 +16,8 @@
         </div>
       </div>
       <p class="title">
-        <span>最近记录</span>
+        <span @click="showShip">{{shipName}}
+          <van-icon name="arrow-down" /></span>
         <span @click="goHistory">更多</span>
       </p>
     </div>
@@ -33,16 +34,16 @@
                :key="item.id"
                @click="goInfo(item)">
             <p>
-              <span>浙湖州货35010</span>
-              <span>2020-04-03 10:00:00</span>
+              <span>{{item.zwcm}}</span>
+              <span>{{item.modifyTimeString}}</span>
             </p>
             <p>
               <span>船闸：</span>
-              <span>湖州船闸</span>
+              <span>{{item.czmc}}</span>
             </p>
             <p>
               <span>状态：</span>
-              <span>审批驳回</span>
+              <span>{{item.status===1?'待审批':item.status===2?'审批驳回':item.status===3?'安排过闸':item.status===4?'过闸完成':'--'}}</span>
             </p>
           </div>
         </van-list>
@@ -55,16 +56,28 @@
       <div v-html="know"
            class="know"></div>
     </van-popup>
+    <van-popup v-model="showShipName"
+               position="bottom"
+               :style="{ height: '35%' }">
+      <van-picker :columns="columnsShipName"
+                  v-if="showShipName"
+                  show-toolbar
+                  title="状态"
+                  @cancel="onCancelShipName"
+                  @confirm="onChangeShipName" />
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { setTitle } from '@/utils/cache.js'
 import { lockApplyKnow } from '@/api/ehyLock'
-import { reportList } from '@/api/lockReport'
+import { reportList } from '@/api/ehyLockHS'
+import { boatList } from '@/api/ehy'
 export default {
   data() {
     return {
+      shipName: '选择船舶',
       page: {
         pageSize: 5,
         pageNum: 1,
@@ -77,6 +90,8 @@ export default {
       ],
       list: [],
       know: '',
+      columnsShipName: [],
+      showShipName: false,
       showKnow: false,
       loading: false,
       finished: false,
@@ -86,7 +101,7 @@ export default {
   components: {
   },
   created() {
-    this.lists()
+    this.getBoat()
     setTitle(this.$route.meta.title)
   },
   methods: {
@@ -96,11 +111,28 @@ export default {
         this.know = res.data.content
       })
     },
+    showShip() {
+      this.showShipName = true
+    },
+    getBoat() {
+      boatList(2).then(res => {
+        console.log(res)
+        this.columnsShipName = res.data.map(item => item.shipName)
+        this.shipName = this.columnsShipName[0]
+        this.lists()
+      })
+    },
     lists() {
-      reportList(this.page.pageNum, this.page.pageSize, this.order, this.sort, this.keyword).then(response => {
+      reportList(this.page.pageNum, this.page.pageSize, this.shipName).then(response => {
         console.log(response)
         this.page.total = response.data.page.total
         this.cardList = this.cardList.concat(response.data.dataList)
+        // 加载状态结束
+        this.loading = false
+        // 数据全部加载完成
+        if (this.cardList.length >= this.page.total) {
+          this.finished = true
+        }
         console.log(this.cardList)
       })
     },
@@ -112,7 +144,7 @@ export default {
         this.lists()
         this.isLoading = false
         this.finished = false
-      }, 500)
+      }, 0)
     },
     goHistory() {
       this.$router.push({ name: 'lockReportHistory' })
@@ -125,19 +157,20 @@ export default {
       setTimeout(() => {
         this.page.pageNum++
         this.lists()
-        // 加载状态结束
-        this.loading = false
-        // 数据全部加载完成
-        if (this.cardList.length >= this.page.total) {
-          this.finished = true
-        }
-      }, 500)
-    },
-    go() {
-      this.$router.push({ name: 'lockReportOne' })
+      }, 100)
     },
     goInfo(item) {
-      this.$router.push({ path: '/lockReportDetail', query: { infos: JSON.stringify(item) }})
+      this.$router.push({ path: '/lockReportInfo', query: { infos: JSON.stringify(item) } })
+    },
+    onChangeShipName(value) {
+      this.shipName = value
+      this.showShipName = false
+      this.page.pageNum = 1
+      this.cardList = []
+      this.lists()
+    },
+    onCancelShipName() {
+      this.showShipName = false
     }
   }
 }
@@ -235,7 +268,7 @@ export default {
   }
 }
 .know {
-  padding: 80px 30px 0;
+  padding: 80px 30px 40px;
   line-height: 50px;
 }
 </style>
