@@ -48,7 +48,7 @@
 
 <script>
 import { recoveryInfo, allPoints } from '@/api/sewageDisposal'
-import { getGoQr, setBoat, getBoat, getLat, getLng } from '@/utils/cache.js'
+import { getGoQr, setBoat, getBoat, getLat, getLng, getCity } from '@/utils/cache.js'
 import { boatList } from '@/api/ehy'
 import { Toast } from 'vant'
 import { discharge } from '@/api/sewageDisposal'
@@ -66,9 +66,9 @@ export default {
     }
   },
   mounted() {
-    this.getAllPoint()
     this.list()
     window.callBackCode = this.callBackCode
+    this.getAllPoint()
   },
   methods: {
     goPoint() {
@@ -91,12 +91,12 @@ export default {
         console.log(response)
         this.shipList = response.data
         console.log('船舶', getBoat())
-        if (getBoat().length > 0) {
-          this.shipName = getBoat()
-        } else {
-          this.shipName = this.shipList[0].shipName
-          setBoat(this.shipName)
-        }
+        // if (getBoat().length > 0) {
+        //   this.shipName = getBoat()
+        // } else {
+        this.shipName = this.shipList[0].shipName
+        setBoat(this.shipName)
+        // }
         this.shipColumn = this.shipList.map(item => item.shipName)
       })
     },
@@ -106,7 +106,7 @@ export default {
       })
     },
     getAllPoint() {
-      allPoints().then(response => {
+      allPoints(getCity(), this.shipName).then(response => {
         this.point = response.data
       })
     },

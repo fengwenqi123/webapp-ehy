@@ -8,6 +8,8 @@
                    name="船舶名称"
                    placeholder="船舶名称"
                    required
+                   readonly
+                   @click="boatFocus"
                    :rules="[{ required: true, message: '请填写船舶名称' }]" />
         <van-field v-model="formOne.captain"
                    label="船长"
@@ -18,15 +20,17 @@
         <van-field v-model="formOne.portName"
                    label="当前港口"
                    name="当前港口"
-                   @focus="selectPort"
+                   @click="selectPort"
+                   readonly
                    placeholder="当前港口"
                    required
                    :rules="[{ required: true, message: '请填写当前港口' }]" />
         <van-field v-model="formOne.nextPortName"
                    label="下一港口"
                    name="下一港口"
+                   readonly
                    placeholder="下一港口"
-                   @focus="selectNextPort"
+                   @click="selectNextPort"
                    required
                    :rules="[{ required: true, message: '请填写下一港口' }]" />
         <div class="bottom">
@@ -45,16 +49,28 @@
       <cityList @send="sendNextPort"
                 style="width:100%" />
     </van-popup>
+    <!-- 船舶列表 -->
+    <van-popup v-model="showBoat"
+               position="bottom">
+      <van-picker show-toolbar
+                  :columns="boatLists"
+                  @cancel="showBoat = false"
+                  @confirm="onConfirmBoat" />
+    </van-popup>
   </div>
 </template>
 
 <script>
 import cityList from '../../components/portList'
+import { boatList } from '@/api/ehy'
+import { setTitle } from '@/utils/cache.js'
 export default {
   data() {
     return {
       showPort: false,
       showNextPort: false,
+      showBoat: false,
+      boatLists: [],
       formOne: {
         shipName: '',
         captain: '',
@@ -65,6 +81,13 @@ export default {
   },
   components: {
     cityList
+  },
+  created() {
+    boatList(2).then(res => {
+      console.log(res)
+      this.boatLists = res.data.map(item => item.shipName)
+    })
+    setTitle(this.$route.meta.title)
   },
   methods: {
     onSubmit(values) {
@@ -85,6 +108,13 @@ export default {
     },
     selectNextPort() {
       this.showNextPort = true
+    },
+    boatFocus() {
+      this.showBoat = true
+    },
+    onConfirmBoat(value) {
+      this.formOne.shipName = value
+      this.showBoat = false
     }
   }
 }

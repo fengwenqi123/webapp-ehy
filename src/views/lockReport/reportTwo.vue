@@ -33,6 +33,7 @@
 <script>
 import { Dialog } from 'vant'
 import { dateToString } from '../../utils/index'
+import { setTitle } from '@/utils/cache.js'
 import { submitReport } from '@/api/lockReport'
 export default {
   data() {
@@ -165,6 +166,7 @@ export default {
   },
   created() {
     console.log(JSON.parse(this.$route.query.one))
+    setTitle(this.$route.meta.title)
   },
   methods: {
     submit() {

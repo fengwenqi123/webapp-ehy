@@ -9,8 +9,10 @@
       </div>
       <div class="main">
         <ul>
-          <li v-for="item in list" :key="item.label">
-            <div class="item" @click="pathTo(item.path)">
+          <li v-for="item in list"
+              :key="item.label">
+            <div class="item"
+                 @click="pathTo(item.path)">
               <div class="title-item">
                 {{ item.label }}
               </div>

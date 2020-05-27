@@ -61,10 +61,13 @@ export function points(time, shipName) {
 }
 
 // 总积分
-export function allPoints() {
+export function allPoints(city, shipName) {
   return request({
-    url: '/poi/shipPoint/sumByToken',
-    method: 'GET'
+    url: '/poi/shipPoint/sumByTokens',
+    method: 'GET',
+    params: {
+      city, shipName
+    }
   })
 }
 

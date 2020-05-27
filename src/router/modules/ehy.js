@@ -71,7 +71,7 @@ const ehy = [
     path: '/lockApply',
     name: 'lockApply',
     component: () => import('@/views/lockApply'),
-    meta: { title: '过闸申报历史' }
+    meta: { title: '过闸申报' }
   },
   {
     path: '/lockAddReport',

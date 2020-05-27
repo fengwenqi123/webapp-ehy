@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import { setTitle } from '@/utils/cache.js'
 export default {
   data() {
     return {
@@ -75,6 +76,7 @@ export default {
   created() {
     this.form = JSON.parse(this.$route.query.infos)
     console.log(this.form)
+    setTitle(this.$route.meta.title)
   },
   methods: {
     showType(code) {
