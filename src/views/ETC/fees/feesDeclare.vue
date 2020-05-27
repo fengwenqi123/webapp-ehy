@@ -1,23 +1,18 @@
 <template>
   <div class="container">
-    <div
-      class="register"
-      v-if="isCancel"
-    >
+    <div class="register"
+         v-if="isCancel">
       <ul>
         <li>
           <span>船舶名称</span>
-          <input
-            placeholder="请输入船舶名称"
-            v-model="shipName"
-          >
+          <input placeholder="请输入船舶名称"
+                 @click="showBoat"
+                 v-model="shipName">
         </li>
         <li>
           <span>危险品船舶</span>
-          <input
-            placeholder="是否危险品船舶"
-            v-model="dangerShip"
-          >
+          <input placeholder="是否危险品船舶"
+                 v-model="dangerShip">
           <!--          <span>{{dangerShip}}</span>-->
         </li>
         <li>
@@ -26,36 +21,28 @@
         </li>
         <li>
           <span>联系方式</span>
-          <input
-            type="number"
-            placeholder="请输入联系方式"
-            v-model="input.phone"
-          >
+          <input type="number"
+                 placeholder="请输入联系方式"
+                 v-model="input.phone">
         </li>
         <li class="list-title">航道选择</li>
         <li>
           <span>航道</span>
           <span @click="showShipLock()">{{shipLock}}</span>
         </li>
-        <li
-          class="list-title"
-          v-if="isGoods"
-        >货种选择
+        <li class="list-title"
+            v-if="isGoods">货种选择
         </li>
-        <li
-          class="goods-add"
-          @click="addGoods()"
-          v-if="isGoods"
-        >
+        <li class="goods-add"
+            @click="addGoods()"
+            v-if="isGoods">
           <span>添加货种</span>
           <van-icon name="add-o" />
         </li>
-        <li
-          class="goods-list"
-          v-for="(item,index) in goodsArr"
-          :key="index"
-          @click="goodsDel(item,index)"
-        >
+        <li class="goods-list"
+            v-for="(item,index) in goodsArr"
+            :key="index"
+            @click="goodsDel(item,index)">
           <label>{{item.name}}</label>
           <label>{{item.load}}吨</label>
           <van-icon name="close" />
@@ -67,35 +54,27 @@
         </li>
         <li>
           <span>实际吃水（m）</span>
-          <input
-            type="number"
-            placeholder="请输入实际吃水量"
-            v-model="input.water"
-          >
+          <input type="number"
+                 placeholder="请输入实际吃水量"
+                 v-model="input.water">
         </li>
         <li>
           <span>申报干舷（m）</span>
-          <input
-            type="number"
-            placeholder="请输入申报干舷"
-            v-model="input.freeboard"
-          >
+          <input type="number"
+                 placeholder="请输入申报干舷"
+                 v-model="input.freeboard">
         </li>
         <li>
           <span>拖泥深度（m）</span>
-          <input
-            type="number"
-            placeholder="请输入拖泥深度"
-            v-model="input.depth"
-          >
+          <input type="number"
+                 placeholder="请输入拖泥深度"
+                 v-model="input.depth">
         </li>
         <li>
           <span>净空高度（m）</span>
-          <input
-            type="number"
-            placeholder="请输入净空高度"
-            v-model="input.height"
-          >
+          <input type="number"
+                 placeholder="请输入净空高度"
+                 v-model="input.height">
         </li>
         <li class="list-title">船舶信息</li>
         <li>
@@ -104,119 +83,91 @@
         </li>
         <li>
           <span>船舶净吨位</span>
-          <input
-            type="number"
-            placeholder="请输入船舶净吨位"
-            v-model="input.tonnage"
-          >
+          <input type="number"
+                 placeholder="请输入船舶净吨位"
+                 v-model="input.tonnage">
         </li>
         <li>
           <span>C级参考载重吨</span>
-          <input
-            type="number"
-            placeholder="请输入参考载重吨"
-            v-model="input.DWT"
-          >
+          <input type="number"
+                 placeholder="请输入参考载重吨"
+                 v-model="input.DWT">
         </li>
         <li>
           <span>船舶长度（m）</span>
-          <input
-            type="number"
-            placeholder="请输入船舶长度"
-            v-model="input.length"
-          >
+          <input type="number"
+                 placeholder="请输入船舶长度"
+                 v-model="input.length">
         </li>
         <li>
           <span>金额</span>
-          <input
-            type="number"
-            readonly
-            v-model="je"
-          >
+          <input type="number"
+                 readonly
+                 v-model="je">
         </li>
       </ul>
 
       <div class="login-click padding">
-        <van-button
-          type="info"
-          size="large"
-          :disabled="buttonFlag"
-          @click="portSumitClick()"
-        >确认申报
+        <van-button type="info"
+                    size="large"
+                    :disabled="buttonFlag"
+                    @click="portSumitClick()">确认申报
         </van-button>
       </div>
       <!-- 装载方式 -->
-      <van-dialog
-        v-model="show"
-        title="装载方式"
-        :show-confirm-button="false"
-        :close-on-click-overlay="true"
-      >
+      <van-dialog v-model="show"
+                  title="装载方式"
+                  :show-confirm-button="false"
+                  :close-on-click-overlay="true">
         <ul class="dialog-ul load-ul">
-          <li
-            v-for="(item,index) in actions"
-            :key="index"
-            @click="onSelect(item)"
-          >{{item.name}}
+          <li v-for="(item,index) in actions"
+              :key="index"
+              @click="onSelect(item)">{{item.name}}
           </li>
         </ul>
       </van-dialog>
       <!--      航道-->
-      <van-dialog
-        v-model="shipLockFlag"
-        title="航道列表"
-        :show-confirm-button="false"
-        :close-on-click-overlay="true"
-      >
+      <van-dialog v-model="shipLockFlag"
+                  title="航道列表"
+                  :show-confirm-button="false"
+                  :close-on-click-overlay="true">
         <ul class="dialog-ul">
-          <li
-            v-for="(item,index) in shipLockList"
-            :key="index"
-            @click="onSelectShipLock(item)"
-          >{{item.name}}
+          <li v-for="(item,index) in shipLockList"
+              :key="index"
+              @click="onSelectShipLock(item)">{{item.name}}
           </li>
         </ul>
       </van-dialog>
       <!-- 起始港 -->
-      <van-dialog
-        v-model="startPortShow"
-        title="起始港"
-        :show-confirm-button="false"
-        :close-on-click-overlay="true"
-      >
+      <van-dialog v-model="startPortShow"
+                  title="起始港"
+                  :show-confirm-button="false"
+                  :close-on-click-overlay="true">
         <ul class="dialog-ul">
-          <li
-            v-for="(item,index) in portItems"
-            :key="index"
-            @click="startPortSelect(item)"
-          >{{item.name}}
+          <li v-for="(item,index) in portItems"
+              :key="index"
+              @click="startPortSelect(item)">{{item.name}}
           </li>
         </ul>
       </van-dialog>
       <!-- 目的港 -->
-      <van-dialog
-        v-model="endPortShow"
-        title="目的港"
-        :show-confirm-button="false"
-        :close-on-click-overlay="true"
-      >
+      <van-dialog v-model="endPortShow"
+                  title="目的港"
+                  :show-confirm-button="false"
+                  :close-on-click-overlay="true">
         <ul class="dialog-ul">
-          <li
-            v-for="(item,index) in portItems"
-            :key="index"
-            @click="endPortSelect(item)"
-          >{{item.name}}
+          <li v-for="(item,index) in portItems"
+              :key="index"
+              @click="endPortSelect(item)">{{item.name}}
           </li>
         </ul>
       </van-dialog>
       <!-- 货种 -->
-      <van-dialog
-        v-model="goodsShow"
-        title="添加货种"
-        @confirm="goodsSubmit"
-        :show-confirm-button="false"
-        :close-on-click-overlay="true"
-      >
+      <van-dialog v-model="goodsShow"
+                  title="添加货种"
+                  @confirm="goodsSubmit"
+                  :show-confirm-button="false"
+                  :close-on-click-overlay="true">
         <ul class="goods-ul">
           <li @click="goodsList()">
             <span>货种名称</span>
@@ -224,61 +175,59 @@
           </li>
           <li>
             <span>载货吨位</span>
-            <input
-              type="number"
-              placeholder="请输入载货吨位"
-              v-model="goodLoad"
-            >
+            <input type="number"
+                   placeholder="请输入载货吨位"
+                   v-model="goodLoad">
           </li>
         </ul>
         <div class="login-click padding">
-          <van-button
-            type="info"
-            size="large"
-            @click="goodsSubmit()"
-          >添加
+          <van-button type="info"
+                      size="large"
+                      @click="goodsSubmit()">添加
           </van-button>
         </div>
       </van-dialog>
       <!-- 货种列表 -->
-      <van-dialog
-        v-model="goodsListShow"
-        title="货种"
-        :show-confirm-button="false"
-        :close-on-click-overlay="true"
-      >
+      <van-dialog v-model="goodsListShow"
+                  title="货种"
+                  :show-confirm-button="false"
+                  :close-on-click-overlay="true">
         <ul class="dialog-ul">
-          <li
-            v-for="(item,index) in goodsItems"
-            :key="index"
-            @click="goodsSelect(item)"
-          >{{item.name}}
+          <li v-for="(item,index) in goodsItems"
+              :key="index"
+              @click="goodsSelect(item)">{{item.name}}
           </li>
         </ul>
       </van-dialog>
     </div>
-    <van-dialog
-      v-model="otherShow"
-      title="货种名称"
-      @confirm="otherGoods"
-      :close-on-click-overlay="true"
-      show-cancel-button
-    >
+    <van-dialog v-model="otherShow"
+                title="货种名称"
+                @confirm="otherGoods"
+                :close-on-click-overlay="true"
+                show-cancel-button>
       <div class="other-goods">
-        <input
-          type="text"
-          placeholder="请输入货种名称"
-          v-model="goodName"
-        >
+        <input type="text"
+               placeholder="请输入货种名称"
+               v-model="goodName">
       </div>
 
     </van-dialog>
-
+    <!-- 船舶列表 -->
+    <van-popup v-model="showBoatList"
+               round
+               position="bottom">
+      <van-picker show-toolbar
+                  :columns="boatCol"
+                  @cancel="showBoatList = false"
+                  @confirm="onConfirmBoat" />
+    </van-popup>
   </div>
 </template>
 <script>
 import { channel, goodsLists, postBaoGang } from '@/api/etc.js'
 import { setTitle } from '@/utils/cache'
+import { boatList, shipInfo } from '@/api/ehy'
+import { getUserInfos } from '@/api/validate'
 // import Vue from 'vue'
 // import { Toast } from 'vant'
 
@@ -288,11 +237,15 @@ export default {
     return {
       je: 0,
       items: [],
+      showBoatList: false,
       loadingSpinner: true,
+      boatCbsbh: '',
       shipName: null,
       isCancel: true,
       buttonFlag: false,
       portItems: [],
+      boatList: [],
+      boatCol: [],
       loadText: '请选择装载方式',
       loadId: '',
       show: false,
@@ -326,6 +279,7 @@ export default {
       shipTypeId: '',
       loadNumber: 0,
       typeText: '干货船',
+      userInfo: null,
       input: {
         phone: '',
         water: '',
@@ -348,11 +302,50 @@ export default {
     }
   },
   created() {
-    setTitle(this.$route.meta.title)
     this.getGoodsLists()
     this.getShipLockList()
+    this.getBoatList()
+    this._getUserInfos()
+    setTitle(this.$route.meta.title)
   },
   methods: {
+    //
+    _getUserInfos() {
+      getUserInfos().then(res => {
+        this.input.phone = res.data.mobile
+      })
+    },
+    showBoat() {
+      this.showBoatList = true
+    },
+    // 船舶列表
+    getBoatList() {
+      boatList(2).then(res => {
+        console.log(res)
+        this.boatList = res.data
+        this.boatCol = this.boatList.map(item => item.shipName)
+        this.onConfirmBoat(this.boatCol[0])
+      })
+    },
+    onConfirmBoat(value) {
+      this.shipName = value
+      this.showBoatList = false
+      this.boatCbsbh = this.boatList.filter(item => item.shipName === this.shipName)[0].cbsbh
+      this.getShipInfo(this.boatCbsbh)
+    },
+    getShipInfo(cbsbh) {
+      shipInfo(cbsbh).then(res => {
+        console.log('info', res)
+        this.input.tonnage = res.data.jdw
+        this.input.DWT = res.data.ckzzd
+        this.input.length = res.data.cbzc
+        if (res.data.cbzldm.substr(0, 2) === '03') {
+          this.dangerShip = '是'
+        } else {
+          this.dangerShip = '否'
+        }
+      })
+    },
     // 装载方式
     loadWay() {
       this.show = true
