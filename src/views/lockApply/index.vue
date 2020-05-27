@@ -150,7 +150,7 @@ export default {
       this.$router.push({ name: 'lockReportHistory' })
     },
     goLock(value) {
-      this.$router.push({ path: '/lockAddReport', query: { direction: value } })
+      this.$router.push({ path: '/lockAddReport', query: { direction: value }})
     },
     onLoad() {
       // 异步更新数据

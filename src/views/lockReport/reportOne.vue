@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     onSubmit(values) {
-      this.$router.push({ name: 'lockReportTwo', query: { one: JSON.stringify(this.formOne) } })
+      this.$router.push({ name: 'lockReportTwo', query: { one: JSON.stringify(this.formOne) }})
     },
     sendPort(city) {
       console.log(city)

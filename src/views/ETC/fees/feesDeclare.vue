@@ -126,6 +126,14 @@
             v-model="input.length"
           >
         </li>
+        <li>
+          <span>金额</span>
+          <input
+            type="number"
+            readonly
+            v-model="je"
+          >
+        </li>
       </ul>
 
       <div class="login-click padding">
@@ -134,7 +142,7 @@
           size="large"
           :disabled="buttonFlag"
           @click="portSumitClick()"
-        >确认报港
+        >确认申报
         </van-button>
       </div>
       <!-- 装载方式 -->
@@ -278,6 +286,7 @@ export default {
   name: 'point',
   data() {
     return {
+      je: 0,
       items: [],
       loadingSpinner: true,
       shipName: null,

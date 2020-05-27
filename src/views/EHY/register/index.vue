@@ -58,18 +58,25 @@
           @click="unitList"
         />
       </van-cell-group>
+      <div class="agree">
+        <van-checkbox v-model="checked"><div @click="agree" style="color: #1890ff">同意用户隐私协议</div></van-checkbox>
+      </div>
       <div class="submit" @click="submit">
         <van-button type="info" size="large">注 册</van-button>
       </div>
     </div>
     <van-popup v-model="showPicker" position="bottom">
-      <van-picker
-        show-toolbar
-        title="站点"
-        :columns="columns"
-        @cancel="showPicker = false"
-        @confirm="onConfirm"
-      />
+      <van-area :area-list="areaList" @confirm="onConfirm" @cancel="showPicker = false"/>
+<!--      <van-picker-->
+<!--        show-toolbar-->
+<!--        title="站点"-->
+<!--        :columns="columns"-->
+<!--        @cancel="showPicker = false"-->
+<!--        @confirm="onConfirm"-->
+<!--      />-->
+    </van-popup>
+    <van-popup v-model="showAgree">
+      <agree></agree>
     </van-popup>
   </div>
 </template>
@@ -79,13 +86,20 @@ import { getSms, getRegister } from '@/api/register.js'
 import { getFinishWeb } from '@/utils/cache.js'
 import { Toast } from 'vant'
 import { setTitle } from '@/utils/cache.js'
+import areaList from './areaList'
+import agree from './agree'
+
 var smsText = 60
 export default {
   name: 'index',
+  components: {
+    agree
+  },
   data() {
     return {
       smsText: '发送验证码',
       disabled: false,
+      areaList: areaList,
       form: {
         name: null,
         idCard: null,
@@ -96,7 +110,9 @@ export default {
         loginName: null
       },
       showPicker: false,
-      columns: ['吴山渡站', '太湖站', '南浔港航管理检查站', '乾元站', '新市站', '环城站', '洪桥站', '双林站', '武康站', '马家渡站', '雉城站', '吕山站', '菱湖站', '小浦站', '和平站']
+      checked: false,
+      showAgree: false
+      // columns: ['吴山渡站', '太湖站', '南浔港航管理检查站', '乾元站', '新市站', '环城站', '洪桥站', '双林站', '武康站', '马家渡站', '雉城站', '吕山站', '菱湖站', '小浦站', '和平站']
     }
   },
   created() {
@@ -153,6 +169,9 @@ export default {
       } if (!this.form.channel) {
         Toast('请选择推广单位')
         return
+      } if (!this.checked) {
+        Toast('请先同意隐私协议')
+        return
       }
       this.form.loginName = this.form.mobile
       getRegister(this.form).then(response => {
@@ -160,8 +179,19 @@ export default {
       })
     },
     onConfirm(value) {
-      this.form.channel = value
+      this.form.channel = ''
+      value.forEach((item, index) => {
+        if (index === 0) {
+          this.form.channel += `${item.name}`
+        } else {
+          this.form.channel += `-${item.name}`
+        }
+      })
+      // this.form.channel = value
       this.showPicker = false
+    },
+    agree() {
+      this.showAgree = true
     }
   }
 }
@@ -173,5 +203,8 @@ export default {
   position: absolute;
   width: 100%;
   background: #fff;
+  .agree{
+    padding: 10px 20px;
+  }
 }
 </style>

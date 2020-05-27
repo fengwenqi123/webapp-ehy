@@ -15,7 +15,6 @@
           <div class="item">
             <div class="line line1">
               <div class="left">{{item.shipname}}</div>
-              <!--            <div class="right">编号:{{111}}</div>-->
             </div>
             <div class="line line2">
               {{item.lock}}
