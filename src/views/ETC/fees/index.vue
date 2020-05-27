@@ -19,7 +19,7 @@
           </div>
           <div class="line line4">
             <div class="left">
-              状态：已过闸
+              状态：已通过
             </div>
             <div class="right">
               金额：0
