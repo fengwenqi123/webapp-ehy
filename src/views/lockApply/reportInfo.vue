@@ -155,7 +155,7 @@ export default {
   },
   methods: {
     reSubmit() {
-      this.$router.push({ path: '/lockAddReport', query: { addInfo: JSON.stringify(this.form) } })
+      this.$router.push({ path: '/lockAddReport', query: { addInfo: JSON.stringify(this.form) }})
     },
     getQuery() {
       reportInfo(JSON.parse(this.$route.query.infos).id).then(res => {

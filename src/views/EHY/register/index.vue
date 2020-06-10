@@ -61,7 +61,7 @@
       <div class="agree">
         <van-checkbox v-model="checked"><div @click="agree" style="color: #1890ff">同意用户隐私协议</div></van-checkbox>
       </div>
-      <div class="submit" @click="submit">
+      <div class="submit" @click="submit" :disabled="disa">
         <van-button type="info" size="large">注 册</van-button>
       </div>
     </div>
@@ -111,7 +111,8 @@ export default {
       },
       showPicker: false,
       checked: false,
-      showAgree: false
+      showAgree: false,
+      disa: false
       // columns: ['吴山渡站', '太湖站', '南浔港航管理检查站', '乾元站', '新市站', '环城站', '洪桥站', '双林站', '武康站', '马家渡站', '雉城站', '吕山站', '菱湖站', '小浦站', '和平站']
     }
   },
@@ -174,8 +175,11 @@ export default {
         return
       }
       this.form.loginName = this.form.mobile
+      this.disa = true
       getRegister(this.form).then(response => {
         getFinishWeb()
+      }).catch(() => {
+        this.disa = false
       })
     },
     onConfirm(value) {

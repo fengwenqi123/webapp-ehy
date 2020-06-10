@@ -199,7 +199,7 @@ export default {
       this.$router.push({ name: 'lockAddReport' })
     },
     goInfo(item) {
-      this.$router.push({ path: '/lockReportInfo', query: { infos: JSON.stringify(item) } })
+      this.$router.push({ path: '/lockReportInfo', query: { infos: JSON.stringify(item) }})
     }
   }
 }

@@ -160,7 +160,7 @@ export default {
       }, 100)
     },
     goInfo(item) {
-      this.$router.push({ path: '/lockReportInfo', query: { infos: JSON.stringify(item) } })
+      this.$router.push({ path: '/lockReportInfo', query: { infos: JSON.stringify(item) }})
     },
     onChangeShipName(value) {
       this.shipName = value
