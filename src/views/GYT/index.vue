@@ -7,43 +7,28 @@
         </div>
       </div>
       <div class="content">
-        <van-row gutter="40">
-          <van-col span="8" v-for="(item,index) in list" :key="index">
-            <div class="item" @click="linkTo(item.path)">
-              <div class="img">
-                <img :src="item.img" alt="">
-              </div>
-              <div class="label">
-                <p>{{item.label}}</p>
-              </div>
-            </div>
-          </van-col>
-        </van-row>
+        <div v-for="(item,index) in list" :key="index" class="item" @click="linkTo(item.path)">
+          <div class="img">
+            <img :src="item.img" alt="">
+          </div>
+          <div class="label">
+            <p>{{item.label}}</p>
+          </div>
+        </div>
       </div>
-    </template>
-    <template v-if="showError===2">
-      <p>用户信息获取失败</p>
     </template>
   </div>
 </template>
 
 <script>
   import pageHeader from '@/components/navBar'
-  import { getAccessToken, getUserInfo } from '@/api/validate'
-  import { getCode } from '@/utils/cache.js'
-  import { mapGetters } from 'vuex'
-  import { setTitle } from '@/utils/cache.js'
+  import { getCode, setTitle } from '@/utils/cache.js'
 
   export default {
     components: {
       pageHeader
     },
     name: 'index',
-    computed: {
-      ...mapGetters([
-        'userInfos'
-      ])
-    },
     data() {
       return {
         banner: require('@/assets/img/gyt/banner.png'),
@@ -78,35 +63,11 @@
       this.$store.dispatch('clearAll')
       setTitle(this.$route.meta.title)
     },
-    mounted() {
-      this.getTokenAndUserInfo()
-    },
     methods: {
       linkTo(path) {
         this.$router.push({
           path
         })
-      },
-      getTokenAndUserInfo() {
-        if (!this.userInfos) {
-          const obj = {
-            appId: this.appId,
-            secret: '2iqPvudiVWhUMreSHxCBWt',
-            code: this.code,
-            grantType: 'authorization_code'
-          }
-          getAccessToken(obj).then(response => {
-            const accessToken = response.data.accessToken
-            const openId = response.data.openId
-            getUserInfo(accessToken, openId).then(res => {
-              this.$store.commit('setUserInfo', res.data)
-              this.showError = 1
-            }).catch(error => {
-              console.log(error)
-              this.showError = 2
-            })
-          })
-        }
       }
     }
   }
@@ -124,12 +85,14 @@
     }
 
     .content {
+      display: flex;
+      flex-wrap: wrap;
       padding: 0 40px;
 
       .item {
         width: 140px;
         text-align: center;
-        margin: 40px auto;
+        margin: 40px;
 
         .img {
           img {
