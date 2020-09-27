@@ -25,10 +25,10 @@
             </div>
             <div class="line line4">
               <div class="left">
-                状态：已申报
+                状态：{{item.payStatus==1?'待支付':item.payStatus==2?'已支付':item.payStatus==3?'已退款':''}}
               </div>
               <div class="right">
-                金额：0
+                金额：0.01
               </div>
             </div>
           </div>

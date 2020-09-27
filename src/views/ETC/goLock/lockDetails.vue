@@ -53,7 +53,7 @@
         />
       </van-cell-group>
     </div>
-    <div class="button">
+    <div class="button" v-if="item.payStatus==2">
       <van-button type="info" plain hairline size="large" @click="refund">申请退款</van-button>
     </div>
   </div>
@@ -61,13 +61,15 @@
 
 <script>
   import { setTitle } from '@/utils/cache.js'
+  import { refund } from '@/api/etc.js'
+
   export default {
     name: 'lockDetails',
     data() {
       return {
         item: null,
-        je: 0,
-        jfzt: '已缴费',
+        je: 0.01,
+        jfzt: '',
         gzzt: '已过闸',
         amount: 0,
         goodType: null
@@ -80,6 +82,17 @@
     methods: {
       init() {
         this.item = this.$route.params.obj
+        switch (this.item.payStatus) {
+          case 1:
+            this.jfzt = '待支付'
+            break
+          case 2:
+            this.jfzt = '已支付'
+            break
+          case 3:
+            this.jfzt = '已退款'
+            break
+        }
         var goodType = []
         this.item.goodList.forEach((item, index) => {
           this.amount += item.zhdw
@@ -88,7 +101,15 @@
         this.goodType = goodType.join(',')
       },
       refund() {
-        this.$toast('金额为0，无法退款。')
+        // this.$toast('金额为0，无法退款。')
+        refund(this.item.id).then(res => {
+          this.$toast.success('退款成功')
+          setTimeout(() => {
+            this.$router.push({
+              path: '/goLock'
+            })
+          }, 1500)
+        })
       }
     }
   }

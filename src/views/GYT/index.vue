@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <template v-if="showError===1">
       <div class="top">
         <div class="banner">
           <img :src="banner" alt="">
@@ -16,13 +15,12 @@
           </div>
         </div>
       </div>
-    </template>
   </div>
 </template>
 
 <script>
   import pageHeader from '@/components/navBar'
-  import { getCode, setTitle } from '@/utils/cache.js'
+  import { setTitle, getDefaultShip } from '@/utils/cache.js'
 
   export default {
     components: {
@@ -53,21 +51,24 @@
             img: require('@/assets/img/gyt/gzgl.png'),
             path: '/lockManageIn'
           }
-        ],
-        code: getCode(),
-        appId: '1KKSAkQTCeqw6GGXUN4iB',
-        showError: 1
+        ]
       }
     },
     created() {
       this.$store.dispatch('clearAll')
       setTitle(this.$route.meta.title)
     },
+    mounted() {
+      this.setDefaultShip()
+    },
     methods: {
       linkTo(path) {
         this.$router.push({
           path
         })
+      },
+      setDefaultShip() {
+        this.$store.commit('setShipName', getDefaultShip())
       }
     }
   }

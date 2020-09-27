@@ -37,3 +37,9 @@ export function postBaoGang(form) {
     data: form
   })
 }
+export function refund(id) {
+  return request({
+    url: '/rfid/etc/refund/' + id,
+    method: 'GET'
+  })
+}

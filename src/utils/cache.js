@@ -83,6 +83,14 @@ export function getCbsbh() {
 export function isWz() {
   return isProd ? Android.isWz() : null
 }
+// 是否支付
+export function pay(orderId, je) {
+  return isProd ? Android.pay(orderId, je) : null
+}
+
+export function getDefaultShip() {
+  return isProd ? Android.getDefaultShip() : null
+}
 
 export function setToken(token) {
   return storage.set(Token, token)
