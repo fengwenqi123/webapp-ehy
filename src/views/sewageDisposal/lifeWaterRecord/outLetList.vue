@@ -1,12 +1,9 @@
 <template>
   <div class="main">
     <div class="top">
-      <van-row type="flex"
-               style="color:#fff"
-               align="center">
+      <van-row type="flex" style="color:#fff" align="center">
         <van-col :span="2">
-          <van-icon name="location-o"
-                    class="location" />
+          <van-icon name="location-o" class="location" />
         </van-col>
         <van-col :span="22">
           <p>{{item.city}}{{item.area}}{{item.name}}</p>
@@ -20,12 +17,8 @@
         <div>
           <span>AIS定位距离</span>
           <span style="display:flex;align-items:center">{{distance}}
-            <van-icon name="checked"
-                      class="yes"
-                      v-if="positionStatus" />
-            <van-icon name="clear"
-                      class="close"
-                      v-if="!positionStatus" />
+            <van-icon name="checked" class="yes" v-if="positionStatus" />
+            <van-icon name="clear" class="close" v-if="!positionStatus" />
           </span>
         </div>
         <div>
@@ -36,24 +29,25 @@
     </div>
     <div class="middle">
       <!-- <h2>码头设备</h2> -->
-      <div v-for="item in item.outlet"
-           :key="item.id">
+      <div v-for="item in item.outlet" :key="item.id">
         <p>
           <span>{{item.name}}</span>
           <span>{{item.attribute===1?'智能':item.attribute===2?'普通':item.attribute===3?'综合':"不明"}}</span>
         </p>
-        <p> <span @click="getRecoveryInfo(item)">点击开始排放</span></p>
+        <p> <span @click="getLocation('getRecoveryInfo',item)">点击开始排放</span></p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { setTitle, getBoat, setOutlet, getOutlet, getLng, getLat } from '@/utils/cache.js'
+import { setTitle, getBoat, setOutlet, getOutlet } from '@/utils/cache.js'
 import { recoveryInfo } from '@/api/sewageDisposal'
 import { Toast } from 'vant'
 import { discharge, boatPosition } from '@/api/sewageDisposal'
+import { getLocation } from '@/mixins/getLocation'
 export default {
+  mixins: [getLocation],
   data() {
     return {
       item: null,
@@ -89,14 +83,14 @@ export default {
         this.receiveTimeString = response.data.receiveTimeString
       })
     },
-    submitWater() {
+    submitWater(lng, lat) {
       const obj = {
         type: 1,
         shipName: this.recoveryInfo.shipName,
         code: this.code,
         orderWay: 1,
-        currentLon: getLng(),
-        currentLat: getLat()
+        currentLon: lng,
+        currentLat: lat
       }
       discharge(obj).then(response => {
         Toast.success({
@@ -110,15 +104,15 @@ export default {
         }, 2000)
       })
     },
-    submitRubbish() {
+    submitRubbish(lng, lat) {
       const obj3 = {
         type: 3,
         shipName: this.recoveryInfo.shipName,
         code: this.code,
         refuseType: parseFloat(this.recoveryInfo.type) - 2,
         orderWay: 1,
-        currentLon: getLng(),
-        currentLat: getLat()
+        currentLon: lng,
+        currentLat: lat
       }
       // alert(JSON.stringify(obj3))
       discharge(obj3).then(response => {
@@ -133,10 +127,10 @@ export default {
         }, 2000)
       })
     },
-    getRecoveryInfo(item) {
+    getRecoveryInfo(lng, lat, item) {
       this.shipName = getBoat()
       this.code = item.code
-      recoveryInfo(this.shipName, this.code, getLng(), getLat()).then(response => {
+      recoveryInfo(this.shipName, this.code, lng, lat).then(response => {
         this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
         this.$store.commit('setrecoveryCode', this.code)
@@ -144,7 +138,8 @@ export default {
           case 1:
             switch (response.data.attribute) {
               case 1:
-                this.submitWater()
+                // this.submitWater()
+                this.getLocation('submitWater')
                 break
               case 2:
                 this.$router.push({
@@ -165,7 +160,8 @@ export default {
           default:
             switch (response.data.attribute) {
               case 1:
-                this.submitRubbish()
+                // this.submitRubbish()
+                this.getLocation('submitRubbish')
                 break
               case 2:
                 this.$router.push({

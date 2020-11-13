@@ -12,50 +12,16 @@
     </div>
     <div class="main-list">
       <van-cell-group>
-        <van-field v-model="type"
-                   label="回收类型"
-                   disabled
-                   clickable
-                   input-align="right" />
-        <van-field v-model="recoveryInfo.shipName"
-                   label="船舶名称"
-                   disabled
-                   clickable
-                   input-align="right" />
-        <van-field v-model="recoveryInfo.siteName"
-                   label="回收点"
-                   disabled
-                   clickable
-                   input-align="right" />
-        <van-field v-model="recoveryInfo.name"
-                   label="排放口"
-                   disabled
-                   clickable
-                   input-align="right" />
-        <van-field v-model="recoveryInfo.attribute===1?'智能':'普通'"
-                   label="排放口类型"
-                   disabled
-                   clickable
-                   input-align="right" />
-        <van-field v-if="recoveryInfo.attribute!==1"
-                   v-model="amount"
-                   label="排放容积(L)"
-                   placeholder="请输入排放容积"
-                   type="number"
-                   clickable
-                   input-align="right" />
+        <van-field v-model="type" label="回收类型" disabled clickable input-align="right" />
+        <van-field v-model="recoveryInfo.shipName" label="船舶名称" disabled clickable input-align="right" />
+        <van-field v-model="recoveryInfo.siteName" label="回收点" disabled clickable input-align="right" />
+        <van-field v-model="recoveryInfo.name" label="排放口" disabled clickable input-align="right" />
+        <van-field v-model="recoveryInfo.attribute===1?'智能':'普通'" label="排放口类型" disabled clickable input-align="right" />
+        <van-field v-if="recoveryInfo.attribute!==1" v-model="amount" label="排放容积(L)" placeholder="请输入排放容积" type="number" clickable input-align="right" />
       </van-cell-group>
       <div class="submit">
-        <van-button @click="submit"
-                    v-if="recoveryInfo.attribute===1"
-                    class="button"
-                    type="info"
-                    size="large">确认开始排放</van-button>
-        <van-button @click="submit1"
-                    v-else
-                    class="button"
-                    type="info"
-                    size="large">确认排放</van-button>
+        <van-button @click="getLocation('submit')" v-if="recoveryInfo.attribute===1" class="button" type="info" size="large">确认开始排放</van-button>
+        <van-button @click="getLocation('submit1')" v-else class="button" type="info" size="large">确认排放</van-button>
       </div>
     </div>
     <errors></errors>
@@ -67,8 +33,10 @@ import errors from '@/views/sewageDisposal/errorTip'
 import { mapGetters } from 'vuex'
 import { Toast } from 'vant'
 import { discharge } from '@/api/sewageDisposal'
-import { setTitle, getLat, getLng } from '@/utils/cache.js'
+import { setTitle } from '@/utils/cache.js'
+import { getLocation } from '@/mixins/getLocation'
 export default {
+  mixins: [getLocation],
   components: {
     errors
   },
@@ -88,14 +56,14 @@ export default {
     }
   },
   methods: {
-    submit() {
+    submit(lng, lat) {
       const obj = {
         type: 2,
         shipName: this.recoveryInfo.shipName,
         code: this.recoveryCode,
         orderWay: 1,
-        currentLon: getLng(),
-        currentLat: getLat()
+        currentLon: lng,
+        currentLat: lat
       }
       discharge(obj).then(response => {
         Toast.success({
@@ -109,7 +77,7 @@ export default {
         }, 2000)
       })
     },
-    submit1() {
+    submit1(lng, lat) {
       if (!this.amount) {
         Toast('请先输入容积')
         return
@@ -120,8 +88,8 @@ export default {
         code: this.recoveryCode,
         amount: this.amount,
         orderWay: 1,
-        currentLon: getLng(),
-        currentLat: getLat()
+        currentLon: lng,
+        currentLat: lat
       }
       discharge(obj).then(response => {
         Toast.success({

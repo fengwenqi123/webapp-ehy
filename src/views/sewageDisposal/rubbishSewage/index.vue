@@ -72,29 +72,12 @@
                    input-align="right" />
       </van-cell-group> -->
       <div class="submitField">
-        <van-field v-if="recoveryInfo.attribute!==1"
-                   style="margin-top:20px"
-                   class="submitNumber"
-                   label-width="120px"
-                   v-model="amount"
-                   label="投放重量"
-                   placeholder="请输入投放重量"
-                   type="number"
-                   clickable
-                   input-align="right" />
+        <van-field v-if="recoveryInfo.attribute!==1" style="margin-top:20px" class="submitNumber" label-width="120px" v-model="amount" label="投放重量" placeholder="请输入投放重量" type="number" clickable input-align="right" />
         <span v-if="recoveryInfo.attribute!==1">(kg)</span>
       </div>
       <div class="submit">
-        <van-button @click="submit"
-                    v-if="recoveryInfo.attribute===1"
-                    class="button"
-                    type="info"
-                    size="large">确认开始排放</van-button>
-        <van-button @click="submit1"
-                    v-else
-                    class="button"
-                    type="info"
-                    size="large">确认排放</van-button>
+        <van-button @click="getLocation('submit')" v-if="recoveryInfo.attribute===1" class="button" type="info" size="large">确认开始排放</van-button>
+        <van-button @click="getLocation('submit1')" v-else class="button" type="info" size="large">确认排放</van-button>
       </div>
     </div>
     <errors :info="info"></errors>
@@ -106,8 +89,10 @@ import errors from '@/views/sewageDisposal/errorTip'
 import { mapGetters } from 'vuex'
 import { Toast } from 'vant'
 import { discharge } from '@/api/sewageDisposal'
-import { setTitle, getLat, getLng } from '@/utils/cache.js'
+import { setTitle } from '@/utils/cache.js'
+import { getLocation } from '@/mixins/getLocation'
 export default {
+  mixins: [getLocation],
   components: {
     errors
   },
@@ -130,15 +115,15 @@ export default {
     }
   },
   methods: {
-    submit() {
+    submit(lng, lat) {
       const obj = {
         type: 3,
         shipName: this.recoveryInfo.shipName,
         code: this.recoveryCode,
         refuseType: parseFloat(this.recoveryInfo.type) - 2,
         orderWay: 1,
-        currentLon: getLng(),
-        currentLat: getLat()
+        currentLon: lng,
+        currentLat: lat
       }
       discharge(obj).then(response => {
         Toast.success({
@@ -152,7 +137,7 @@ export default {
         }, 2000)
       })
     },
-    submit1() {
+    submit1(lng, lat) {
       // if (!this.amount) {
       //   Toast('请先输入重量')
       //   return
@@ -164,8 +149,8 @@ export default {
         refuseType: parseFloat(this.recoveryInfo.type) - 2,
         amount: this.amount,
         orderWay: 1,
-        currentLon: getLng(),
-        currentLat: getLat()
+        currentLon: lng,
+        currentLat: lat
       }
       discharge(obj).then(response => {
         Toast.success({

@@ -52,6 +52,7 @@ export function setTitle(title) {
 
 // 获取手机当前的经纬度
 export function getLng() {
+  /* eslint-disable*/
   return isProd ? Android.getLng() : null
 }
 
@@ -64,7 +65,7 @@ export function getOrderId() {
 }
 // 获取token
 export function getToken() {
-  return isProd ? Android.getAccount() : 'Tbg1MGri8kSJrWJKcuApuz'
+  return isProd ? Android.getAccount() : 'QKPE9Gaw2HQDKBt2aLBfUv'
 }
 
 // 获取船名

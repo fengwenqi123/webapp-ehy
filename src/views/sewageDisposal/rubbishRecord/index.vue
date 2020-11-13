@@ -10,20 +10,13 @@
         </p>
         <div style="clear:both"></div>
       </div>
-      <van-popup v-model="showShipName"
-                 round
-                 position="bottom"
-                 :style="{ height: '30%' }">
-        <van-picker :columns="shipColumn"
-                    show-toolbar
-                    @cancel="onCancel"
-                    @confirm="onConfirm" />
+      <van-popup v-model="showShipName" round position="bottom" :style="{ height: '30%' }">
+        <van-picker :columns="shipColumn" show-toolbar @cancel="onCancel" @confirm="onConfirm" />
       </van-popup>
     </div>
     <div class="tip">
       <span>请选择附近上岸站点，也可以直接扫扫码</span>
-      <img src="../../../assets/img/sewage/qr.png"
-           @click="getCode" />
+      <img src="../../../assets/img/sewage/qr.png" @click="getCode" />
     </div>
     <div class="bottom">
       <div class="bottom-title">
@@ -36,20 +29,12 @@
         </div>
       </div>
       <div class="bottom-list">
-        <van-pull-refresh v-model="isLoading"
-                          @refresh="onRefresh">
-          <van-list v-model="loading"
-                    :finished="finished"
-                    finished-text="没有更多了"
-                    @load="onLoad">
-            <div class="card"
-                 @click="goOutLet(item)"
-                 v-for="item in itemList"
-                 :key="item.id">
+        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+          <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+            <div class="card" @click="goOutLet(item)" v-for="item in itemList" :key="item.id">
               <div>
                 <van-row>
-                  <van-col :offset="1"
-                           span="19">
+                  <van-col :offset="1" span="19">
                     <p>{{item.name}}</p>
                   </van-col>
                   <!-- <van-col span="3">
@@ -62,8 +47,7 @@
                   <!-- </van-col> -->
                 </van-row>
                 <van-row>
-                  <van-col span="8"
-                           :offset="1">
+                  <van-col span="8" :offset="1">
                     <p>联系人：{{item.contact||'--'}}</p>
                   </van-col>
                   <van-col span="15">
@@ -71,8 +55,7 @@
                   </van-col>
                 </van-row>
                 <van-row>
-                  <van-col span="18"
-                           :offset="1">
+                  <van-col span="18" :offset="1">
                     <p>地址：{{item.city}}{{item.area}}{{item.address}}</p>
                   </van-col>
                   <van-col span="5">
@@ -80,8 +63,7 @@
                   </van-col>
                 </van-row>
                 <van-row>
-                  <van-col span="12"
-                           :offset="1">
+                  <van-col span="12" :offset="1">
                     <span class="active">生活垃圾</span>
                   </van-col>
                 </van-row>
@@ -95,13 +77,15 @@
 </template>
 
 <script>
-import { setTitle, setBoat, getBoat, getGoQr, getLng, getLat } from '@/utils/cache.js'
+import { setTitle, setBoat, getBoat, getGoQr } from '@/utils/cache.js'
 import { sewagePoint } from '@/api/sewageDisposalNo'
 import { boatList } from '@/api/ehy'
 import { Toast } from 'vant'
 import { discharge } from '@/api/sewageDisposal'
 import { recoveryInfo } from '@/api/sewageDisposal'
+import { getLocation } from '@/mixins/getLocation'
 export default {
+  mixins: [getLocation],
   data() {
     return {
       shipName: null,
@@ -125,7 +109,8 @@ export default {
     }
   },
   created() {
-    this.lists()
+    // this.lists()
+    this.getLocation('lists')
     this.boatlist()
     setTitle(this.$route.meta.title)
   },
@@ -179,9 +164,9 @@ export default {
       this.showShipName = false
     },
     //
-    lists() {
-      this.currentLon = getLng()
-      this.currentLat = getLat()
+    lists(lng, lat) {
+      this.currentLon = lng
+      this.currentLat = lat
       // this.currentLon = '119.5811'
       // this.currentLat = '30.1342'
       sewagePoint(this.page.pageNum, this.page.pageSize, this.city, this.area, this.fomesType, this.currentLon, this.currentLat, this.classify).then(response => {
@@ -197,14 +182,16 @@ export default {
       })
     },
     getDW() {
-      this.lists()
+      // this.lists()
+      this.getLocation('lists')
     },
     onRefresh() {
       setTimeout(() => {
         this.$toast('刷新成功')
         this.page.pageNum = 1
         this.itemList = []
-        this.lists()
+        // this.lists()
+        this.getLocation('lists')
         this.loading = true
         this.isLoading = false
         this.finished = false
@@ -214,7 +201,8 @@ export default {
       // 异步更新数据
       setTimeout(() => {
         this.page.pageNum++
-        this.lists()
+        // this.lists()
+        this.getLocation('lists')
       }, 800)
     },
     getCode() {
@@ -224,17 +212,19 @@ export default {
       if (/^[0-9]+$/.test(code) && code.length === 20) {
         this.code = code
         this.$store.commit('setrecoveryCode', this.code)
-        this.getRecoveryInfo()
+        // this.getRecoveryInfo()
+        this.getLocation('getRecoveryInfo')
       } else if (code.split('?')[1].split('=')[0] === 'locationID') {
         this.code = code
         this.$store.commit('setrecoveryCode', this.code.split('?')[1].split('=')[1])
-        this.getSbRecoveryInfo()
+        // this.getSbRecoveryInfo()
+        this.getLocation('getSbRecoveryInfo')
       } else {
         this.$router.push({ path: '/unrecognized' })
       }
     },
-    getSbRecoveryInfo() {
-      recoveryInfo(this.shipName, this.code, getLng(), getLat()).then(response => {
+    getSbRecoveryInfo(lng, lat) {
+      recoveryInfo(this.shipName, this.code, lng, lat).then(response => {
         this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
         Toast.success({
@@ -248,14 +238,14 @@ export default {
         }, 2000)
       })
     },
-    submitWater() {
+    submitWater(lng, lat) {
       const obj = {
         type: 1,
         shipName: this.recoveryInfo.shipName,
         code: this.code,
         orderWay: 1,
-        currentLon: getLng(),
-        currentLat: getLat()
+        currentLon: lng,
+        currentLat: lat
       }
       discharge(obj).then(response => {
         Toast.success({
@@ -269,15 +259,15 @@ export default {
         }, 2000)
       })
     },
-    submitRubbish() {
+    submitRubbish(lng, lat) {
       const obj3 = {
         type: 3,
         shipName: this.recoveryInfo.shipName,
         code: this.code,
         refuseType: parseFloat(this.recoveryInfo.type) - 2,
         orderWay: 1,
-        currentLon: getLng(),
-        currentLat: getLat()
+        currentLon: lng,
+        currentLat: lat
       }
       // alert(JSON.stringify(obj3))
       discharge(obj3).then(response => {
@@ -292,15 +282,16 @@ export default {
         }, 2000)
       })
     },
-    getRecoveryInfo() {
-      recoveryInfo(this.shipName, this.code, getLng(), getLat()).then(response => {
+    getRecoveryInfo(lng, lat) {
+      recoveryInfo(this.shipName, this.code, lng, lat).then(response => {
         this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
         switch (response.data.type) {
           case 1:
             switch (response.data.attribute) {
               case 1:
-                this.submitWater()
+                // this.submitWater()
+                this.getLocation('submitWater')
                 break
               case 2:
                 this.$router.push({
@@ -321,7 +312,8 @@ export default {
           default:
             switch (response.data.attribute) {
               case 1:
-                this.submitRubbish()
+                // this.submitRubbish()
+                this.getLocation('submitRubbish')
                 break
               case 2:
                 this.$router.push({

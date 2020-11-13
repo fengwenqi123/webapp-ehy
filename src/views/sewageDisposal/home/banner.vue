@@ -9,14 +9,8 @@
       </p>
       <div style="clear:both"></div>
     </div>
-    <van-popup v-model="showShipName"
-               round
-               position="bottom"
-               :style="{ height: '30%' }">
-      <van-picker :columns="shipColumn"
-                  show-toolbar
-                  @cancel="onCancel"
-                  @confirm="onConfirm" />
+    <van-popup v-model="showShipName" round position="bottom" :style="{ height: '30%' }">
+      <van-picker :columns="shipColumn" show-toolbar @cancel="onCancel" @confirm="onConfirm" />
     </van-popup>
     <!-- <div class="container">
       <p @click="pathTo">
@@ -48,12 +42,14 @@
 
 <script>
 import { recoveryInfo, allPoints } from '@/api/sewageDisposal'
-import { getGoQr, setBoat, getBoat, getLat, getLng, getCity } from '@/utils/cache.js'
+import { getGoQr, setBoat, getBoat, getCity } from '@/utils/cache.js'
 import { boatList } from '@/api/ehy'
 import { Toast } from 'vant'
 import { discharge } from '@/api/sewageDisposal'
+import { getLocation } from '@/mixins/getLocation'
 
 export default {
+  mixins: [getLocation],
   data() {
     return {
       recoveryInfo: null,
@@ -61,7 +57,8 @@ export default {
       code: null,
       shipName: null,
       showShipName: false,
-      shipColumn: []
+      shipColumn: [],
+      test: null
       // shipName: getShipName()
     }
   },
@@ -114,11 +111,13 @@ export default {
       if (/^[0-9]+$/.test(code) && code.length === 20) {
         this.code = code
         this.$store.commit('setrecoveryCode', this.code)
-        this.getRecoveryInfo()
+        // this.getRecoveryInfo()
+        this.getLocation('getRecoveryInfo')
       } else if (code.split('?')[1].split('=')[0] === 'locationID') {
         this.code = code
         this.$store.commit('setrecoveryCode', this.code.split('?')[1].split('=')[1])
-        this.getSbRecoveryInfo()
+        // this.getSbRecoveryInfo()
+        this.getLocation('getSbRecoveryInfo')
       } else {
         this.$router.push({ path: '/unrecognized' })
       }
@@ -126,14 +125,14 @@ export default {
     getCode() {
       getGoQr()
     },
-    submitWater() {
+    submitWater(lng, lat) {
       const obj1 = {
         type: 1,
         shipName: this.recoveryInfo.shipName,
         code: this.code,
         orderWay: 1,
-        currentLon: getLng(),
-        currentLat: getLat()
+        currentLon: lng,
+        currentLat: lat
       }
       discharge(obj1).then(response => {
         Toast.success({
@@ -147,15 +146,15 @@ export default {
         }, 2000)
       })
     },
-    submitRubbish() {
+    submitRubbish(lng, lat) {
       const obj3 = {
         type: 3,
         shipName: this.recoveryInfo.shipName,
         code: this.code,
         refuseType: parseFloat(this.recoveryInfo.type) - 2,
         orderWay: 1,
-        currentLon: getLng(),
-        currentLat: getLat()
+        currentLon: lng,
+        currentLat: lat
       }
       // alert(JSON.stringify(obj3))
       discharge(obj3).then(response => {
@@ -170,8 +169,8 @@ export default {
         }, 2000)
       })
     },
-    getSbRecoveryInfo() {
-      recoveryInfo(this.shipName, this.code, getLng(), getLat()).then(response => {
+    getSbRecoveryInfo(lng, lat) {
+      recoveryInfo(this.shipName, this.code, lng, lat).then(response => {
         this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
         Toast.success({
@@ -185,8 +184,8 @@ export default {
         }, 2000)
       })
     },
-    getRecoveryInfo() {
-      recoveryInfo(this.shipName, this.code, getLng(), getLat()).then(response => {
+    getRecoveryInfo(lng, lat) {
+      recoveryInfo(this.shipName, this.code, lng, lat).then(response => {
         this.recoveryInfo = response.data
         this.$store.commit('setRecoveryInfo', response.data)
         // alert('类型', response.data.type)
@@ -195,7 +194,8 @@ export default {
           case 1:
             switch (response.data.attribute) {
               case 1:
-                this.submitWater()
+                // this.submitWater()
+                this.getLocation('submitWater')
                 break
               case 2:
                 this.$router.push({
@@ -216,7 +216,8 @@ export default {
           default:
             switch (response.data.attribute) {
               case 1:
-                this.submitRubbish()
+                // this.submitRubbish()
+                this.getLocation('submitRubbish')
                 break
               case 2:
                 this.$router.push({

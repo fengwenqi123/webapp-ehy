@@ -1,41 +1,28 @@
 <template>
   <div class="container">
     <div class="content">
-      <van-popup v-model="showType"
-                 position="bottom">
-        <van-picker :columns="columns"
-                    show-toolbar
-                    @cancel="onCancel"
-                    @confirm="onConfirm" />
+      <van-popup v-model="showType" position="bottom">
+        <van-picker :columns="columns" show-toolbar @cancel="onCancel" @confirm="onConfirm" />
       </van-popup>
-      <van-popup v-model="showArea"
-                 position="bottom">
-        <van-area :area-list="areaList"
-                  @cancel="onCancelArea"
-                  @confirm="onConfirmArea" />
+      <van-popup v-model="showArea" position="bottom">
+        <van-area :area-list="areaList" @cancel="onCancelArea" @confirm="onConfirmArea" />
       </van-popup>
       <div class="dateBtn">
         <span @click="showPopupArea">{{areaBtn}}
-          <van-icon name="arrow-down" /></span>
+          <van-icon name="arrow-down" />
+        </span>
       </div>
       <div class="dateBtn">
         <span @click="showPopupType">{{typeBtn}}
-          <van-icon name="arrow-down" /></span>
+          <van-icon name="arrow-down" />
+        </span>
       </div>
-      <van-pull-refresh v-model="isLoading"
-                        @refresh="onRefresh">
-        <van-list v-model="loading"
-                  :finished="finished"
-                  finished-text="没有更多了"
-                  @load="onLoad">
-          <div class="card"
-               @click="goOutLet(item)"
-               v-for="item in itemList"
-               :key="item.id">
+      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+          <div class="card" @click="goOutLet(item)" v-for="item in itemList" :key="item.id">
             <div>
               <van-row>
-                <van-col :offset="1"
-                         span="19">
+                <van-col :offset="1" span="19">
                   <p>{{item.name}}</p>
                 </van-col>
                 <!-- <van-col span="3">
@@ -48,8 +35,7 @@
                 <!-- </van-col> -->
               </van-row>
               <van-row>
-                <van-col span="8"
-                         :offset="1">
+                <van-col span="8" :offset="1">
                   <p>联系人：{{item.contact||'--'}}</p>
                 </van-col>
                 <van-col span="15">
@@ -57,8 +43,7 @@
                 </van-col>
               </van-row>
               <van-row>
-                <van-col span="18"
-                         :offset="1">
+                <van-col span="18" :offset="1">
                   <p>地址：{{item.city}}{{item.area}}{{item.address}}</p>
                 </van-col>
                 <van-col span="5">
@@ -66,8 +51,7 @@
                 </van-col>
               </van-row>
               <van-row>
-                <van-col span="12"
-                         :offset="1">
+                <van-col span="12" :offset="1">
                   <span :class="{active:fomesFun1(item.fomesType||'')}">生活垃圾</span>
                   <span :class="{active:fomesFun2(item.fomesType||'')}">生活污水</span>
                   <span :class="{active:fomesFun3(item.fomesType||'')}">油污</span>
@@ -83,8 +67,10 @@
 
 <script>
 import { sewagePoint } from '@/api/sewageDisposalNo'
-import { getLat, getLng, setTitle } from '@/utils/cache'
+import { setTitle } from '@/utils/cache'
+import { getLocation } from '@/mixins/getLocation'
 export default {
+  mixins: [getLocation],
   data() {
     return {
       value1: 0,
@@ -233,7 +219,8 @@ export default {
     }
   },
   created() {
-    this.lists()
+    // this.lists()
+    this.getLocation('lists')
     setTitle(this.$route.meta.title)
   },
   methods: {
@@ -242,7 +229,8 @@ export default {
         this.$toast('刷新成功')
         this.page.pageNum = 1
         this.itemList = []
-        this.lists()
+        // this.lists()
+        this.getLocation('lists')
         this.loading = true
         this.isLoading = false
         this.finished = false
@@ -280,14 +268,16 @@ export default {
         this.showType = false
         this.fomesType = value
         this.itemList = []
-        this.lists()
+        // this.lists()
+        this.getLocation('lists')
       } else {
         this.page.pageNum = 1
         this.typeBtn = '排污类型'
         this.fomesType = ''
         this.showType = false
         this.itemList = []
-        this.lists()
+        // this.lists()
+        this.getLocation('lists')
         this.finished = false
       }
     },
@@ -297,7 +287,8 @@ export default {
       this.showType = false
       this.fomesType = ''
       this.itemList = []
-      this.lists()
+      // this.lists()
+      this.getLocation('lists')
       this.finished = false
     },
     onConfirmArea(value) {
@@ -307,7 +298,8 @@ export default {
       this.areaBtn = this.city + this.area
       this.page.pageNum = 1
       this.itemList = []
-      this.lists()
+      // this.lists()
+      this.getLocation('lists')
       this.finished = false
       this.showArea = false
     },
@@ -316,7 +308,8 @@ export default {
       this.area = ''
       this.page.pageNum = 1
       this.itemList = []
-      this.lists()
+      // this.lists()
+      this.getLocation('lists')
       this.areaBtn = '选择地区'
       this.finished = false
       this.showArea = false
@@ -327,9 +320,9 @@ export default {
     showPopupArea() {
       this.showArea = true
     },
-    lists() {
-      this.currentLon = getLng()
-      this.currentLat = getLat()
+    lists(lng, lat) {
+      this.currentLon = lng
+      this.currentLat = lat
       // this.currentLon = '120.1'
       // this.currentLat = '30.86'
       sewagePoint(this.page.pageNum, this.page.pageSize, this.city, this.area, this.fomesType, this.currentLon, this.currentLat).then(response => {
@@ -348,7 +341,8 @@ export default {
       // 异步更新数据
       setTimeout(() => {
         this.page.pageNum++
-        this.lists()
+        // this.lists()
+        this.getLocation('lists')
       }, 800)
     }
   }

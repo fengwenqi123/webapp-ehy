@@ -65,29 +65,12 @@
                    input-align="right" />
       </van-cell-group> -->
       <div class="submitField">
-        <van-field style="margin-top:20px"
-                   class="submitNumber"
-                   v-if="recoveryInfo.attribute!==1"
-                   v-model="amount"
-                   label="排放量"
-                   placeholder="请输入排放量"
-                   type="number"
-                   clickable
-                   error-message="请输入100-1000的数字"
-                   input-align="right" />
+        <van-field style="margin-top:20px" class="submitNumber" v-if="recoveryInfo.attribute!==1" v-model="amount" label="排放量" placeholder="请输入排放量" type="number" clickable error-message="请输入100-1000的数字" input-align="right" />
         <span v-if="recoveryInfo.attribute!==1">(L)</span>
       </div>
       <div class="submit">
-        <van-button @click="submit"
-                    v-if="recoveryInfo.attribute===1"
-                    class="button"
-                    type="info"
-                    size="large">确认开始排放</van-button>
-        <van-button @click="submit1"
-                    v-else
-                    class="button"
-                    type="info"
-                    size="large">确认排放</van-button>
+        <van-button @click="getLocation('submit')" v-if="recoveryInfo.attribute===1" class="button" type="info" size="large">确认开始排放</van-button>
+        <van-button @click="getLocation('submit1')" v-else class="button" type="info" size="large">确认排放</van-button>
       </div>
     </div>
     <errors :info="info"></errors>
@@ -99,8 +82,10 @@ import errors from '@/views/sewageDisposal/errorTip'
 import { mapGetters } from 'vuex'
 import { Toast } from 'vant'
 import { discharge } from '@/api/sewageDisposal'
-import { setTitle, getLat, getLng } from '@/utils/cache.js'
+import { setTitle } from '@/utils/cache.js'
+import { getLocation } from '@/mixins/getLocation'
 export default {
+  mixins: [getLocation],
   components: {
     errors
   },
@@ -125,14 +110,14 @@ export default {
     }
   },
   methods: {
-    submit() {
+    submit(lng, lat) {
       const obj = {
         type: 1,
         shipName: this.recoveryInfo.shipName,
         code: this.recoveryCode,
         orderWay: 1,
-        currentLon: getLng(),
-        currentLat: getLat()
+        currentLon: lng,
+        currentLat: lat
       }
       discharge(obj).then(response => {
         Toast.success({
@@ -146,7 +131,7 @@ export default {
         }, 2000)
       })
     },
-    submit1() {
+    submit1(lng, lat) {
       if (!this.amount) {
         Toast('请先输入排放量')
         return
@@ -167,8 +152,8 @@ export default {
         amount: this.amount,
         orderWay: 1,
         status: 3,
-        currentLon: getLng(),
-        currentLat: getLat()
+        currentLon: lng,
+        currentLat: lat
       }
       discharge(obj).then(response => {
         Toast.success({

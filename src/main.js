@@ -15,6 +15,8 @@ Vue.prototype.expActive = 0
 Vue.config.productionTip = false
 Vue.config.jhType = null
 Vue.use(Vant)
+// import Vconsole from 'vconsole'
+// new Vconsole()
 // Vue.use(ActionSheet)
 /* eslint-disable no-new */
 new Vue({
