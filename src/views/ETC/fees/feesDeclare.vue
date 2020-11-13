@@ -221,6 +221,25 @@
                   @cancel="showBoatList = false"
                   @confirm="onConfirmBoat" />
     </van-popup>
+    <van-popup v-model="showPayAwy"
+               position="bottom"
+               :style="{ height: '3rem' }"
+               @closed="closed">
+      <div class="pay-popup">
+        <div @click="alipay()">
+          <img src="@/assets/img/alipay.png"
+               alt="">
+        </div>
+        <div @click="wechatpay()">
+          <img src="@/assets/img/wechatpay.png"
+               alt="">
+        </div>
+      </div>
+    </van-popup>
+    <van-popup v-model="loading"
+               class="van-popup1">
+      <van-loading type="spinner" />
+    </van-popup>
   </div>
 </template>
 <script>
@@ -230,12 +249,13 @@ import { boatList, shipInfo } from '@/api/ehy'
 import { getUserInfos } from '@/api/validate'
 // import Vue from 'vue'
 // import { Toast } from 'vant'
+import { pay } from '@/utils/cache.js'
 
 export default {
   name: 'point',
   data() {
     return {
-      je: 0,
+      je: 0.01,
       items: [],
       showBoatList: false,
       loadingSpinner: true,
@@ -298,7 +318,11 @@ export default {
       shipLockFlag: false,
       shipLockList: [],
       shipLock: null,
-      shipLockId: null
+      shipLockId: null,
+      showPayAwy: false,
+      loading: false,
+      orderId: false
+
     }
   },
   created() {
@@ -307,6 +331,9 @@ export default {
     this.getBoatList()
     this._getUserInfos()
     setTitle(this.$route.meta.title)
+  },
+  mounted() {
+    window.refresh = this.refresh
   },
   methods: {
     //
@@ -449,7 +476,7 @@ export default {
         this.goodsItems = response.data
       })
     },
-    portSumitClick() {
+    async portSumitClick() {
       if (this.loadText === '请选择装载方式') {
         this.$toast('请选择装载方式')
         return
@@ -527,16 +554,37 @@ export default {
         arr.push(obj)
       })
       dataObj.goodList = arr
-      postBaoGang(JSON.stringify(dataObj)).then(response => {
-        this.$toast('申报成功！\n' +
-          '\n' +
-          '过闸金额：0（元）\n' +
-          '\n' +
-          '等待过闸····')
-        setTimeout(() => {
-          this.$router.back()
-        }, 1500)
+      this.orderId = await this.submit(dataObj)
+      this.showPayAwy = true
+    },
+    submit(dataObj) {
+      return new Promise((resolve, reject) => {
+        postBaoGang(JSON.stringify(dataObj)).then(response => {
+          resolve(response.data)
+        }).catch(err => {
+          reject(err)
+        })
       })
+      // postBaoGang(JSON.stringify(dataObj)).then(response => {
+      //   // setTimeout(() => {
+      //   //   this.$router.back()
+      //   // }, 1500)
+      // })
+    },
+    closed() {
+    },
+    alipay() {
+      this.showPayAwy = false
+      pay(this.orderId, this.je)
+    },
+    refresh() {
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+        this.$router.push({
+          path: '/fees'
+        })
+      }, 2000)
     }
   }
 }
@@ -672,10 +720,22 @@ export default {
 }
 </style>
 
-<style lang="scss">
-// .van-pull-refresh__head {
-//   height: 0.8rem;
-//   line-height: 0.8rem;
-//   top: -0.8rem;
-// }
+<style lang="scss" scoped>
+  .pay-popup {
+    div {
+      width: 50%;
+      height: 3rem;
+      float: left;
+      text-align: center;
+      line-height: 4rem;
+
+      img {
+        width: 70%;
+        height: 42%;
+      }
+    }
+  }
+  .van-popup1 {
+    background: none;
+  }
 </style>

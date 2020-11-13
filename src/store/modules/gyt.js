@@ -13,6 +13,9 @@ const gyt = {
     userInfos: null
   },
   mutations: {
+    setShipName: (state, shipName) => {
+      state.shipName = shipName
+    },
     setUserInfo: (state, obj) => {
       state.userInfos = obj
       state.shipName = obj.shipName
