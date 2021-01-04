@@ -32,6 +32,11 @@ export const getLocation = {
             if (to === 'lists') {
               this.lists(data.longitude, data.latitude)
             }
+            if (to === 'homecity') {
+              this.city = data.cityName
+              this.getWeather()
+              this.getFindByCity()
+            }
           }
         },
         fail: function(data) {
