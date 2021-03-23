@@ -90,6 +90,12 @@ const ehy = [
     name: 'lockReportHistory',
     component: () => import('@/views/lockApply/reportHistory'),
     meta: { title: '申报历史列表' }
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: () => import('@/views/home/index'),
+    meta: { title: '首页' }
   }
 ]
 export default ehy
